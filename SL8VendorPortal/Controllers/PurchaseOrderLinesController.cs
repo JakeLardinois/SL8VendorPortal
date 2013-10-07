@@ -20,12 +20,14 @@ namespace SL8VendorPortal.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public ActionResult Search()
         {
             return View("Search");
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public JsonResult Search(JQueryDataTablesModel jQueryDataTablesModel)
         {
             int totalRecordCount;

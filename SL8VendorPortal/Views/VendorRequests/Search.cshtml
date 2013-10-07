@@ -1,0 +1,227 @@
+﻿@model SL8VendorPortal.Models.VendorRequest
+
+@Scripts.Render("~/bundles/SearchVendorRequests")
+@Scripts.Render("~/bundles/DataTablesColumnFilter")
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search Vendor Requests</h2>
+<table>
+    <tr>
+        <td>
+            <table class="SearchFields2">@*The css class SearchFields and SearchFields2 is defined in 'Content\media\css\jquery.dataTables_themeroller.css' *@
+                <tbody>
+                    <tr>
+                        <td align="right">ID:</td>
+                        <td align="center" id="IDFilter"></td>
+                        <td align="right">Order No:</td>
+                        <td align="center" id="OrderNoFilter"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="SearchFields">
+                <tbody>
+                    <tr>
+                        <td align="right">Date Processed:</td>
+                        <td align="center" id="DateProcessedFilter"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Date Requested:</td>
+                        <td align="center" id="DateRequestedFilter"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Date Updated:</td>
+                        <td align="center" id="DateUpdatedFilter"></td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td align="center"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <table class="SearchFields">
+                <tbody>
+                    <tr>
+                        <td align="right">Processed:</td>
+                        <td align="center" id="ProcessedFilter"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Source Whse:</td>
+                        <td align="center" id="SourceWhseFilter"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Dest Whse:</td>
+                        <td align="center" id="DestWhseFilter"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Category Code:</td>
+                        <td align="center" id="CategoryCodeFilter"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<br />
+
+<table id="objItems">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                Note
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Processed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LineNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SourceWarehouse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DestWarehouse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QtyLoss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateProcessed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateRequested)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestCategoryID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestCategoryCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Creator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Updater)
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot style = "display: none">
+		<tr>
+			<th></th>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Processed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LineNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SourceWarehouse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DestWarehouse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QtyLoss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateProcessed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateRequested)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestCategoryID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestCategoryCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Creator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Updater)
+            </th>
+		</tr>
+	</tfoot>
+
+</table>
+
+
+
+<script type="text/javascript">
+    var sOpenImageUrl = '@Url.Content("~/images/details_open.png")';
+    var sCloseImageUrl = '@Url.Content("~/images/details_close.png")';
+    var sProgressImageUrl = '@Url.Content("~/Images/Progress.gif")';
+
+    var sRequestCatUrl = '@Url.Action("RequestCategories", "VendorRequests")';
+    var sAllWhsesUrl = '@Url.Action("AllWarehouses", "VendorRequests")';
+    var sVRNotesUpdateUrl = '@Url.Action("UpdateNote", "VendorRequests")';
+    var sUpdateVRUrl = '@Url.Action("UpdateVR", "VendorRequests")';
+
+
+    function GetVRNoteDetailHTML(objRow) {
+
+        var sOut =
+            '<div class="innerRowDetails">' +
+                '<table>' +
+                    '<tbody>' +
+                        '<tr>' +
+                            '<td>' +
+                                '<div id="VRNoteEditorDiv" class="EditRequestNotes">' +
+                                    objRow.HTMLNotes +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>' +
+                    '</tbody>' +
+                '</table>' +
+            '</div>';
+
+        return sOut;
+    }
+</script>

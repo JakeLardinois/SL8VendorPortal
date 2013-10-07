@@ -10,9 +10,9 @@ using SL8VendorPortal.Models;
 using SL8VendorPortal.Infrastructure;
 using jQuery.DataTables.Mvc;
 
-
 namespace SL8VendorPortal.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class TransferOrdersController : Controller
     {
         private SytelineDbEntities db = new SytelineDbEntities();
@@ -21,6 +21,38 @@ namespace SL8VendorPortal.Controllers
         [HttpGet]
         public ActionResult Search()
         {
+            UsersContext context;
+            UserProfile user;
+            IEnumerable<string> objUserWhses;
+            List<whse> objWarehouseList;
+
+            //Add the request types for the dropdown list
+            //ViewData["RequestCategoryCode"] = new SelectList(new[] { new SelectListItem { Text = "TOReciept", Value = "TOReciept" }, 
+            //        new SelectListItem { Text = "TOShipment", Value = "TOShipment" }},
+            //        "Value", "Text", "TOReciept");
+            //I changed the above manual entry of the Request Categorie listing to one that is drawn from the database
+            using (SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb())
+            {
+                ViewData["RequestCategoryCode"] = new SelectList(VendorPortalDb.RequestCategories.Where(r => r.ID == 2).ToList(),
+                    "Code", "Description", "TOReciept");
+            }
+
+            context = new UsersContext();
+            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            objUserWhses = user.Warehouses.SplitNTrim(); //put the users warehouses into a list of trimmed strings
+
+            objWarehouseList = db.whses.ToList();//get all the warehouses from the database
+
+            //Add the users source warehouses to ViewData so the selectlist can access them
+            ViewData["SourceWarehouses"] = new SelectList(
+                objWarehouseList.Where(w => objUserWhses.Contains(w.whse1)).ToList(),//This is how you go about the SQL IN clause in Linq. 
+                "whse1", "name");
+
+            //Add all the warehouses to the destination; a user can send inventory to any of our warehouses
+            ViewData["DestWarehouses"] = new SelectList(
+                objWarehouseList, "whse1", "name", 
+                objWarehouseList.Where(w => w.whse1.Equals("MAIN")).SingleOrDefault().whse1);//Sets the default to the MAIN warehouse which is WTF
+
             return View("Search");
         }
 
@@ -40,7 +72,6 @@ namespace SL8VendorPortal.Controllers
             strSQL = QueryDefinitions.GetQuery("SelectTOByLineToFromWarehousesAndStatuses", new string[] { user.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//O is for Ordered, T is for Transit, etc.
 
             InMemoryTransferOrdersRepository.AllTransferOrders = db.transfers.SqlQuery(strSQL).ToList();
-
 
             var objItems = InMemoryTransferOrdersRepository.GetTransferOrders(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
@@ -69,45 +100,6 @@ namespace SL8VendorPortal.Controllers
             InMemoryTransferOrderLinesRepository.AllTransferOrderLines = db.trnitems.SqlQuery(strSQL).ToList();
 
             var objItems = InMemoryTransferOrderLinesRepository.GetTransferOrderLines(startIndex: jQueryDataTablesModel.iDisplayStart,
-                pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
-                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
-
-            return this.DataTablesJson(items: objItems,
-                totalRecords: totalRecordCount,
-                totalDisplayRecords: searchRecordCount,
-                sEcho: jQueryDataTablesModel.sEcho);
-        }
-
-        [HttpGet]
-        public ActionResult NotesViewer()
-        {
-            return View("NotesViewer");//located in Views/Shared/NotesViewer.cshtml
-        }
-
-        [HttpPost]
-        public JsonResult NotesViewer(JQueryDataTablesModel jQueryDataTablesModel, string OrderNo, string LineNo)
-        {
-            int totalRecordCount;
-            int searchRecordCount;
-            short shTemp;
-            List<SytelineNote> objNotes;
-            Notes objOrderNotes, objLineNotes;
-
-
-            objNotes = new List<SytelineNote>();
-            objOrderNotes = new Notes(OrderNo, NoteType.TO);
-            objLineNotes = new Notes(
-                OrderNo,
-                short.TryParse(LineNo, out shTemp) ? shTemp : (short)0,
-                NoteType.TOLine);
-            objNotes.AddRange(objOrderNotes);
-            objNotes.AddRange(objLineNotes);
-
-            InMemoryNotesRepository.AllNotes = objNotes
-                .Where(n => n.IsInternal == 0)
-                .ToList();
-
-            var objItems = InMemoryNotesRepository.GetNotes(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
                 totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
 

@@ -82,6 +82,9 @@ namespace jQuery.DataTables.Mvc
         /// </summary>
         public ReadOnlyCollection<string> mDataProp_ { get; set; }
 
+        //Modified by Jake Lardinois 9/2/2013; added another mDataProp Column for server side multi column search that uses sSelector as well as column reordering.
+        public ReadOnlyCollection<string> mDataProp2_ { get; set; }
+
         public ReadOnlyCollection<SortedColumn> GetSortedColumns()
         {
             if (!iSortingCols.HasValue)

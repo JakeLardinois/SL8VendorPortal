@@ -1,5 +1,109 @@
 
 
+/*Both of these below css statements are required to format the search footer that contains the individual column searches */
+tfoot input {
+	margin: 0.5em 0;
+	width: 100%;
+	height: 10px;
+	color: #444;
+	font-size: 80%; 
+}
+
+tfoot input.search_init {
+	color: #999;
+}
+
+
+.SearchFields
+{
+    /*border: 1px solid #000000;*/
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+.SearchFields td
+{
+    padding: 0px;
+    /*border: 1px solid #000000;*/
+}
+.SearchFields tr
+{
+    padding: 0px;
+    /*border: 1px solid #000000;*/
+}
+/*Applies to all the inputs that are in the table with the class SearchFields*/
+.SearchFields input
+{
+    font-size: 80%;
+    padding: 0px;
+    width: 30%;
+}
+/*Applies to the buttons*/
+.SearchFields button 
+{
+    font-size: 80%;
+    width: 90%;
+}
+
+
+
+.SearchFields2
+{
+    /*border: 1px solid #000000;*/
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+.SearchFields2 td
+{
+    padding: 0px;
+    /*border: 1px solid #000000;*/
+}
+.SearchFields2 tr
+{
+    padding: 0px;
+    /*border: 1px solid #000000;*/
+}
+/*Applies to all the inputs that are in the table with the class SearchFields*/
+.SearchFields2 input
+{
+    font-size: 100%;
+    padding: 2px;
+    width: 90%;
+}
+/*Applies to the buttons*/
+.SearchFields2 select 
+{
+    font-size: 90%;
+    width: 90%;
+}
+
+
+/*textarea 
+{
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #333;
+    font-size: 80%;
+    margin: 5px 0 6px 0;
+    padding: 5px;
+    width: 10%;
+}*/
+            
+/*When you set the sPlaceHolder: "head:after" attribute on the columnFilter() initialization of the datatable, this is the css that will format the newly placed header*/
+/*thead input {
+	margin: 0.5em 0;
+	width: 100%;
+	height: 10px;
+	color: #444;
+	font-size: 80%; 
+}
+
+thead input.search_init {
+	color: #999;
+}*/
+
+
 /*
  * Table
  */
@@ -17,11 +121,11 @@ table.dataTable thead th {
 }
 
 table.dataTable tfoot th {
-	padding: 3px 10px;
+	padding: 0px 10px;
 }
 
 table.dataTable td {
-	padding: 3px 10px;
+	padding: 0px 10px;
 }
 
 table.dataTable td.center,

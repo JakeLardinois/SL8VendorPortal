@@ -13,14 +13,36 @@ using jQuery.DataTables.Mvc;
 
 namespace SL8VendorPortal.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class PurchaseOrdersController : Controller
     {
         private SytelineDbEntities db = new SytelineDbEntities();
+        private UserProfile CurrentUserProfile;
 
 
         [HttpGet]
         public ActionResult Search()
         {
+            UsersContext context;
+            UserProfile user;
+            IEnumerable<string> objUserWhses;
+
+
+            using (SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb())
+            {
+                ViewData["RequestCategoryCode"] = new SelectList(VendorPortalDb.RequestCategories.Where(r => r.ID == 1).ToList(),
+                    "Code", "Description", "POReciept");
+            }
+
+            context = new UsersContext();
+            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            objUserWhses = user.Warehouses.SplitNTrim(); //put the users warehouses into a list of trimmed strings
+
+            //Add the users source warehouses to ViewData so the selectlist can access them
+            ViewData["SourceWarehouses"] = new SelectList(
+                db.whses.Where(w => objUserWhses.Contains(w.whse1)).ToList(),//This is how you go about the SQL IN clause in Linq. 
+                "whse1", "name");
+
             return View("Search");
         }
 
@@ -29,15 +51,12 @@ namespace SL8VendorPortal.Controllers
         {
             int totalRecordCount;
             int searchRecordCount;
-            UsersContext context;
-            UserProfile user;
             string strSQL;
 
 
-            context = new UsersContext();
-            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
             //strSQL = QueryDefinitions.GetQuery("SelectPurchaseOrdersByWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O" });//O is for Ordered, C is for Complete, etc.
-            strSQL = QueryDefinitions.GetQuery("SelectPOByLineWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O" });//This will only bring in Orders where there are corresponding Open Order Lines.
+            strSQL = QueryDefinitions.GetQuery("SelectPOByLineWarehousesAndStatus", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O" });//This will only bring in Orders where there are corresponding Open Order Lines.
 
             InMemoryPurchaseOrdersRepository.AllPurchaseOrders = db.poes.SqlQuery(strSQL).ToList();
 
@@ -57,64 +76,16 @@ namespace SL8VendorPortal.Controllers
         {
             int totalRecordCount;
             int searchRecordCount;
-            UsersContext context;
-            UserProfile user;
             string strSQL;
 
 
-            context = new UsersContext();
-            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
-            strSQL = QueryDefinitions.GetQuery("SelectPOLinesByWarehousesAndStatusAndOrderNo", new string[] { user.Warehouses.AddSingleQuotes(), "O", OrderNo });//O is for Ordered, C is for Complete, etc.
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            strSQL = QueryDefinitions.GetQuery("SelectPOLinesByWarehousesAndStatusAndOrderNo", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O", OrderNo });//O is for Ordered, C is for Complete, etc.
             //strSQL = QueryDefinitions.GetQuery("SelectPOLinesByWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O", OrderNo });//O is for Ordered, C is for Complete, etc.
 
             InMemoryPurchaseOrderLinesRepository.AllPurchaseOrderLines = db.poitems.SqlQuery(strSQL).ToList();
 
             var objItems = InMemoryPurchaseOrderLinesRepository.GetPurchaseOrderLines(startIndex: jQueryDataTablesModel.iDisplayStart,
-                pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
-                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
-
-            return this.DataTablesJson(items: objItems,
-                totalRecords: totalRecordCount,
-                totalDisplayRecords: searchRecordCount,
-                sEcho: jQueryDataTablesModel.sEcho);
-        }
-
-        [HttpGet]
-        public ActionResult NotesViewer()
-        {
-            return View("NotesViewer");//located in Views/Shared/NotesViewer.cshtml
-        }
-
-        [HttpPost]
-        public JsonResult NotesViewer(JQueryDataTablesModel jQueryDataTablesModel, string OrderNo, string LineNo, string ReleaseNo)
-        {
-            int totalRecordCount;
-            int searchRecordCount;
-            short shTemp;
-            List<SytelineNote> objNotes;
-            Notes objOrderNotes, objLineNotes, objLineReleaseNotes;
-
-
-            objNotes = new List<SytelineNote>();
-            objOrderNotes = new Notes(OrderNo, NoteType.PO);
-            objLineNotes = new Notes(
-                OrderNo,
-                short.TryParse(LineNo, out shTemp) ? shTemp : (short)0,
-                NoteType.POLine);
-            objLineReleaseNotes = new Notes(
-                OrderNo,
-                short.TryParse(LineNo, out shTemp) ? shTemp : (short)0,
-                short.TryParse(ReleaseNo, out shTemp) ? shTemp : (short)0,
-                NoteType.POLineRelease);
-            objNotes.AddRange(objOrderNotes);
-            objNotes.AddRange(objLineNotes);
-            objNotes.AddRange(objLineReleaseNotes);
-
-            InMemoryNotesRepository.AllNotes = objNotes
-                .Where(n => n.IsInternal == 0)
-                .ToList();
-
-            var objItems = InMemoryNotesRepository.GetNotes(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
                 totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
 

@@ -7,6 +7,9 @@ $(document).ready(function () {
         "bProcessing": true,
         "bServerSide": true,
         "sAjaxSource": document.URL,
+        "bFilter": false,   //hides the search box
+        "bPaginate": false, //disables paging functionality
+        "sDom": '<"top">rt<"bottom"flp><"clear">', //hides footer that displays 'showing record 1 of 1'...
         "sServerMethod": "POST",
         "aoColumns": [
             {

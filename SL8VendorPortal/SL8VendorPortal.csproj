@@ -71,6 +71,7 @@
       <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.1.13153\lib\net40-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.30506.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
     </Reference>
@@ -191,13 +192,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminFunctionsController.cs" />
     <Compile Include="Controllers\CustomerOrderLinesController.cs" />
     <Compile Include="Controllers\CustomerOrdersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
+    <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\PurchaseOrderLinesController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\TransferOrdersController.cs" />
+    <Compile Include="Controllers\VendorRequestsController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -214,6 +218,9 @@
     <Compile Include="Models\co_bln.cs">
       <DependentUpon>Syteline.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\custaddr.cs">
+      <DependentUpon>Syteline.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\InMemoryRepositories.cs" />
     <Compile Include="Models\itemwhse.cs">
       <DependentUpon>Syteline.tt</DependentUpon>
@@ -221,7 +228,6 @@
     <Compile Include="Models\MyEnums.cs" />
     <Compile Include="Models\Notes.cs" />
     <Compile Include="Models\PartialEDMXClasses.cs" />
-    <Compile Include="Models\PendingTransferOrderTransaction.cs" />
     <Compile Include="Models\po.cs">
       <DependentUpon>Syteline.tt</DependentUpon>
     </Compile>
@@ -237,6 +243,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QueryDefs.resx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReportDataLists.cs" />
+    <Compile Include="Models\RequestCategories.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SL8VendorPortalDb.cs" />
     <Compile Include="Models\Syteline.Context.cs">
@@ -260,7 +268,19 @@
     <Compile Include="Models\trnitem.cs">
       <DependentUpon>Syteline.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VendorRequests.cs" />
+    <Compile Include="Models\VendorRequestSearch.cs" />
+    <Compile Include="Models\whse.cs">
+      <DependentUpon>Syteline.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\VendorPortalSecurity.sdf" />
@@ -405,14 +425,40 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\themes\flick\images\animated-overlay.gif" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_0_eeeeee_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_55_ffffff_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_highlight-soft_100_f6f6f6_1x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_highlight-soft_25_0073ea_1x100.png" />
+    <Content Include="Content\themes\flick\images\ui-bg_highlight-soft_50_dddddd_1x100.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_0073ea_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_666666_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_ff0084_256x240.png" />
+    <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\flick\jquery-ui-1.10.3.custom.css" />
+    <Content Include="Content\themes\flick\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\details_close.png" />
     <Content Include="Images\details_open.png" />
+    <Content Include="Images\editBtn.png" />
+    <Content Include="Images\Progress.gif" />
+    <Content Include="Scripts\autogrow-1.0.2\autogrow.js" />
+    <Content Include="Scripts\autogrow-1.0.2\autogrow.min.js" />
+    <Content Include="Scripts\ColReorderWithResize.js" />
+    <Content Include="Scripts\DateTimeFormatter.js" />
+    <Content Include="Scripts\jquery.dataTables.columnFilter.js" />
+    <Content Include="Scripts\jquery.dataTables.columnFilterOld.js" />
+    <Content Include="Scripts\jquery.dataTables.custom-filter.js" />
+    <Content Include="Scripts\jquery.dataTables.editable.js" />
+    <Content Include="Scripts\jquery.jeditable.js" />
     <Content Include="Scripts\SearchTransferOrders.js" />
+    <Content Include="Scripts\SearchVendorRequests.js" />
     <Content Include="Scripts\SharedNotesViewer.js" />
-    <Content Include="Scripts\SearchCustomerOrdersCopy2.js" />
-    <Content Include="Scripts\SearchCustomerOrdersCopy.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\doc.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\jquery.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\shBrushJScript.js" />
@@ -513,6 +559,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -540,7 +587,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Syteline.cs</LastGenOutput>
     </None>
-    <Content Include="Views\TransferOrders\Index.cshtml" />
     <Content Include="Views\TransferOrders\Details.cshtml" />
     <Content Include="Views\TransferOrders\Create.cshtml" />
     <Content Include="Views\TransferOrders\Edit.cshtml" />
@@ -553,8 +599,10 @@
     <Content Include="Views\Inventory\DetailsOld.cshtml" />
     <Content Include="Views\Inventory\IndexOld.cshtml" />
     <Content Include="Views\TransferOrders\DetailsOld.cshtml" />
-    <Content Include="Views\TransferOrders\IndexOld.cshtml" />
+    <Content Include="Views\TransferOrders\Index.cshtml" />
     <Content Include="Views\TransferOrders\Copy of Index.cshtml" />
+    <None Include="Scripts\autogrow-1.0.2\autogrow.jquery.json" />
+    <None Include="Scripts\autogrow-1.0.2\README.md" />
     <None Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\js\AutoFill.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\js\ColReorder.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.4\extras\ColVis\media\js\ColVis.min.js.gz" />
@@ -582,21 +630,23 @@
     <Content Include="Views\CustomerOrderLines\Edit.cshtml" />
     <Content Include="Views\CustomerOrderLines\Delete.cshtml" />
     <Content Include="Views\CustomerOrderLines\Search.cshtml" />
-    <Content Include="Views\CustomerOrders\SearchOld.cshtml" />
     <Content Include="Views\PurchaseOrderLines\Index.cshtml" />
     <Content Include="Views\PurchaseOrderLines\Details.cshtml" />
     <Content Include="Views\PurchaseOrderLines\Create.cshtml" />
     <Content Include="Views\PurchaseOrderLines\Edit.cshtml" />
     <Content Include="Views\PurchaseOrderLines\Delete.cshtml" />
     <Content Include="Views\PurchaseOrderLines\Search.cshtml" />
-    <Content Include="Views\CustomerOrders\SearchOld2.cshtml" />
     <Content Include="Views\Shared\NotesViewer.cshtml" />
+    <Content Include="Views\AdminFunctions\Index.cshtml" />
+    <Content Include="Views\VendorRequests\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Models\QueryDefs.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QueryDefs.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\CustomerOrderLines.rdlc" />
+    <EmbeddedResource Include="Reports\CustomerOrders.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\jQuery.DataTables.Mvc\jQuery.DataTables.Mvc.csproj">

@@ -28,12 +28,12 @@ namespace SL8VendorPortal.Models
             get 
             {
                 if (!string.IsNullOrEmpty(NoteContent))
-                    return NoteContent.Replace(Environment.NewLine, "<br />");
+                    return NoteContent.Replace(Environment.NewLine, "<br />").Replace("\n", "<br />");
                 else
                     return string.Empty;
             } 
         }
-        public bool Save()
+        public bool Save(string strUserName)
         {
             DateTime dtmLastUpdate;
 
@@ -45,7 +45,7 @@ namespace SL8VendorPortal.Models
                             .FirstOrDefault();
 
                 if (DateTime.Compare(dtmLastUpdate, LastUpdated) <= 0)
-                    if (db.Database.ExecuteSqlCommand(QueryDefinitions.GetQuery("UpdateNote", new string[] { SpecificNoteToken.ToString(), NoteContent.Replace("'", "''"), NoteDesc.Replace("'", "''") })) == 1)
+                    if (db.Database.ExecuteSqlCommand(QueryDefinitions.GetQuery("UpdateNote", new string[] { SpecificNoteToken.ToString(), NoteContent.Replace("'", "''"), NoteDesc.Replace("'", "''"), strUserName })) == 1)
                         return true;
             }
             return false;

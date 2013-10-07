@@ -49,9 +49,56 @@ namespace SL8VendorPortal
         {
             base.Seed(context);
 
+            context.VendorRequests.Add(new VendorRequest
+            {
+                Approved = true,
+                Processed = true,
+                DateProcessed = DateTime.Now.AddDays(1),
+                DateRequested = DateTime.Now,
+                DestWarehouse = "PPI",
+                Notes = "Blah Blah",
+                Qty = 3,
+                QtyLoss = 1,
+                SourceWarehouse = "MAIN",
+                OrderNo = "T000000267",
+                LineNo = 1,
+                RequestCategoryCode = "TOReciept",
+                RequestCategoryID = (int)VendorRequestCategoryID.TORequest,
+                Creator = "Administrator",
+                Updater = "Administrator"
+            });
+            context.VendorRequests.Add(new VendorRequest
+            {
+                Approved = true,
+                Processed = false,
+                DateProcessed = SharedVariables.MINDATE,
+                DateRequested = DateTime.Now,
+                DestWarehouse = "MAIN",
+                Notes = "Blah Blah",
+                Qty = 3,
+                QtyLoss = 1,
+                SourceWarehouse = "PPI",
+                LineNo = 1,
+                OrderNo = "T000000267",
+                RequestCategoryCode = "TOShipment",
+                RequestCategoryID = (int)VendorRequestCategoryID.TORequest,
+                Creator = "Administrator",
+                Updater = "Administrator"
+            });
+
+            //CORequest = 0, PORequest = 1, TORequest = 2 
+            //TORequestTypes - TOReciept, TOShipment; CORequestTypes - COShipment, COLateRequest; PORequestTypes: POReciept, POLateRequest
+            context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COShipment", Description = "CO Shipment" });
+            context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COLateRequest", Description = "CO Late Request" });
+            context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POReciept", Description = "PO Reciept" });
+            context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POLateRequest", Description = "PO Late Request" });
+            context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOReciept", Description = "TO Reciept" });
+            context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOShipment", Description = "TO Shipment" });
+
             //context.PendingTransferOrderTransactions.Add(new PendingTransferOrderTransaction { Description = "My Description" });
 
-            //context.SaveChanges();
+
+            context.SaveChanges();
         }
 
     }

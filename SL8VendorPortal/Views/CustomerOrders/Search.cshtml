@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SL8VendorPortal.Models.co>
+﻿@model SL8VendorPortal.Models.co
 
 @Scripts.Render("~/bundles/SearchCustomerOrders")
 
@@ -78,6 +78,63 @@
     </thead>
     <tbody></tbody>
 </table>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmAddVendorRequest", style = "display: none" }))
+ {
+    @Html.HiddenFor(model => model.COItem.VendorRequest.ID, new { Name = "ID", ID = "ID", rel = "0" })
+    <input type="hidden" id="Notebtn" name="Notebtn" rel="1"/> <!--This field is just for the column that holds the button image...-->
+    @Html.HiddenFor(model => model.COItem.VendorRequest.OrderNo, new { Name = "OrderNo", ID = "OrderNo", rel = "7" })
+    @Html.HiddenFor(model => model.COItem.VendorRequest.LineNo, new { Name = "LineNo", ID = "LineNo", rel = "8" })
+    @Html.HiddenFor(model => model.COItem.VendorRequest.ReleaseNo, new { Name = "ReleaseNo", ID = "ReleaseNo", rel = "6" })
+    @Html.HiddenFor(model => model.COItem.VendorRequest.QtyLoss, new { Name = "RequestCategoryID", ID = "RequestCategoryID", rel = "10" })
+    @Html.HiddenFor(model => model.COItem.VendorRequest.QtyLoss, new { Name = "QtyLoss", style = "width:100px", rel = "4" })@*QtyLoss is not needed for Customer Orders Vendor Request*@
+    
+    @Html.ValidationSummary(true)
+    @Html.ValidationSummary("Errors:")
+
+    <table>
+        <tr>
+            <td colspan="2">
+                @Html.ValidationMessageFor(model => model.COItem.VendorRequest.Qty)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.COItem.VendorRequest.RequestCategoryCode)</td>
+            <td>
+                @*Datatables uses the name property for sending the value in the textbox or dropdownlist to the server; The DropDownListFor and TextBoxFor default to using the 
+                model listing as the name (model.TrnItem.VendorRequest.RequestCategoryCode instead of RequestCategoryCode). I cannot override the 'name' property for my html attributes, so what
+                I did was to specify 'Name' (notice the captital 'N') instead which datatables would then use when posting the data to the controller. *@
+                @Html.DropDownListFor(model => model.COItem.VendorRequest.RequestCategoryCode, ViewData["RequestCategoryCode"] as SelectList, new { Name = "RequestCategoryCode", rel = "2" })
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.COItem.VendorRequest.Qty)</td>
+            <td>@Html.TextBoxFor(model => model.COItem.VendorRequest.Qty, new { Name = "Qty", style = "width:100px", rel = "3" })</td>
+        </tr>
+        @*<tr>
+            <td>@Html.DisplayNameFor(model => model.COItem.VendorRequest.QtyLoss)</td>
+            <td>@Html.TextBoxFor(model => model.COItem.VendorRequest.QtyLoss, new { Name = "QtyLoss", style = "width:100px", rel = "4" })</td>
+        </tr>*@
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.COItem.VendorRequest.SourceWarehouse)</td>
+            <td>@Html.DropDownListFor(model => model.COItem.VendorRequest.SourceWarehouse, ViewData["SourceWarehouses"] as SelectList, new { Name = "SourceWarehouse", rel = "5" })</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.COItem.VendorRequest.Notes)</td>
+            <td>@Html.TextAreaFor(model => model.COItem.VendorRequest.Notes, new { Name = "Notes", rel = "9", @class = "MyAutogrow" })</td>
+        </tr>
+    </table>
+
+ }
+
+<div id='NotesDialogDiv' style="display: none;">
+</div>
+<div id='VendorRequestDialogDiv' style="display: none;">
+</div>
+<div id='AddressDialogDiv' style="display: none;">
+</div>
+
 @section scripts 
 { 
 }
@@ -87,10 +144,22 @@
 <script type="text/javascript">
     var sOpenImageUrl = '@Url.Content("~/images/details_open.png")';
     var sCloseImageUrl = '@Url.Content("~/images/details_close.png")';
-    var sLineURL = '@Url.Action("NotesViewer", "CustomerOrders")'
+    var sProgressImageUrl = '@Url.Content("~/Images/Progress.gif")';
+    var sNotesUpdateUrl = '@Url.Action("UpdateNote", "Notes")';
+    var sCONotesUrl = '@Url.Action("CONotesViewer", "Notes")';
+
+    var sVendorRequestsUrl = '@Url.Action("VendorRequests", "VendorRequests")';
+    var sUserWhsesUrl = '@Url.Action("UserWarehouses", "VendorRequests")';
+    var sVRNotesUpdateUrl = '@Url.Action("UpdateNote", "VendorRequests")';
+    var sUpdateVRUrl = '@Url.Action("UpdateVR", "VendorRequests")';
+    var sDeleteVRUrl = '@Url.Action("DeleteVR", "VendorRequests")';
+    var sAddVRUrl = '@Url.Action("AddVR", "VendorRequests")';
+    var sRequestCatUrl = '@Url.Action("RequestCategories", "VendorRequests")';
+    var sCustAddrUrl = '@Url.Action("GetCustomerAddress", "CustomerOrders")';
+    var sPrintCOUrl = '@Url.Action("GenerateCOReport", "CustomerOrders")';
 
 
-    function fnFormatDetails(oTable, nTr, sTableName) {
+    function GetLineTableHTML(oTable, nTr, sTableName) {
         var oData = oTable.fnGetData(nTr);
 
         var sOut =
@@ -100,6 +169,15 @@
                         '<tr>' +
                             '<th>' +
                                 'Notes' +
+                            '</th>' +
+                            '<th>' +
+                                'Requests' +
+                            '</th>' +
+                            '<th>' +
+                                'Address' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.COItem.item)' +
                             '</th>' +
                             '<th>' +
                                 '@Html.DisplayNameFor(model => model.COItem.co_line)' +
@@ -120,9 +198,6 @@
                                 '@Html.DisplayNameFor(model => model.COItem.ship_date)' +
                             '</th>' +
                             '<th>' +
-                                '@Html.DisplayNameFor(model => model.COItem.projected_date)' +
-                            '</th>' +
-                            '<th>' +
                                 '@Html.DisplayNameFor(model => model.COItem.CreateDate)' +
                             '</th>' +
                         '</tr>' +
@@ -133,4 +208,105 @@
 
         return sOut;
     }
+
+    function GetNoteTableHTML() {
+        var sOut =
+            '<table id="objNotes">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th>' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.Note.NoteDesc)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.Note.CreatedBy)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.Note.UpdatedBy)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.Note.LastUpdated)' +
+                        '</th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+            '</table>';
+
+        return sOut;
+    }
+
+    function GetVRTableHTML() {
+        var sOut =
+            '<table id="objVendorRequest">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th>' + //I need this empty header Column for the ID column
+                            'ID' +
+                        '</th>' +
+                        '<th >' +
+                            'Note' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.COItem.VendorRequest.RequestCategoryCode)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.COItem.VendorRequest.Qty)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.COItem.VendorRequest.QtyLoss)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.COItem.VendorRequest.SourceWarehouse)' +
+                        '</th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '<button id="btnAddNewRow">Add</button>' +
+                '<button id="btnDeleteRow">Delete</button>' +
+            '</table>';
+
+        return sOut;
+    }
+
+    function GetNoteDetailHTML(objRow) {
+
+        var sOut =
+            '<div class="innerRowDetails">' +
+                '<table>' +
+                    '<tbody>' +
+                        '<tr>' +
+                            '<td>' +
+                                '<div id="NoteEditorDiv" class="EditNotes">' +
+                                    objRow.HTMLNoteContent +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>' +
+                    '</tbody>' +
+                '</table>' +
+            '</div>';
+
+        return sOut;
+    }
+
+    function GetVRNoteDetailHTML(objRow) {
+
+        var sOut =
+            '<div class="innerRowDetails">' +
+                '<table>' +
+                    '<tbody>' +
+                        '<tr>' +
+                            '<td>' +
+                                '<div id="VRNoteEditorDiv" class="EditRequestNotes">' +
+                                    objRow.HTMLNotes +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>' +
+                    '</tbody>' +
+                '</table>' +
+            '</div>';
+
+        return sOut;
+    }
+    
 </script>

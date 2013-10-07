@@ -1,14 +1,73 @@
 ﻿var anOpen = [];
 var oTable;
+var strMinDate = dateFormat(new Date(1900, 0, 1), "mm-dd-yyyy"); // '1/1/1900';
 
+
+function FormatDate(objDate, blnIncludeTime) {
+    var objDateProcessed = new Date(parseInt(objDate.replace("/Date(", "").replace(")/", ""), 10));
+
+    //return objDateProcessed.getMonth() + 1 + "/" + objDateProcessed.getDate() + "/" + objDateProcessed.getFullYear();
+    //return dateFormat(objDateProcessed, "dddd, mmmm dS, yyyy, h:MM:ss TT"); //returns Thursday, November 1st, 2012, 12:00:00 AM
+    if (blnIncludeTime)
+        return dateFormat(objDateProcessed, "mm-dd-yyyy HH:MM:ss"); //returns 11-01-2012 12:30:00
+    else
+        return dateFormat(objDateProcessed, "mm-dd-yyyy"); //returns  11-01-2012
+}
 
 $(document).ready(function () {
+    var oTimerId;
+
+
+    $.editable.addInputType('autogrow', {   //adds the autogrow plugin for editing notes
+        element: function (settings, original) {
+            var textarea = $('<textarea />');
+            if (settings.rows) {
+                textarea.attr('rows', settings.rows);
+            } else {
+                textarea.height(settings.height);
+            }
+
+            if (settings.cols) {
+                //textarea.attr('cols', settings.cols);// commenting these out fixed the horizontal sizing issue I was having with the textarea
+            } else {
+                //textarea.width(settings.width);
+            }
+            $(this).append(textarea);
+            return (textarea);
+        },
+        plugin: function (settings, original) {
+            $('textarea', this).autogrow(settings.autogrow);
+        }
+    });
+
+    //note that these statements have nothing to do with autogrow in my datatables. I put the below here so that I could get autogrow to work on my frmAddVendorRequest; autogrow for datatables is handled in the .MakeEditable instantiation
+    //$('textarea').autogrow(); // will apply autogrow to all textareas...
+    $('.MyAutogrow').autogrow(); //applies autogrow to any textarea with statement class="MyAutogrow"...
+
     oTable = $('#objItems').dataTable({
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": document.URL,
-            "sServerMethod": "POST",
-            "aoColumns": [
+        "bProcessing": true,
+        "bServerSide": true,
+        "sDom": "Rlfrtip", //Enables column reorder with resize
+        "sScrollX": "100%",
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "sAjaxSource": document.URL,
+        "sServerMethod": "POST",
+        "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
+
+            window.clearTimeout(oTimerId);
+            oTimerId = window.setTimeout(function () {
+                oSettings.jqXHR = $.ajax({
+                    "dataType": 'json',
+                    "type": "POST",
+                    "url": sSource,
+                    "data": aoData,
+                    "success": fnCallback
+                });
+            }, 1000)
+        },
+        "oLanguage": { "sSearch": "Search PO #s:" },
+        "aoColumns": [
             {
                 "mDataProp": null, //Note that I had a problem with this column being first because when the datatable loads, it automatically sorts based on the first column; since this column had a null value
                 "bSortable": false, //it would pass that null value to the data call. I actually fixed this by modifying the code in InMemoryRepositories.cs so that if there was an error, it just returns the list
@@ -17,37 +76,48 @@ $(document).ready(function () {
             },
             { "mDataProp": "po_num" },
             { "mDataProp": "vend_num" },
-            { "mDataProp": "order_date" },
+            {
+                "mDataProp": "order_date",
+                "fnRender": function (oObj) {
+                    if (oObj.aData.order_date != null && oObj.aData.order_date !== undefined) {
+                        return FormatDate(oObj.aData.order_date);
+                    }
+                }
+            },
             { "mDataProp": "ship_code" },
             { "mDataProp": "terms_code" },
             { "mDataProp": "fob" },
             { "mDataProp": "type" },
-            { "mDataProp": "eff_date" },
+            {
+                "mDataProp": "eff_date",
+                "fnRender": function (oObj) {
+                    if (oObj.aData.eff_date != null && oObj.aData.eff_date !== undefined) {
+                        return FormatDate(oObj.aData.eff_date);
+                    }
+                    else
+                        return strMinDate;
+                }
+            },
             { "mDataProp": "whse" },
-            { "mDataProp": "RecordDate" },
+            {
+                "mDataProp": "RecordDate",
+                "fnRender": function (oObj) {
+                    if (oObj.aData.RecordDate != null && oObj.aData.RecordDate !== undefined) {
+                        return FormatDate(oObj.aData.RecordDate);
+                    }
+                }
+            },
             { "mDataProp": "buyer" },
             { "mDataProp": "CreatedBy" },
             { "mDataProp": "UpdatedBy" },
-            { "mDataProp": "CreateDate" }],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                var objOrderdate = new Date(parseInt(aData.order_date.replace("/Date(", "").replace(")/", ""), 10));
-                $('td:eq(3)', nRow).html(objOrderdate.getMonth() + 1 + "/" + objOrderdate.getDate() + "/" + objOrderdate.getFullYear());
-
-                if (aData.eff_date != null && aData.eff_date !== undefined) {
-                    var objEffdate = new Date(parseInt(aData.eff_date.replace("/Date(", "").replace(")/", ""), 10));
-                    $('td:eq(8)', nRow).html(objEffdate.getMonth() + 1 + "/" + objEffdate.getDate() + "/" + objEffdate.getFullYear());
+            {
+                "mDataProp": "CreateDate",
+                "fnRender": function (oObj) {
+                    if (oObj.aData.CreateDate != null && oObj.aData.CreateDate !== undefined) {
+                        return FormatDate(oObj.aData.CreateDate);
+                    }
                 }
-
-                if (aData.RecordDate != null && aData.RecordDate !== undefined) {
-                    var objRecordDate = new Date(parseInt(aData.RecordDate.replace("/Date(", "").replace(")/", ""), 10));
-                    $('td:eq(10)', nRow).html(objRecordDate.getMonth() + 1 + "/" + objRecordDate.getDate() + "/" + objRecordDate.getFullYear());
-                }
-
-                if (aData.CreateDate != null && aData.CreateDate !== undefined) {
-                    var objCreateDate = new Date(parseInt(aData.CreateDate.replace("/Date(", "").replace(")/", ""), 10));
-                    $('td:eq(14)', nRow).html(objCreateDate.getMonth() + 1 + "/" + objCreateDate.getDate() + "/" + objCreateDate.getFullYear());
-                }
-            }
+            }]
     });
 
     $('#objItems tbody').on('click', 'td.control', function () {
@@ -73,45 +143,56 @@ $(document).ready(function () {
 
         if (i === -1) { //the datatable is opening the row...
             $('img', this).attr('src', sCloseImageUrl);
-            nDetailsRow = oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr, sLineTableName), 'details');
+            nDetailsRow = oTable.fnOpen(nTr, GetLineTableHTML(oTable, nTr, sLineTableName), 'details');
             $('div.innerDetails', nDetailsRow).slideDown();
             anOpen.push(nTr);
 
 
             var tInnerTable = $('#' + sLineTableName).dataTable({ //when referencing the table for it's api, it always wants to be prefaced with #
                 "bProcessing": true,
+                "sDom": "Rlfrtip", //Enables column reorder with resize
                 "bFilter": false,   //hides the search box
                 "bPaginate": false, //disables paging functionality
                 "bServerSide": true,
                 "sAjaxSource": sLineURL + '?&OrderNo=' + sOrderNo, //pass the order number to the orderline url as a querystring; note query string variables are delimited by &
                 "sDom": '<"top">rt<"bottom"flp><"clear">', //hides the filter box and the 'showing recordno of records' message
                 "sServerMethod": "POST", "aoColumns": [
-                        { "mDataProp": "po_num", "sWidth": 30, fnRender: makeViewNotesBtn, "bSortable": false, "bSearchable": false },
+                        {
+                            fnRender: makeViewNotesBtn,
+                            "sWidth": 30,
+                            "bSortable": false,
+                            "bSearchable": false,
+                            "sDefaultContent": '<img src="' + sOpenImageUrl + '">'
+                        },
+                        {  //I can't have the same mDataProp used twice on the datatable, and when I used null I kept getting a 'Requested unknown parameter '0' datatables error
+                            fnRender: makeVendorRequestBtn,
+                            "mDataProp": null,
+                            "bSortable": false,
+                            "bSearchable": false,
+                            "sDefaultContent": '<img src="' + sOpenImageUrl + '">'//adding sDefaultContent solved the error from having a null dataprop
+                        },
+                        { "mDataProp": "item" },
                         { "mDataProp": "po_line" },
                         { "mDataProp": "po_release" },
                         { "mDataProp": "qty_ordered" },
                         { "mDataProp": "qty_received" },
                         { "mDataProp": "qty_rejected" },
-                        { "mDataProp": "due_date" },
-                        { "mDataProp": "rcvd_date" },
-                        { "mDataProp": "CreateDate"}],
-                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-
-                    if (aData.due_date != null && aData.due_date !== undefined) {
-                        var objduedate = new Date(parseInt(aData.due_date.replace("/Date(", "").replace(")/", ""), 10));
-                        $('td:eq(6)', nRow).html(objduedate.getMonth() + 1 + "/" + objduedate.getDate() + "/" + objduedate.getFullYear());
-                    }
-
-                    if (aData.ship_date != null && aData.ship_date !== undefined) {
-                        var objrcvddate = new Date(parseInt(aData.rcvd_date.replace("/Date(", "").replace(")/", ""), 10));
-                        $('td:eq(7)', nRow).html(objrcvddate.getMonth() + 1 + "/" + objrcvddate.getDate() + "/" + objrcvddate.getFullYear());
-                    }
-
-                    if (aData.CreateDate != null && aData.CreateDate !== undefined) {
-                        var objCreateDate = new Date(parseInt(aData.CreateDate.replace("/Date(", "").replace(")/", ""), 10));
-                        $('td:eq(8)', nRow).html(objCreateDate.getMonth() + 1 + "/" + objCreateDate.getDate() + "/" + objCreateDate.getFullYear());
-                    }
-                }
+                        {
+                            "mDataProp": "due_date",
+                            "fnRender": function (oObj) {
+                                if (oObj.aData.due_date != null && oObj.aData.due_date !== undefined) {
+                                    return FormatDate(oObj.aData.due_date);
+                                }
+                            }
+                        },
+                        {
+                            "mDataProp": "CreateDate",
+                            "fnRender": function (oObj) {
+                                if (oObj.aData.CreateDate != null && oObj.aData.CreateDate !== undefined) {
+                                    return FormatDate(oObj.aData.CreateDate);
+                                }
+                            }
+                        }]
             });
         }
         else {
@@ -124,10 +205,375 @@ $(document).ready(function () {
     });
 });
 
+function loadDialog(sUrl) {
+    var oNotesTable;
+
+    /*The below sets the html in the div to the proper table with ID objNotes so datatables can instantiate it. Before I did this I had a problem with datatables erroring out because
+    I was trying to initialize the same data table a second time*/
+    $("#NotesDialogDiv").html(GetNoteTableHTML());
+
+    oNotesTable = $('#objNotes').dataTable({
+        "bJQueryUI": true,
+        "sDom": "Rlfrtip", //Enables column reorder with resize
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": sUrl, //document.URL,
+        "bFilter": false,   //hides the search box
+        "bPaginate": false, //disables paging functionality
+        "sDom": '<"top">rt<"bottom"flp><"clear">', //hides footer that displays 'showing record 1 of 1'...
+        "sServerMethod": "POST",
+        "aoColumns": [
+            {
+                "mDataProp": null, //Note that I had a problem with this column being first because when the datatable loads, it automatically sorts based on the first column; since this column had a null value
+                "bSortable": false, //it would pass that null value to the data call. I actually fixed this by modifying the code in InMemoryRepositories.cs so that if there was an error, it just returns the list
+                "sClass": "control center",
+                "sDefaultContent": '<img src="' + sOpenImageUrl + '">'
+            },
+            { "mDataProp": "NoteDesc" },
+            { "mDataProp": "CreatedBy" },
+            { "mDataProp": "UpdatedBy" },
+            {
+                "mDataProp": "LastUpdated"
+                //"fnRender": function (oObj) {
+                //    if (oObj.aData.LastUpdated != null && oObj.aData.LastUpdated !== undefined) {
+                //        return FormatDate(oObj.aData.LastUpdated);
+                //    }
+                //} 
+            }],
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            /*This needed to be reinstated because fnRender changed the value that was sent to the controller and broke the note updating functionality due to the time
+            being truncated off by the FormatDate function; see NotesController's UpdateNote method for details*/
+            if (aData.LastUpdated != null && aData.LastUpdated !== undefined) {
+                var objLastUpdated = new Date(parseInt(aData.LastUpdated.replace("/Date(", "").replace(")/", ""), 10));
+                $('td:eq(4)', nRow).html(objLastUpdated.getMonth() + 1 + "/" + objLastUpdated.getDate() + "/" + objLastUpdated.getFullYear());
+            }
+        }
+    });
+
+    $('#objNotes tbody').on('click', 'td.control', function () {
+        var nTr;
+        var i;
+        var rowIndex;
+        var nDetailsRow;
+        var sLineTableName;
+        var objRow;
+
+        nTr = this.parentNode;
+        i = $.inArray(nTr, anOpen);
+
+        rowIndex = oNotesTable.fnGetPosition(nTr); //get the index of the current row
+        sLineTableName = 'dtLineTable' + rowIndex;
+
+        objRow = oNotesTable.fnGetData(rowIndex);
+
+        if (i === -1) { //the datatable is opening the row...
+            $('img', this).attr('src', sCloseImageUrl);
+            nDetailsRow = oNotesTable.fnOpen(nTr, GetNoteDetailHTML(objRow), 'details');
+            $('div.innerRowDetails', nDetailsRow).slideDown();
+            anOpen.push(nTr);
+
+            $('.EditNotes').editable(sNotesUpdateUrl, { //make the note detail editable...
+                id: 'PostedNoteData',  //gives the label 'id' the label 'PostedNoteData'
+                name: 'NoteContent', //labels the updated data as NoteContent instead of 'value'
+                submitdata: { SpecificNoteToken: objRow.SpecificNoteToken, NoteDesc: objRow.NoteDesc, LastUpdated: objRow.LastUpdated }, //passes the additional parameters SpecificNoteToken and NoteDesc
+                type: "autogrow", //specifies to use the autogrow input specified above
+                submit: 'OK', //Adds the OK button that submits post
+                cancel: 'Cancel', //adds the Cancel button that cancels the edit
+                tooltip: "Click to edit.",
+                onblur: "ignore", //what happens when user clicks out of textarea values can be "ignore", "submit", or "cancel"
+                indicator: '<img src="' + sProgressImageUrl + '">', //could also just be a text message like 'Saving...'
+                data: function (value, settings) { //This gets fired when the control goes into edit mode
+                    /* Convert <br> to newline. */
+                    //alert(value);
+                    var retval = value.replace(/<br[\s\/]?>/gi, '\n');
+                    return retval;
+                },
+                callback: function (value, settings) {
+                    sValue = JSON.parse(value); //puts the JSON data into objects form so they can be accessed like sValue.LastUpdate, etc.
+
+                    if (sValue.Success) {
+                        objRow.LastUpdated = sValue.LastUpdate
+                        oNotesTable.fnUpdate(objRow, rowIndex); //required to update the datatable with the new LastUpdate Date, else subsequent edits to notes will fail
+                        //oNotesTable.fnUpdate(sValue.LastUpdate, rowIndex, 
+
+                        //alert(sValue.LastUpdate);
+                    }
+                    else {
+                        alert('The edits failed to save');
+                    }
+                    $('#NoteEditorDiv').html(sValue.HTMLNoteContent);
+                    //window.location.reload();
+                }
+            });
+        }
+        else {
+            $('img', this).attr('src', sOpenImageUrl);
+            $('div.innerRowDetails', $(nTr).next()[0]).slideUp(function () {
+                oNotesTable.fnClose(nTr);
+                anOpen.splice(i, 1);
+            });
+        }
+    });
+
+    // Open this Datatable as a modal dialog box.
+    $('#NotesDialogDiv').dialog({
+        modal: true,
+        resizable: true,
+        position: 'top',
+        width: 'auto',
+        autoResize: true,
+        title: 'Purchase Order Notes'
+    });
+};
+
 function makeViewNotesBtn(oObj) {
     var sOrderNo = oObj.aData.po_num;
     var sLineNo = oObj.aData.po_line;
     var sReleaseNo = oObj.aData.po_release;
-    return "<a href='" + sLineURL + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + "' class='ViewNotes' title='View Notes'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
+    var sHref
 
+
+    /*The below is what i was using to call my NotesViewer.cshtml from the controller before i implemented the dialog box*/
+    //return "<a href='" + sLineURL + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + "' class='ViewNotes' title='View Notes'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
+
+    sHref = sPONotesUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo; //generate the query string
+    return "<a href=\"javascript:loadDialog('" + sHref + "')\" class='ViewNotes' title='View Notes'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
 }
+
+function makeVendorRequestBtn(oObj) {
+    var sOrderNo = oObj.aData.po_num;
+    var sLineNo = oObj.aData.po_line;
+    var sReleaseNo = oObj.aData.po_release;
+    var sHref
+
+    sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + '&RequestType=PO'; //generate the query string
+    return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='Process'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
+};
+
+function loadVendorRequestDialog(sUrl) {
+    var oVRequestTable;
+
+    //This is a cool little chunk of code that I use to get the values of parameters from the querystring sUrl. For sUrl='/VendorRequests/VendorRequests?&OrderNo=T000000267&LineNo=1' I can call it like GET("OrderNo")[0] to get 'T000000267'
+    //or I can call it like data = GET("OrderNo","LineNo"); and get data[0]= 'T000000267' and data[1]= '1'.
+    function GET() {
+        var data = [];
+        for (x = 0; x < arguments.length; ++x)
+            data.push(sUrl.match(new RegExp("/\?".concat(arguments[x], "=", "([^\n&]*)")))[1])
+        return data;
+    }
+
+    //This is a way to create a reusable column, so you don't have to redefine the same variables on each column instantiation of makeEditable()
+    //note that all options that are available for editable() from jeditable are available here...
+    defaultEditable = {
+        tooltip: 'Click to edit',
+        type: 'select', //was 'textarea' in the example which called my autogrowing textbox...
+        onblur: 'submit',
+        data: UserWarehouses()
+    }
+
+    /*The below sets the html in the div to the proper table with ID objNotes so datatables can instantiate it. Before I did this I had a problem with datatables erroring out because
+    I was trying to initialize the same data table a second time*/
+    $("#VendorRequestDialogDiv").html(GetVRTableHTML()); //Just a hidden empty div on Search.cshtml that the popup uses...
+
+
+    oVRequestTable = $('#objVendorRequest').dataTable({
+        "bJQueryUI": true,
+        "sDom": "Rlfrtip", //Enables column reorder with resize
+        "bProcessing": true,
+        "bServerSide": true,
+        "bFilter": false,   //hides the search box
+        "bPaginate": false, //disables paging functionality
+        "sDom": '<"top">rt<"bottom"flp><"clear">', //hides footer that displays 'showing record 1 of 1'...
+        "sAjaxSource": sUrl, //document.URL,
+        "sServerMethod": "POST",
+        "aoColumns": [
+            {   //I had to add this column to the table otherwise it was passing the button href to my update Url; Datatables wants the first column to be a primary key...
+                "mDataProp": null, //When posting, there was no value being passed to the 'id' parameter that datatables datatables automatically posts; THE ONLY WAY that I could get a the key value (column 'ID' in my database) to populate to the id parameter
+                "sDefaultContent": "ID",    //Was to set mDataProp to null, set sDefaultContent to some arbitrary value (I used 'ID') and then populate the cell with the 'ID' property of the row which maps to my ID column in my database..
+                "bVisible": false, //Setting this column as hidden removed it from the display and negated the need to include it in my makeEditable aoColumns array, however I still had to add the column to GetVRTableHTML()
+                "fnRender": function (oObj) {
+                    return oObj.aData["ID"]; //accessing the ID column of the specific row
+                }
+            },
+            {
+                "mDataProp": null, //Note that I had a problem with this column being first because when the datatable loads, it automatically sorts based on the first column; since this column had a null value
+                "bSortable": false, //it would pass that null value to the data call. I actually fixed this by modifying the code in InMemoryRepositories.cs so that if there was an error, it just returns the list
+                "sClass": "control center",
+                "sDefaultContent": '<img src="' + sOpenImageUrl + '">'
+            },
+            { "mDataProp": "RequestCategoryCode" },
+            { "mDataProp": "Qty" },
+            {
+                "mDataProp": "QtyLoss",
+                "bVisible": false
+            },
+            { "mDataProp": "SourceWarehouse" },
+            {
+                "mDataProp": "OrderNo", //I don't show this row on the datatable, but I need it here so that I can populate it on my frmAddVendorRequest
+                "bVisible": false
+            },
+            {
+                "mDataProp": "LineNo", //I don't show this row on the datatable, but I need it here so that I can populate it on my frmAddVendorRequest
+                "bVisible": false
+            },
+            {
+                "mDataProp": "Notes", //I don't show this row on the datatable, but I need it here so that I can populate it on my frmAddVendorRequest
+                "bVisible": false
+            },
+            {
+                "mDataProp": "RequestCategoryID", //I don't show this row on the datatable, but I need it here so that I can populate it on my frmAddVendorRequest
+                "bVisible": false
+            },
+            {
+                "mDataProp": "ReleaseNo", //I don't show this row on the datatable, but I need it here so that I can populate it on my frmAddVendorRequest
+                "bVisible": false
+            }]
+    }).makeEditable({ //I kept getting the error "Object doesn't support property or method 'live'" until I changed line 1260 of jquery.dataTables.editable.js 'live' method to 'on'
+        sUpdateURL: sUpdateVRUrl,
+        sAddURL: sAddVRUrl,
+        sDeleteURL: sDeleteVRUrl,
+        fnOnAdding: function () {//This event gets fired right before the form is submitted to the server. I can use this time to populate the variables I need to add a new record into the database such as OrderNo, OrderLine, OrderRelease, etc.
+            //In order for this to work I needed to add the columns to the datatable and then hide them, put the hiddent textboxes on the frmAddVendorRequest form with the proper rel="#" attribute (where # is the column order
+            //That they were added in the column instantiation. I then populate thier values here...
+
+            //uses the GET function defined above and retrieves the values from the querystring...
+            var dataValues = GET("OrderNo", "LineNo", "ReleaseNo");
+            document.getElementById('OrderNo').value = dataValues[0];
+            document.getElementById('LineNo').value = dataValues[1];
+            document.getElementById('ReleaseNo').value = dataValues[2];
+            document.getElementById('RequestCategoryID').value = 1; //Purchase Orders have a request category of 1
+
+            return true;
+        },
+        sAddNewRowFormId: "frmAddVendorRequest", //specifies the ID of the form that will be used to add a new row...
+        "oAddNewRowFormOptions": { //These options are the same/taken from the jquery.dialog() options http://api.jqueryui.com/dialog/
+            "title": "Add new Vendor Request", //This can also be done by setting the attribute 'title = "Add new Vendor Request"' in the form tag
+            "height": 450,
+            "width": 700
+        },
+        aoColumns: [
+            null,
+            {
+                type: 'select',
+                onblur: 'submit',  //values can be "ignore", "submit", or "cancel"
+                //data: "{'COShipment':'COShipment', 'COLateRequest':'COLateRequest'}", 
+                data: RequestCategories()
+                //submit: 'Save changes'//shows a submit button
+            },
+            {},
+            //{}, //not needed once I removed LossQty
+            $.extend({}, defaultEditable, { indicator: 'Saving...' }) //create a column using defaultEditable value that is listed above, also passes an 'indicator' parameter that is specific to this instance...
+        ]
+    });
+
+    $('#objVendorRequest tbody').on('click', 'td.control', function () {
+
+        var nTr;
+        var i;
+        var rowIndex;
+        var nDetailsRow;
+        var sLineTableName;
+        var objRow;
+
+        nTr = this.parentNode;
+        i = $.inArray(nTr, anOpen);
+
+
+        rowIndex = oVRequestTable.fnGetPosition(nTr); //get the index of the current row
+        sLineTableName = 'dtProcessTable' + rowIndex;
+
+        objRow = oVRequestTable.fnGetData(rowIndex);
+
+        if (i === -1) { //the datatable is opening the row...
+            $('img', this).attr('src', sCloseImageUrl);
+            nDetailsRow = oVRequestTable.fnOpen(nTr, GetVRNoteDetailHTML(objRow), 'details');
+            $('div.innerRowDetails', nDetailsRow).slideDown();
+            anOpen.push(nTr);
+
+            $('.EditRequestNotes').editable(sVRNotesUpdateUrl, { //make the note detail editable...
+                id: 'PostedNoteData',  //gives the label 'id' the label 'PostedNoteData'
+                name: 'NoteContent', //labels the updated data as NoteContent instead of 'value'
+                submitdata: { ID: objRow.ID, notes: objRow.notes },
+                type: "autogrow", //specifies to use the autogrow input specified above
+                submit: 'OK', //Adds the OK button that submits post
+                cancel: 'Cancel', //adds the Cancel button that cancels the edit
+                tooltip: "Click to edit.",
+                onblur: "ignore", //what happens when user clicks out of textarea values can be "ignore", "submit", or "cancel"
+                indicator: '<img src="' + sProgressImageUrl + '">', //This is what shows while ajax is processing. Could also just be a text message like 'Saving...'
+                data: function (value, settings) { //This gets fired when the control goes into edit mode
+                    /* Convert <br> to newline. */
+                    var retval = value.replace(/<br[\s\/]?>/gi, '\n');
+                    return retval;
+                },
+                callback: function (value, settings) {//This is fired after the control uses ajax to save the data to the server and the JSON Result is recieved back from the server
+                    sValue = JSON.parse(value); //puts the JSON data into objects form so they can be accessed like sValue.LastUpdate, etc.
+
+                    if (sValue.Success) { }
+                    else {
+                        alert('The edits failed to save');
+                    }
+                    $('#VRNoteEditorDiv').html(sValue.HTMLNotes); //Sets the NoteEditorDiv to the html of the newly saved Notes Object's HTML property
+                    //window.location.reload();
+                }
+            });
+        }
+        else {
+            $('img', this).attr('src', sOpenImageUrl);
+            $('div.innerRowDetails', $(nTr).next()[0]).slideUp(function () {
+                oVRequestTable.fnClose(nTr);
+                anOpen.splice(i, 1);
+            });
+        }
+    });
+
+    //This function needed to be in the same Block as the calling function in the oProcessTable.makeEditable() column call, else I would get the error 'SCRIPT5002: Function expected'. Its almost like the 
+    //Script file gets detached from the DOM or something and then the column instantiation can't find the AllWarehouses() function... This took me a day to figure out!
+    function UserWarehouses() {
+        var sValue;
+        $.post(sUserWhsesUrl, {}, function (data) {
+            UserWarehouses = FormatJSON(data);
+        });
+        return UserWarehouses;
+    }
+
+    //This function gets all the Transfer Order Request Categories from the Database
+    function RequestCategories() {
+        var sValue;
+
+        //I modified the below so that I didn't have to specify a different controller action for CO, PO, and TO request categories. I pass the RequestCategory ID in a query string so the controllerselects the correct one
+        $.post(sRequestCatUrl + '?&RequestCategoryID=1', {}, function (data) {
+            RequestCategories = FormatJSON(data);
+        });
+        return RequestCategories;
+    }
+
+    //The JSON must be in the a format such as "{'TOReciept':'TOReciept', 'TOShipment':'TOShipment'}" This function does that
+    function FormatJSON(x) {
+        var orig = x;
+        var stgify = JSON.stringify(orig);
+        var splitchar = ['\",\"', '\"],[\"', '[', ']', '\"'];
+        var joinchar = ['\':\'', '\', \'', '', '', '\''];
+
+        //This is the loop that does the replacement of the above characters
+        for (i = 0; i < 5; i++) {
+            //alert("Split Char: " + splitchar[i] + "\r\n" + "Join Char: " + joinchar[i]);
+            stgify = stgify.split(splitchar[i]);
+            tmp = stgify.join(joinchar[i]);
+            stgify = tmp;
+        }
+
+        stgify = "{" + stgify + "}";
+        var finalEdit = stgify;
+        return finalEdit;
+    }
+
+    // Open this Datatable as a modal dialog box.
+    $('#VendorRequestDialogDiv').dialog({
+        modal: true,
+        resizable: true,
+        position: 'top',
+        width: 'auto',
+        autoResize: true,
+        title: 'Purchase Order Requests'
+    });
+};

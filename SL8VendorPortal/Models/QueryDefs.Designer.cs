@@ -61,6 +61,30 @@ namespace SL8VendorPortal.Models {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SET ANSI_NULLS ON
+        ///GO
+        ///SET QUOTED_IDENTIFIER ON
+        ///GO
+        ///-- =============================================
+        ///-- Author:		Jake Lardinois
+        ///-- Create date: 8/25/2013
+        ///-- Description:	This trigger updates the DateUpdated field after a VendorRequest has been modified
+        ///-- =============================================
+        ///CREATE TRIGGER trg_UpdateDateUpdated
+        ///   ON  [SL8VendorPortal].[dbo].[VendorRequests]
+        ///   AFTER UPDATE
+        ///AS 
+        ///BEGIN
+        ///	-- SET NOCOUNT ON added to prevent extra result sets from
+        ///	-- interfering with SELECT  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CreateUpdateDateUpdatedTrigger {
+            get {
+                return ResourceManager.GetString("CreateUpdateDateUpdatedTrigger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT *
         ///  FROM co
         ///  WHERE co_num IN (
@@ -338,13 +362,36 @@ namespace SL8VendorPortal.Models {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UPDATE SpecificNotes 
-        ///SET NoteContent = &apos;~p1&apos;, NoteDesc = &apos;~p2&apos; 
-        ///WHERE SpecificNoteToken = &apos;~p0&apos;.
+        ///   Looks up a localized string similar to DECLARE @UserName nvarchar(30)
+        ///SET @UserName = suser_sname()
+        ///IF (@UserName = &apos;WTFApp&apos;)
+        ///	BEGIN;
+        ///		DISABLE TRIGGER SpecificNotesUpdatePenultimate ON SpecificNotes
+        ///		UPDATE SpecificNotes 
+        ///			SET NoteContent = &apos;~p1&apos;, NoteDesc = &apos;~p2&apos;, UpdatedBy = &apos;~p3&apos;, RecordDate = GETDATE()
+        ///			WHERE SpecificNoteToken = ~p0;
+        ///		ENABLE TRIGGER SpecificNotesUpdatePenultimate ON SpecificNotes
+        ///	END 
+        ///ELSE
+        ///	BEGIN
+        ///		UPDATE SpecificNotes
+        ///			SET NoteContent = &apos;~p1&apos;, NoteDesc = &apos;~p2&apos;, UpdatedBy = &apos;~p3&apos;
+        ///			WHERE SpecificNote [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UpdateNote {
             get {
                 return ResourceManager.GetString("UpdateNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPDATE VendorRequests
+        ///SET ~p0 = &apos;~p1&apos;, Updater = &apos;~p3&apos;
+        ///WHERE ID = ~p2.
+        /// </summary>
+        internal static string UpdateVendorRequest {
+            get {
+                return ResourceManager.GetString("UpdateVendorRequest", resourceCulture);
             }
         }
     }

@@ -10,165 +10,13 @@ using System.ComponentModel.DataAnnotations;
  */
 namespace SL8VendorPortal.Models
 {
-    #region Transfer Order Classes
-    //Transfer Orders
-    [MetadataType(typeof(transferMetadata))]
-    public partial class transfer 
-    {
-        public IEnumerable<trnitem> trnitems { get; set; }
-        public trnitem TrnItem { get; set; }
-    }
-    public class transferMetadata
-    {
-        // Name the field the same as EF named the property - "FirstName" for example.
-        // Also, the type needs to match.  Basically just redeclare it.
-        // Note that this is a field.  I think it can be a property too, but fields definitely should work.
-
-        //[Required]
-        [Display(Name = "Transfer Number")]
-        public string trn_num { get; set; }
-
-        [Display(Name = "Source")]
-        public string from_whse { get; set; }
-
-        [Display(Name = "Destination")]
-        public string to_whse { get; set; }
-
-        [Display(Name = "Status")]
-        public string stat { get; set; }
-
-        [Display(Name = "ShipCode")]
-        public string ship_code { get; set; }
-
-        [Display(Name = "Weight")]
-        public Nullable<decimal> weight { get; set; }
-
-        [Display(Name = "# of Skids")]
-        public Nullable<short> qty_packages { get; set; }
-
-        [Display(Name = "Creator")]
-        public string CreatedBy { get; set; }
-
-        [Display(Name = "Updater")]
-        public string UpdatedBy { get; set; }
-
-        [Display(Name = "Date Created")]
-        public System.DateTime CreateDate { get; set; }
-
-        [Display(Name = "Order Date")]
-        public Nullable<System.DateTime> order_date { get; set; }
-    }
-
-    //Transfer Order Lines
-    [MetadataType(typeof(trnitemMetadata))]
-    public partial class trnitem {/*Note this class has nothing in it.  It's just here to add the class-level attribute.*/}
-    public class trnitemMetadata
-    {
-        [Display(Name = "Transfer Number")]
-        public string trn_num { get; set; }
-
-        [Display(Name = "Transfer Line No.")]
-        public short trn_line { get; set; }
-
-        [Display(Name = "Status")]
-        public string stat { get; set; }
-
-        [Display(Name = "Item")]
-        public string item { get; set; }
-
-        [Display(Name = "Location")]
-        public string trn_loc { get; set; }
-
-        [Display(Name = "Ship Date")]
-        public Nullable<System.DateTime> ship_date { get; set; }
-
-        [Display(Name = "Receive Date")]
-        public Nullable<System.DateTime> rcvd_date { get; set; }
-
-        [Display(Name = "Qty Requested")]
-        public Nullable<decimal> qty_req { get; set; }
-
-        [Display(Name = "Qty Shipped")]
-        public Nullable<decimal> qty_shipped { get; set; }
-
-        [Display(Name = "Qty Recieved")]
-        public Nullable<decimal> qty_received { get; set; }
-
-        [Display(Name = "Qty Loss")]
-        public Nullable<decimal> qty_loss { get; set; }
-
-        [Display(Name = "Qty Packed")]
-        public Nullable<decimal> qty_packed { get; set; }
-
-        [Display(Name = "Pick Date")]
-        public Nullable<System.DateTime> pick_date { get; set; }
-
-        [Display(Name = "U of M")]
-        public string u_m { get; set; }
-
-        [Display(Name = "Scheduled Receive Date")]
-        public System.DateTime sch_rcv_date { get; set; }
-
-        [Display(Name = "Scheduled Ship Date")]
-        public System.DateTime sch_ship_date { get; set; }
-
-        [Display(Name = "From Site")]
-        public string from_site { get; set; }
-
-        [Display(Name = "Source ")]
-        public string from_whse { get; set; }
-
-        [Display(Name = "To Site")]
-        public string to_site { get; set; }
-
-        [Display(Name = "Destination")]
-        public string to_whse { get; set; }
-
-        [Display(Name = "Unit Weight")]
-        public Nullable<decimal> unit_weight { get; set; }
-
-        [Display(Name = "Projected Date")]
-        public Nullable<System.DateTime> projected_date { get; set; }
-
-        [Display(Name = "Date Updated")]
-        public System.DateTime RecordDate { get; set; }
-
-        [Display(Name = "Creator")]
-        public string CreatedBy { get; set; }
-
-        [Display(Name = "Updater")]
-        public string UpdatedBy { get; set; }
-
-        [Display(Name = "Date Created")]
-        public System.DateTime CreateDate { get; set; }
-    }
-    #endregion
-
-    [MetadataType(typeof(itemwhseMetadata))]
-    public partial class itemwhse { }
-    public class itemwhseMetadata
-    {
-        [Display(Name = "Item")]
-        public string item { get; set; }
-
-        [Display(Name = "Warehouse")]
-        public string whse { get; set; }
-
-        [Display(Name = "Qty at Whse")]
-        public Nullable<decimal> qty_on_hand { get; set; }
-
-        [Display(Name = "Qty Alloc To COs")]
-        public Nullable<decimal> qty_alloc_co { get; set; }
-
-        [Display(Name = "Qty In Transit")]
-        public Nullable<decimal> qty_trans { get; set; }
-    }
-
     #region Customer Order Classes
     //Customer Orders
     [MetadataType(typeof(coMetadata))]
     public partial class co
     {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
         public IEnumerable<coitem> coitems { get; set; }
         public coitem COItem { get; set; } //I extended this class so that I could access the headers for COLines on my razor view for Customer Orders
     }
@@ -204,7 +52,7 @@ namespace SL8VendorPortal.Models
         [Display(Name = "Terms")]
         public string terms_code { get; set; }
 
-        [Display(Name = "Ship Address")]
+        [Display(Name = "Ship Via")]
         public string ship_code { get; set; }
 
         [Display(Name = "Price")]
@@ -285,13 +133,18 @@ namespace SL8VendorPortal.Models
         [Display(Name = "Date Created")]
         public System.DateTime CreateDate { get; set; }
     }
-
     //Customer Order Lines & Releases
     [MetadataType(typeof(coitemMetadata))]
     public partial class coitem
     {
-        public IEnumerable<co_bln> co_blns { get; set; }
-        public co_bln CO_Bln { get; set; }
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
+
+        public IEnumerable<VendorRequest> VendorRequests { get; set; }
+        public VendorRequest VendorRequest { get; set; }
+
+        //public custaddr CustomerAddress;
+        public string CustomerAddress;
     }
     public class coitemMetadata
     {
@@ -299,7 +152,7 @@ namespace SL8VendorPortal.Models
         public string co_num { get; set; }
 
         [Display(Name = "CO Line No.")]
-        public string co_line { get; set; }
+        public short co_line { get; set; }
 
         [Display(Name = "CO Line Release No.")]
         public short co_release { get; set; }
@@ -418,10 +271,16 @@ namespace SL8VendorPortal.Models
         [Display(Name = "Qty Picked")]
         public decimal qty_picked { get; set; }
     }
-
     //Customer Blanket Order Lines
     [MetadataType(typeof(co_blnMetadata))]
-    public partial class co_bln{}
+    public partial class co_bln
+    {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
+        public IEnumerable<coitem> coitems { get; set; }
+        public coitem COItem { get; set; } //A co_bln will have coitems as children. That is to say that the co_bln will be the line in Syteline, but both regular order lines and 
+        //blanket order lines will have thier lines and releases (respectively) in the coitem table.
+    }
     public class co_blnMetadata
     {
         public string co_num { get; set; }
@@ -469,8 +328,10 @@ namespace SL8VendorPortal.Models
     #region Purchase Order Classes
     //Purchase Orders
     [MetadataType(typeof(poMetadata))]
-    public partial class po 
+    public partial class po
     {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
         public IEnumerable<poitem> poitems { get; set; }
         public poitem POItem { get; set; } //I extended this class so that I could access the headers for POLines on my razor view for Purchase Orders
     }
@@ -569,10 +430,16 @@ namespace SL8VendorPortal.Models
         [Display(Name = "Date Created")]
         public System.DateTime CreateDate { get; set; }
     }
-
     //Purchase Order Lines & Releases
     [MetadataType(typeof(poitemMetadata))]
-    public partial class poitem { }
+    public partial class poitem
+    {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
+
+        public IEnumerable<VendorRequest> VendorRequests { get; set; }
+        public VendorRequest VendorRequest { get; set; }
+    }
     public class poitemMetadata
     {
         [Display(Name = "PO Number")]
@@ -672,10 +539,15 @@ namespace SL8VendorPortal.Models
         [Display(Name = "Manufacturer Item")]
         public string manufacturer_item { get; set; }
     }
-
     //PO Blanket Lines
     [MetadataType(typeof(po_blnMetadata))]
-    public partial class po_bln { }
+    public partial class po_bln
+    {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
+        public IEnumerable<poitem> coitems { get; set; }
+        public poitem POItem { get; set; }
+    }
     public class po_blnMetadata
     {
         [Display(Name = "PO Number")]
@@ -731,4 +603,166 @@ namespace SL8VendorPortal.Models
         public string uf_pref_type { get; set; }
     }
     #endregion 
+
+    #region Transfer Order Classes
+    //Transfer Orders
+    [MetadataType(typeof(transferMetadata))]
+    public partial class transfer 
+    {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
+        public IEnumerable<trnitem> trnitems { get; set; }
+        public trnitem TrnItem { get; set; }
+    }
+    public class transferMetadata
+    {
+        // Name the field the same as EF named the property - "FirstName" for example.
+        // Also, the type needs to match.  Basically just redeclare it.
+        // Note that this is a field.  I think it can be a property too, but fields definitely should work.
+
+        //[Required]
+        [Display(Name = "Transfer Number")]
+        public string trn_num { get; set; }
+
+        [Display(Name = "Source")]
+        public string from_whse { get; set; }
+
+        [Display(Name = "Destination")]
+        public string to_whse { get; set; }
+
+        [Display(Name = "Status")]
+        public string stat { get; set; }
+
+        [Display(Name = "ShipCode")]
+        public string ship_code { get; set; }
+
+        [Display(Name = "Weight")]
+        public Nullable<decimal> weight { get; set; }
+
+        [Display(Name = "# of Skids")]
+        public Nullable<short> qty_packages { get; set; }
+
+        [Display(Name = "Creator")]
+        public string CreatedBy { get; set; }
+
+        [Display(Name = "Updater")]
+        public string UpdatedBy { get; set; }
+
+        [Display(Name = "Date Created")]
+        public System.DateTime CreateDate { get; set; }
+
+        [Display(Name = "Order Date")]
+        public Nullable<System.DateTime> order_date { get; set; }
+    }
+    //Transfer Order Lines
+    [MetadataType(typeof(trnitemMetadata))]
+    public partial class trnitem 
+    {
+        public IEnumerable<SytelineNote> Notes { get; set; }
+        public SytelineNote Note { get; set; }
+
+        public IEnumerable<VendorRequest> VendorRequests { get; set; }
+        public VendorRequest VendorRequest { get; set; }
+    }
+    public class trnitemMetadata
+    {
+        [Display(Name = "Transfer Number")]
+        public string trn_num { get; set; }
+
+        [Display(Name = "Line")]
+        public short trn_line { get; set; }
+
+        [Display(Name = "Status")]
+        public string stat { get; set; }
+
+        [Display(Name = "Item")]
+        public string item { get; set; }
+
+        [Display(Name = "Location")]
+        public string trn_loc { get; set; }
+
+        [Display(Name = "Ship Date")]
+        public Nullable<System.DateTime> ship_date { get; set; }
+
+        [Display(Name = "Receive Date")]
+        public Nullable<System.DateTime> rcvd_date { get; set; }
+
+        [Display(Name = "Qty Requested")]
+        public Nullable<decimal> qty_req { get; set; }
+
+        [Display(Name = "Qty Shipped")]
+        public Nullable<decimal> qty_shipped { get; set; }
+
+        [Display(Name = "Qty Recieved")]
+        public Nullable<decimal> qty_received { get; set; }
+
+        [Display(Name = "Qty Loss")]
+        public Nullable<decimal> qty_loss { get; set; }
+
+        [Display(Name = "Qty Packed")]
+        public Nullable<decimal> qty_packed { get; set; }
+
+        [Display(Name = "Pick Date")]
+        public Nullable<System.DateTime> pick_date { get; set; }
+
+        [Display(Name = "U of M")]
+        public string u_m { get; set; }
+
+        [Display(Name = "Scheduled Receive")]
+        public System.DateTime sch_rcv_date { get; set; }
+
+        [Display(Name = "Scheduled Ship Date")]
+        public System.DateTime sch_ship_date { get; set; }
+
+        [Display(Name = "From Site")]
+        public string from_site { get; set; }
+
+        [Display(Name = "Source ")]
+        public string from_whse { get; set; }
+
+        [Display(Name = "To Site")]
+        public string to_site { get; set; }
+
+        [Display(Name = "Destination")]
+        public string to_whse { get; set; }
+
+        [Display(Name = "Unit Weight")]
+        public Nullable<decimal> unit_weight { get; set; }
+
+        [Display(Name = "Projected Date")]
+        public Nullable<System.DateTime> projected_date { get; set; }
+
+        [Display(Name = "Date Updated")]
+        public System.DateTime RecordDate { get; set; }
+
+        [Display(Name = "Creator")]
+        public string CreatedBy { get; set; }
+
+        [Display(Name = "Updater")]
+        public string UpdatedBy { get; set; }
+
+        [Display(Name = "Date Created")]
+        public System.DateTime CreateDate { get; set; }
+    }
+    #endregion
+
+    [MetadataType(typeof(itemwhseMetadata))]
+    public partial class itemwhse { }
+    public class itemwhseMetadata
+    {
+        [Display(Name = "Item")]
+        public string item { get; set; }
+
+        [Display(Name = "Warehouse")]
+        public string whse { get; set; }
+
+        [Display(Name = "Qty at Whse")]
+        public Nullable<decimal> qty_on_hand { get; set; }
+
+        [Display(Name = "Qty Alloc To COs")]
+        public Nullable<decimal> qty_alloc_co { get; set; }
+
+        [Display(Name = "Qty In Transit")]
+        public Nullable<decimal> qty_trans { get; set; }
+    }
 }

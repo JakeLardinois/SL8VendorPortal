@@ -9,12 +9,14 @@
           <EntitySet Name="co" EntityType="WTF_AppModel.Store.co" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="co_bln" EntityType="WTF_AppModel.Store.co_bln" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="coitem" EntityType="WTF_AppModel.Store.coitem" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="custaddr" EntityType="WTF_AppModel.Store.custaddr" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="itemwhse" EntityType="WTF_AppModel.Store.itemwhse" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="po" EntityType="WTF_AppModel.Store.po" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="po_bln" EntityType="WTF_AppModel.Store.po_bln" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="poitem" EntityType="WTF_AppModel.Store.poitem" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="transfer" EntityType="WTF_AppModel.Store.transfer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="trnitem" EntityType="WTF_AppModel.Store.trnitem" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="whse" EntityType="WTF_AppModel.Store.whse" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="co">
           <Key>
@@ -296,6 +298,55 @@
           <Property Name="manufacturer_item" Type="nvarchar" MaxLength="30" />
           <Property Name="uf_pref_type" Type="nvarchar" MaxLength="8" />
           <Property Name="qty_picked" Type="decimal" Nullable="false" Precision="19" Scale="8" />
+        </EntityType>
+        <EntityType Name="custaddr">
+          <Key>
+            <PropertyRef Name="cust_num" />
+            <PropertyRef Name="cust_seq" />
+          </Key>
+          <Property Name="cust_num" Type="nvarchar" Nullable="false" MaxLength="7" />
+          <Property Name="cust_seq" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="city" Type="nvarchar" MaxLength="30" />
+          <Property Name="state" Type="nvarchar" MaxLength="5" />
+          <Property Name="zip" Type="nvarchar" MaxLength="10" />
+          <Property Name="county" Type="nvarchar" MaxLength="30" />
+          <Property Name="country" Type="nvarchar" MaxLength="30" />
+          <Property Name="fax_num" Type="nvarchar" MaxLength="25" />
+          <Property Name="telex_num" Type="nvarchar" MaxLength="25" />
+          <Property Name="bal_method" Type="nchar" MaxLength="1" />
+          <Property Name="addr##1" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##2" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##3" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##4" Type="nvarchar" MaxLength="50" />
+          <Property Name="credit_hold" Type="tinyint" />
+          <Property Name="credit_hold_user" Type="nvarchar" MaxLength="3" />
+          <Property Name="credit_hold_date" Type="datetime" />
+          <Property Name="credit_hold_reason" Type="nvarchar" MaxLength="3" />
+          <Property Name="credit_limit" Type="decimal" Precision="23" Scale="8" />
+          <Property Name="curr_code" Type="nvarchar" MaxLength="3" />
+          <Property Name="corp_cust" Type="nvarchar" MaxLength="7" />
+          <Property Name="corp_cred" Type="tinyint" />
+          <Property Name="corp_address" Type="tinyint" />
+          <Property Name="amt_over_inv_amt" Type="decimal" Precision="23" Scale="8" />
+          <Property Name="days_over_inv_due_date" Type="smallint" />
+          <Property Name="ship_to_email" Type="nvarchar" MaxLength="60" />
+          <Property Name="bill_to_email" Type="nvarchar" MaxLength="60" />
+          <Property Name="internet_url" Type="nvarchar" MaxLength="150" />
+          <Property Name="internal_email_addr" Type="nvarchar" MaxLength="60" />
+          <Property Name="external_email_addr" Type="nvarchar" MaxLength="60" />
+          <Property Name="NoteExistsFlag" Type="tinyint" Nullable="false" />
+          <Property Name="RecordDate" Type="datetime" Nullable="false" />
+          <Property Name="RowPointer" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="UpdatedBy" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="InWorkflow" Type="tinyint" Nullable="false" />
+          <Property Name="uf_pref_type" Type="nvarchar" MaxLength="8" />
+          <Property Name="carrier_account" Type="nvarchar" MaxLength="25" />
+          <Property Name="carrier_upcharge_pct" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="carrier_residential_indicator" Type="tinyint" Nullable="false" />
+          <Property Name="carrier_bill_to_transportation" Type="nvarchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="itemwhse">
           <Key>
@@ -812,6 +863,57 @@
           <Property Name="preassign_serials" Type="tinyint" Nullable="false" />
           <Property Name="uf_pref_type" Type="nvarchar" MaxLength="8" />
         </EntityType>
+        <EntityType Name="whse">
+          <Key>
+            <PropertyRef Name="whse" />
+          </Key>
+          <Property Name="whse" Type="nvarchar" Nullable="false" MaxLength="4" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="city" Type="nvarchar" MaxLength="30" />
+          <Property Name="state" Type="nvarchar" MaxLength="5" />
+          <Property Name="zip" Type="nvarchar" MaxLength="10" />
+          <Property Name="country" Type="nvarchar" MaxLength="30" />
+          <Property Name="contact" Type="nvarchar" MaxLength="30" />
+          <Property Name="phone" Type="nvarchar" MaxLength="25" />
+          <Property Name="fax_num" Type="nvarchar" MaxLength="25" />
+          <Property Name="phy_inv_flg" Type="tinyint" />
+          <Property Name="cycle_type" Type="nvarchar" MaxLength="4" />
+          <Property Name="cycle_freq" Type="smallint" />
+          <Property Name="logifld" Type="tinyint" />
+          <Property Name="datefld" Type="datetime" />
+          <Property Name="addr##1" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##2" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##3" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##4" Type="nvarchar" MaxLength="50" />
+          <Property Name="NoteExistsFlag" Type="tinyint" Nullable="false" />
+          <Property Name="RecordDate" Type="datetime" Nullable="false" />
+          <Property Name="RowPointer" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="charfld1" Type="nvarchar" MaxLength="20" />
+          <Property Name="charfld2" Type="nvarchar" MaxLength="20" />
+          <Property Name="charfld3" Type="nvarchar" MaxLength="20" />
+          <Property Name="decifld1" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="decifld2" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="decifld3" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="UpdatedBy" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="InWorkflow" Type="tinyint" Nullable="false" />
+          <Property Name="process_ind" Type="nvarchar" MaxLength="1" />
+          <Property Name="trans_nat" Type="nvarchar" MaxLength="2" />
+          <Property Name="trans_nat_2" Type="nvarchar" MaxLength="2" />
+          <Property Name="delterm" Type="nvarchar" MaxLength="4" />
+          <Property Name="transport" Type="nvarchar" MaxLength="3" />
+          <Property Name="tax_reg_num1" Type="nvarchar" MaxLength="25" />
+          <Property Name="dedicated_inventory" Type="tinyint" />
+          <Property Name="consignment_type" Type="nchar" Nullable="false" MaxLength="1" />
+          <Property Name="cust_num" Type="nvarchar" MaxLength="7" />
+          <Property Name="cust_seq" Type="int" />
+          <Property Name="vend_num" Type="nvarchar" MaxLength="7" />
+          <Property Name="vendor_consignment_loc" Type="nvarchar" MaxLength="15" />
+          <Property Name="plan_intra_site_transfer" Type="tinyint" Nullable="false" />
+          <Property Name="trn_time" Type="smallint" Nullable="false" />
+          <Property Name="uf_pref_type" Type="nvarchar" MaxLength="8" />
+        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -826,6 +928,8 @@
           <EntitySet Name="poes" EntityType="WTF_AppModel.po" />
           <EntitySet Name="po_bln" EntityType="WTF_AppModel.po_bln" />
           <EntitySet Name="poitems" EntityType="WTF_AppModel.poitem" />
+          <EntitySet Name="whses" EntityType="WTF_AppModel.whse" />
+          <EntitySet Name="custaddrs" EntityType="WTF_AppModel.custaddr" />
         </EntityContainer>
         <EntityType Name="transfer">
           <Key>
@@ -1622,6 +1726,106 @@
           <Property Type="String" Name="manufacturer_id" MaxLength="7" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="manufacturer_item" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="uf_pref_type" MaxLength="8" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="whse">
+          <Key>
+            <PropertyRef Name="whse1" />
+          </Key>
+          <Property Type="String" Name="whse1" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="name" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="city" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="state" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="zip" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="country" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="contact" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="phone" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="fax_num" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="phy_inv_flg" />
+          <Property Type="String" Name="cycle_type" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Type="Int16" Name="cycle_freq" />
+          <Property Type="Byte" Name="logifld" />
+          <Property Type="DateTime" Name="datefld" />
+          <Property Type="String" Name="addr__1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__3" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__4" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="NoteExistsFlag" Nullable="false" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="false" />
+          <Property Type="Guid" Name="RowPointer" Nullable="false" />
+          <Property Type="String" Name="charfld1" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="charfld2" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="charfld3" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="decifld1" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="decifld2" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="decifld3" Precision="10" Scale="2" />
+          <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UpdatedBy" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateDate" Nullable="false" />
+          <Property Type="Byte" Name="InWorkflow" Nullable="false" />
+          <Property Type="String" Name="process_ind" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="trans_nat" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="trans_nat_2" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="delterm" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="transport" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="tax_reg_num1" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="dedicated_inventory" />
+          <Property Type="String" Name="consignment_type" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="cust_num" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="cust_seq" />
+          <Property Type="String" Name="vend_num" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="vendor_consignment_loc" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="plan_intra_site_transfer" Nullable="false" />
+          <Property Type="Int16" Name="trn_time" Nullable="false" />
+          <Property Type="String" Name="uf_pref_type" MaxLength="8" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="custaddr">
+          <Key>
+            <PropertyRef Name="cust_num" />
+            <PropertyRef Name="cust_seq" />
+          </Key>
+          <Property Type="String" Name="cust_num" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="cust_seq" Nullable="false" />
+          <Property Type="String" Name="name" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="city" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="state" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="zip" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="county" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="country" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="fax_num" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="telex_num" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="bal_method" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="addr__1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__3" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__4" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="credit_hold" />
+          <Property Type="String" Name="credit_hold_user" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="credit_hold_date" />
+          <Property Type="String" Name="credit_hold_reason" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="credit_limit" Precision="23" Scale="8" />
+          <Property Type="String" Name="curr_code" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="corp_cust" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="corp_cred" />
+          <Property Type="Byte" Name="corp_address" />
+          <Property Type="Decimal" Name="amt_over_inv_amt" Precision="23" Scale="8" />
+          <Property Type="Int16" Name="days_over_inv_due_date" />
+          <Property Type="String" Name="ship_to_email" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="bill_to_email" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="internet_url" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="internal_email_addr" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="external_email_addr" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="NoteExistsFlag" Nullable="false" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="false" />
+          <Property Type="Guid" Name="RowPointer" Nullable="false" />
+          <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UpdatedBy" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateDate" Nullable="false" />
+          <Property Type="Byte" Name="InWorkflow" Nullable="false" />
+          <Property Type="String" Name="uf_pref_type" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="carrier_account" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="carrier_upcharge_pct" Precision="4" Scale="2" />
+          <Property Type="Byte" Name="carrier_residential_indicator" Nullable="false" />
+          <Property Type="String" Name="carrier_bill_to_transportation" MaxLength="5" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2426,6 +2630,107 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="whses">
+            <EntityTypeMapping TypeName="WTF_AppModel.whse">
+              <MappingFragment StoreEntitySet="whse">
+                <ScalarProperty Name="uf_pref_type" ColumnName="uf_pref_type" />
+                <ScalarProperty Name="trn_time" ColumnName="trn_time" />
+                <ScalarProperty Name="plan_intra_site_transfer" ColumnName="plan_intra_site_transfer" />
+                <ScalarProperty Name="vendor_consignment_loc" ColumnName="vendor_consignment_loc" />
+                <ScalarProperty Name="vend_num" ColumnName="vend_num" />
+                <ScalarProperty Name="cust_seq" ColumnName="cust_seq" />
+                <ScalarProperty Name="cust_num" ColumnName="cust_num" />
+                <ScalarProperty Name="consignment_type" ColumnName="consignment_type" />
+                <ScalarProperty Name="dedicated_inventory" ColumnName="dedicated_inventory" />
+                <ScalarProperty Name="tax_reg_num1" ColumnName="tax_reg_num1" />
+                <ScalarProperty Name="transport" ColumnName="transport" />
+                <ScalarProperty Name="delterm" ColumnName="delterm" />
+                <ScalarProperty Name="trans_nat_2" ColumnName="trans_nat_2" />
+                <ScalarProperty Name="trans_nat" ColumnName="trans_nat" />
+                <ScalarProperty Name="process_ind" ColumnName="process_ind" />
+                <ScalarProperty Name="InWorkflow" ColumnName="InWorkflow" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="decifld3" ColumnName="decifld3" />
+                <ScalarProperty Name="decifld2" ColumnName="decifld2" />
+                <ScalarProperty Name="decifld1" ColumnName="decifld1" />
+                <ScalarProperty Name="charfld3" ColumnName="charfld3" />
+                <ScalarProperty Name="charfld2" ColumnName="charfld2" />
+                <ScalarProperty Name="charfld1" ColumnName="charfld1" />
+                <ScalarProperty Name="RowPointer" ColumnName="RowPointer" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="NoteExistsFlag" ColumnName="NoteExistsFlag" />
+                <ScalarProperty Name="addr__4" ColumnName="addr##4" />
+                <ScalarProperty Name="addr__3" ColumnName="addr##3" />
+                <ScalarProperty Name="addr__2" ColumnName="addr##2" />
+                <ScalarProperty Name="addr__1" ColumnName="addr##1" />
+                <ScalarProperty Name="datefld" ColumnName="datefld" />
+                <ScalarProperty Name="logifld" ColumnName="logifld" />
+                <ScalarProperty Name="cycle_freq" ColumnName="cycle_freq" />
+                <ScalarProperty Name="cycle_type" ColumnName="cycle_type" />
+                <ScalarProperty Name="phy_inv_flg" ColumnName="phy_inv_flg" />
+                <ScalarProperty Name="fax_num" ColumnName="fax_num" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="whse1" ColumnName="whse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="custaddrs">
+            <EntityTypeMapping TypeName="WTF_AppModel.custaddr">
+              <MappingFragment StoreEntitySet="custaddr">
+                <ScalarProperty Name="carrier_bill_to_transportation" ColumnName="carrier_bill_to_transportation" />
+                <ScalarProperty Name="carrier_residential_indicator" ColumnName="carrier_residential_indicator" />
+                <ScalarProperty Name="carrier_upcharge_pct" ColumnName="carrier_upcharge_pct" />
+                <ScalarProperty Name="carrier_account" ColumnName="carrier_account" />
+                <ScalarProperty Name="uf_pref_type" ColumnName="uf_pref_type" />
+                <ScalarProperty Name="InWorkflow" ColumnName="InWorkflow" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RowPointer" ColumnName="RowPointer" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="NoteExistsFlag" ColumnName="NoteExistsFlag" />
+                <ScalarProperty Name="external_email_addr" ColumnName="external_email_addr" />
+                <ScalarProperty Name="internal_email_addr" ColumnName="internal_email_addr" />
+                <ScalarProperty Name="internet_url" ColumnName="internet_url" />
+                <ScalarProperty Name="bill_to_email" ColumnName="bill_to_email" />
+                <ScalarProperty Name="ship_to_email" ColumnName="ship_to_email" />
+                <ScalarProperty Name="days_over_inv_due_date" ColumnName="days_over_inv_due_date" />
+                <ScalarProperty Name="amt_over_inv_amt" ColumnName="amt_over_inv_amt" />
+                <ScalarProperty Name="corp_address" ColumnName="corp_address" />
+                <ScalarProperty Name="corp_cred" ColumnName="corp_cred" />
+                <ScalarProperty Name="corp_cust" ColumnName="corp_cust" />
+                <ScalarProperty Name="curr_code" ColumnName="curr_code" />
+                <ScalarProperty Name="credit_limit" ColumnName="credit_limit" />
+                <ScalarProperty Name="credit_hold_reason" ColumnName="credit_hold_reason" />
+                <ScalarProperty Name="credit_hold_date" ColumnName="credit_hold_date" />
+                <ScalarProperty Name="credit_hold_user" ColumnName="credit_hold_user" />
+                <ScalarProperty Name="credit_hold" ColumnName="credit_hold" />
+                <ScalarProperty Name="addr__4" ColumnName="addr##4" />
+                <ScalarProperty Name="addr__3" ColumnName="addr##3" />
+                <ScalarProperty Name="addr__2" ColumnName="addr##2" />
+                <ScalarProperty Name="addr__1" ColumnName="addr##1" />
+                <ScalarProperty Name="bal_method" ColumnName="bal_method" />
+                <ScalarProperty Name="telex_num" ColumnName="telex_num" />
+                <ScalarProperty Name="fax_num" ColumnName="fax_num" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="county" ColumnName="county" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="cust_seq" ColumnName="cust_seq" />
+                <ScalarProperty Name="cust_num" ColumnName="cust_num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2447,7 +2752,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="Syteline" ZoomLevel="75" >
+      <Diagram Name="Syteline" ZoomLevel="59" >
         <EntityTypeShape EntityType="WTF_AppModel.transfer" Width="1.5" PointX="0.75" PointY="0.75" Height="12.749166666666666" />
         <EntityTypeShape EntityType="WTF_AppModel.trnitem" Width="1.5" PointX="2.5" PointY="0.75" Height="16.210592447916667" />
         <EntityTypeShape EntityType="WTF_AppModel.itemwhse" Width="1.5" PointX="4.25" PointY="0.75" Height="18.325908203125003" />
@@ -2457,6 +2762,8 @@
         <EntityTypeShape EntityType="WTF_AppModel.po" Width="1.5" PointX="11.875" PointY="0.75" Height="22.171936848958332" />
         <EntityTypeShape EntityType="WTF_AppModel.po_bln" Width="1.5" PointX="15.625" PointY="0.75" Height="10.633850911458332" />
         <EntityTypeShape EntityType="WTF_AppModel.poitem" Width="1.5" PointX="13.75" PointY="0.75" Height="18.325908203125003" />
+        <EntityTypeShape EntityType="WTF_AppModel.whse" Width="1.5" PointX="17.625" PointY="0.75" Height="9.8646451822916674" />
+        <EntityTypeShape EntityType="WTF_AppModel.custaddr" Width="1.5" PointX="19.75" PointY="0.75" Height="9.2877408854166674" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=EDGE" /> @*I needed content tag so my browser would render in the proper mode, else I would get script errors*@
+        <title>@ViewBag.Title - WireTech Vendor Portal</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @*The below statements are actually is calling "bundles" that is created in App_Start\BundleConfig which is called from Global.asax. Bundling is for Instead of loading each script or style 
@@ -12,9 +12,15 @@
         @Scripts.Render("~/bundles/modernizr")
         @Scripts.Render("~/bundles/jquery") 
         @Scripts.Render("~/bundles/jqueryui") 
+        @Scripts.Render("~/bundles/jqueryval")
         @Styles.Render("~/Content/themes/base/css")
         @Scripts.Render("~/bundles/DataTables")
+        @Scripts.Render("~/bundles/AutoGrow")
+        @Scripts.Render("~/bundles/DataTablesColReorderResize")
 
+        <style type="text/css">
+             @*.ui-dialog-buttonpane { text-align: center; }*@
+        </style>
     </head>
     <body>
         <header>
@@ -37,6 +43,13 @@
                                 <li>@Html.ActionLink("Purchase Orders", "Search", "PurchaseOrders")</li>
                                 <li>@Html.ActionLink("Transfer Orders", "Search", "TransferOrders")</li>
                                 <li>@Html.ActionLink("Inventory", "Search", "Inventory")</li>
+                                if(User.IsInRole("Admin")){
+                                    <li>@Html.ActionLink("Admin Functions", "Index", "AdminFunctions")</li>
+                                }
+                                if (User.IsInRole("Admin") || User.IsInRole("QueueAdmin"))
+                                {
+                                    <li>@Html.ActionLink("Request Q", "Search", "VendorRequests")</li>
+                                }
                             }
                         </ul>
                     </nav>

@@ -13,9 +13,11 @@ using jQuery.DataTables.Mvc;
 
 namespace SL8VendorPortal.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class InventoryController : Controller
     {
         private SytelineDbEntities db = new SytelineDbEntities();
+        private UserProfile CurrentUserProfile;
 
 
         [HttpGet]
@@ -29,14 +31,11 @@ namespace SL8VendorPortal.Controllers
         {
             int totalRecordCount;
             int searchRecordCount;
-            UsersContext context;
-            UserProfile user;
             string strSQL;
 
 
-            context = new UsersContext();
-            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
-            strSQL = QueryDefinitions.GetQuery("SelectItemWhseByWhsesAndPMTCode", new string[] { user.Warehouses.AddSingleQuotes(), "M" });//M is for Manufactured, P is for Purchased
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            strSQL = QueryDefinitions.GetQuery("SelectItemWhseByWhsesAndPMTCode", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "M" });//M is for Manufactured, P is for Purchased
 
             InMemoryItemWhsesRepository.AllItemWhses = db.itemwhses.SqlQuery(strSQL).ToList();
 

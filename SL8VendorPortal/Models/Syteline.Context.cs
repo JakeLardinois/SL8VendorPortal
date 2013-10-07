@@ -34,5 +34,7 @@ namespace SL8VendorPortal.Models
         public DbSet<po> poes { get; set; }
         public DbSet<po_bln> po_bln { get; set; }
         public DbSet<poitem> poitems { get; set; }
+        public DbSet<whse> whses { get; set; }
+        public DbSet<custaddr> custaddrs { get; set; }
     }
 }

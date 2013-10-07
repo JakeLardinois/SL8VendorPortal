@@ -10,6 +10,8 @@ namespace SL8VendorPortal.Models
 {
     public class SL8VendorPortalDb : DbContext
     {
-        public DbSet<PendingTransferOrderTransaction> PendingTransferOrderTransactions { get; set; }
+        public DbSet<VendorRequest> VendorRequests { get; set; }
+
+        public DbSet<RequestCategory> RequestCategories { get; set; }
     }
 }

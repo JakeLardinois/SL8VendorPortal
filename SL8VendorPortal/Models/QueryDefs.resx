@@ -117,6 +117,33 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CreateUpdateDateUpdatedTrigger" xml:space="preserve">
+    <value>SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		Jake Lardinois
+-- Create date: 8/25/2013
+-- Description:	This trigger updates the DateUpdated field after a VendorRequest has been modified
+-- =============================================
+CREATE TRIGGER trg_UpdateDateUpdated
+   ON  [SL8VendorPortal].[dbo].[VendorRequests]
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    UPDATE [SL8VendorPortal].[dbo].[VendorRequests]
+	SET [DateUpdated] = GETDATE()
+	WHERE ID IN (SELECT DISTINCT ID FROM Inserted)
+
+END
+GO</value>
+    <comment>This statement creates a trigger that fires after a record on the VendorRequests table has been updated.  After the update on the record has occurred, this trigger sets the DateUpdated field to the current date and time.</comment>
+  </data>
   <data name="SelectCOByLineWarehousesAndStatus" xml:space="preserve">
     <value>SELECT *
   FROM co
@@ -358,10 +385,32 @@ WHERE transfer.trn_num = '~p0'</value>
     <comment>Not used anymore. I implemented SelectTOByLineToFromWarehousesAndStatuses to replace it</comment>
   </data>
   <data name="UpdateNote" xml:space="preserve">
-    <value>UPDATE SpecificNotes 
-SET NoteContent = '~p1', NoteDesc = '~p2' 
-WHERE SpecificNoteToken = '~p0'</value>
+    <value>DECLARE @UserName nvarchar(30)
+SET @UserName = suser_sname()
+IF (@UserName = 'WTFApp')
+	BEGIN;
+		DISABLE TRIGGER SpecificNotesUpdatePenultimate ON SpecificNotes
+		UPDATE SpecificNotes 
+			SET NoteContent = '~p1', NoteDesc = '~p2', UpdatedBy = '~p3', RecordDate = GETDATE()
+			WHERE SpecificNoteToken = ~p0;
+		ENABLE TRIGGER SpecificNotesUpdatePenultimate ON SpecificNotes
+	END 
+ELSE
+	BEGIN
+		UPDATE SpecificNotes
+			SET NoteContent = '~p1', NoteDesc = '~p2', UpdatedBy = '~p3'
+			WHERE SpecificNoteToken = ~p0;
+	END</value>
     <comment>I used the command "GRANT UPDATE ON [WTF_App].[dbo].[SpecificNotes] TO WTFApp" to grant the update priveleges
-"REVOKE UPDATE ON [WTF_App].[dbo].[SpecificNotes] TO WTFApp" is the SQL to remove the privelege.</comment>
+"REVOKE UPDATE ON [WTF_App].[dbo].[SpecificNotes] TO WTFApp" is the SQL to remove the privelege.
+I also used "GRANT CONTROL ON [WTF_App].[dbo].[SpecificNotes] TO WTFApp" So that I could disable and enable the triggers associated with this table
+The SpecificNotesUpdatePenultimate trigger is the name of the trigger that is called after the table gets updated. This trigger was the one that would
+Overwrite any attempts by the application to alter the UpdatedBy, RecordDate, etc. fields
+Notice that I needed a semicolon on each statement preceding a DISABLE or ENABLE TRIGGER Statement, or else the syntax wouldn't be correct</comment>
+  </data>
+  <data name="UpdateVendorRequest" xml:space="preserve">
+    <value>UPDATE VendorRequests
+SET ~p0 = '~p1', Updater = '~p3'
+WHERE ID = ~p2</value>
   </data>
 </root>

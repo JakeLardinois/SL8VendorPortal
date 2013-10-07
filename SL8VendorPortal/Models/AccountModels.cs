@@ -15,7 +15,7 @@ namespace SL8VendorPortal.Models
     public class UsersContext : DbContext
     {
         public UsersContext()
-            : base("SecurityConnection")
+            : base("SecurityConnection")//references the connection string in Web.config that points to VendorPortalSecurity.sdf
         {
         }
 

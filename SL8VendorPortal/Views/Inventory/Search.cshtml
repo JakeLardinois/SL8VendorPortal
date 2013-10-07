@@ -36,11 +36,28 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var oTimerId;
+
+
         $('#objItems').dataTable({
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": document.URL,
             "sServerMethod": "POST",
+            "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
+
+                window.clearTimeout(oTimerId);
+                oTimerId = window.setTimeout(function () {
+                    oSettings.jqXHR = $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    });
+                }, 1000)
+            },
+            "oLanguage": { "sSearch": "Search Item #s:" },
             "aoColumns": [
             { "mDataProp": "item", "sWidth": "25%" },
             { "mDataProp": "whse" },
