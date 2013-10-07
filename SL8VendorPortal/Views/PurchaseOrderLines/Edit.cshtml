@@ -1,0 +1,747 @@
+﻿@model SL8VendorPortal.Models.poitem
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>poitem</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.po_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.po_num)
+            @Html.ValidationMessageFor(model => model.po_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.po_line)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.po_line)
+            @Html.ValidationMessageFor(model => model.po_line)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.po_release)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.po_release)
+            @Html.ValidationMessageFor(model => model.po_release)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.item)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.item)
+            @Html.ValidationMessageFor(model => model.item)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.stat)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.stat)
+            @Html.ValidationMessageFor(model => model.stat)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qty_ordered)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qty_ordered)
+            @Html.ValidationMessageFor(model => model.qty_ordered)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qty_received)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qty_received)
+            @Html.ValidationMessageFor(model => model.qty_received)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qty_rejected)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qty_rejected)
+            @Html.ValidationMessageFor(model => model.qty_rejected)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qty_voucher)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qty_voucher)
+            @Html.ValidationMessageFor(model => model.qty_voucher)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qty_returned)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qty_returned)
+            @Html.ValidationMessageFor(model => model.qty_returned)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.item_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.item_cost)
+            @Html.ValidationMessageFor(model => model.item_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ref_type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ref_type)
+            @Html.ValidationMessageFor(model => model.ref_type)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ref_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ref_num)
+            @Html.ValidationMessageFor(model => model.ref_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ref_line_suf)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ref_line_suf)
+            @Html.ValidationMessageFor(model => model.ref_line_suf)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ref_release)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ref_release)
+            @Html.ValidationMessageFor(model => model.ref_release)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.due_date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.due_date)
+            @Html.ValidationMessageFor(model => model.due_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.rcvd_date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.rcvd_date)
+            @Html.ValidationMessageFor(model => model.rcvd_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.vend_item)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.vend_item)
+            @Html.ValidationMessageFor(model => model.vend_item)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.root_job)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.root_job)
+            @Html.ValidationMessageFor(model => model.root_job)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.root_suf)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.root_suf)
+            @Html.ValidationMessageFor(model => model.root_suf)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.plan_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.plan_cost)
+            @Html.ValidationMessageFor(model => model.plan_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.voucher_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.voucher_cost)
+            @Html.ValidationMessageFor(model => model.voucher_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.non_inv_acct)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.non_inv_acct)
+            @Html.ValidationMessageFor(model => model.non_inv_acct)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.drop_ship_no)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.drop_ship_no)
+            @Html.ValidationMessageFor(model => model.drop_ship_no)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.drop_seq)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.drop_seq)
+            @Html.ValidationMessageFor(model => model.drop_seq)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ship_addr)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ship_addr)
+            @Html.ValidationMessageFor(model => model.ship_addr)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.promise_date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.promise_date)
+            @Html.ValidationMessageFor(model => model.promise_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.release_date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.release_date)
+            @Html.ValidationMessageFor(model => model.release_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.whse)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.whse)
+            @Html.ValidationMessageFor(model => model.whse)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.item_type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.item_type)
+            @Html.ValidationMessageFor(model => model.item_type)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.cost_type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cost_type)
+            @Html.ValidationMessageFor(model => model.cost_type)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.comm_code)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.comm_code)
+            @Html.ValidationMessageFor(model => model.comm_code)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.trans_nat)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.trans_nat)
+            @Html.ValidationMessageFor(model => model.trans_nat)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.process_ind)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.process_ind)
+            @Html.ValidationMessageFor(model => model.process_ind)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_weight)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_weight)
+            @Html.ValidationMessageFor(model => model.unit_weight)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.delterm)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.delterm)
+            @Html.ValidationMessageFor(model => model.delterm)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.origin)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.origin)
+            @Html.ValidationMessageFor(model => model.origin)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.cons_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.cons_num)
+            @Html.ValidationMessageFor(model => model.cons_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_mat_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_mat_cost)
+            @Html.ValidationMessageFor(model => model.unit_mat_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_duty_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_duty_cost)
+            @Html.ValidationMessageFor(model => model.unit_duty_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_freight_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_freight_cost)
+            @Html.ValidationMessageFor(model => model.unit_freight_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_brokerage_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_brokerage_cost)
+            @Html.ValidationMessageFor(model => model.unit_brokerage_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.tax_code1)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.tax_code1)
+            @Html.ValidationMessageFor(model => model.tax_code1)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.tax_code2)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.tax_code2)
+            @Html.ValidationMessageFor(model => model.tax_code2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.export_value)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.export_value)
+            @Html.ValidationMessageFor(model => model.export_value)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ec_code)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ec_code)
+            @Html.ValidationMessageFor(model => model.ec_code)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.transport)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.transport)
+            @Html.ValidationMessageFor(model => model.transport)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.req_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.req_num)
+            @Html.ValidationMessageFor(model => model.req_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.req_line)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.req_line)
+            @Html.ValidationMessageFor(model => model.req_line)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.u_m)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.u_m)
+            @Html.ValidationMessageFor(model => model.u_m)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.qty_ordered_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.qty_ordered_conv)
+            @Html.ValidationMessageFor(model => model.qty_ordered_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.item_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.item_cost_conv)
+            @Html.ValidationMessageFor(model => model.item_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.plan_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.plan_cost_conv)
+            @Html.ValidationMessageFor(model => model.plan_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_mat_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_mat_cost_conv)
+            @Html.ValidationMessageFor(model => model.unit_mat_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_duty_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_duty_cost_conv)
+            @Html.ValidationMessageFor(model => model.unit_duty_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_freight_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_freight_cost_conv)
+            @Html.ValidationMessageFor(model => model.unit_freight_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_brokerage_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_brokerage_cost_conv)
+            @Html.ValidationMessageFor(model => model.unit_brokerage_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.non_inv_acct_unit1)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.non_inv_acct_unit1)
+            @Html.ValidationMessageFor(model => model.non_inv_acct_unit1)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.non_inv_acct_unit2)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.non_inv_acct_unit2)
+            @Html.ValidationMessageFor(model => model.non_inv_acct_unit2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.non_inv_acct_unit3)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.non_inv_acct_unit3)
+            @Html.ValidationMessageFor(model => model.non_inv_acct_unit3)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.non_inv_acct_unit4)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.non_inv_acct_unit4)
+            @Html.ValidationMessageFor(model => model.non_inv_acct_unit4)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.lc_override)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.lc_override)
+            @Html.ValidationMessageFor(model => model.lc_override)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.revision)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.revision)
+            @Html.ValidationMessageFor(model => model.revision)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.drawing_nbr)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.drawing_nbr)
+            @Html.ValidationMessageFor(model => model.drawing_nbr)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.po_vend_num)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.po_vend_num)
+            @Html.ValidationMessageFor(model => model.po_vend_num)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.NoteExistsFlag)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.NoteExistsFlag)
+            @Html.ValidationMessageFor(model => model.NoteExistsFlag)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RecordDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecordDate)
+            @Html.ValidationMessageFor(model => model.RecordDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RowPointer)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RowPointer)
+            @Html.ValidationMessageFor(model => model.RowPointer)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.description)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.description)
+            @Html.ValidationMessageFor(model => model.description)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreatedBy)
+            @Html.ValidationMessageFor(model => model.CreatedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UpdatedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UpdatedBy)
+            @Html.ValidationMessageFor(model => model.UpdatedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreateDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreateDate)
+            @Html.ValidationMessageFor(model => model.CreateDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.InWorkflow)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.InWorkflow)
+            @Html.ValidationMessageFor(model => model.InWorkflow)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.expedited)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.expedited)
+            @Html.ValidationMessageFor(model => model.expedited)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.rcpt_rqmt)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.rcpt_rqmt)
+            @Html.ValidationMessageFor(model => model.rcpt_rqmt)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_insurance_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_insurance_cost)
+            @Html.ValidationMessageFor(model => model.unit_insurance_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_insurance_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_insurance_cost_conv)
+            @Html.ValidationMessageFor(model => model.unit_insurance_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_loc_frt_cost)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_loc_frt_cost)
+            @Html.ValidationMessageFor(model => model.unit_loc_frt_cost)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unit_loc_frt_cost_conv)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unit_loc_frt_cost_conv)
+            @Html.ValidationMessageFor(model => model.unit_loc_frt_cost_conv)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.trans_nat_2)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.trans_nat_2)
+            @Html.ValidationMessageFor(model => model.trans_nat_2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.suppl_qty_conv_factor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.suppl_qty_conv_factor)
+            @Html.ValidationMessageFor(model => model.suppl_qty_conv_factor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.unlinked_xref)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.unlinked_xref)
+            @Html.ValidationMessageFor(model => model.unlinked_xref)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.due_date_day)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.due_date_day)
+            @Html.ValidationMessageFor(model => model.due_date_day)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.preassign_lots)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.preassign_lots)
+            @Html.ValidationMessageFor(model => model.preassign_lots)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.preassign_serials)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.preassign_serials)
+            @Html.ValidationMessageFor(model => model.preassign_serials)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ipr_id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ipr_id)
+            @Html.ValidationMessageFor(model => model.ipr_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ipr_seq)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ipr_seq)
+            @Html.ValidationMessageFor(model => model.ipr_seq)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.manufacturer_id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.manufacturer_id)
+            @Html.ValidationMessageFor(model => model.manufacturer_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.manufacturer_item)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.manufacturer_item)
+            @Html.ValidationMessageFor(model => model.manufacturer_item)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.uf_pref_type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.uf_pref_type)
+            @Html.ValidationMessageFor(model => model.uf_pref_type)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

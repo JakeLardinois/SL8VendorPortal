@@ -1,0 +1,106 @@
+﻿@model IEnumerable<SL8VendorPortal.Models.transfer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@{WebGrid topGrid = new WebGrid(source: Model);}
+
+<h2>NestedGrid</h2>
+
+<div id="grid">
+
+@topGrid.GetHtml(columns:
+    topGrid.Columns(
+            topGrid.Column("trn_num"),
+        topGrid.Column("from_whse")
+        , topGrid.Column("to_whse")
+    ))
+
+</div> 
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.trn_num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.from_whse)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.to_whse)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ship_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.weight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_packages)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.order_date)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.trn_num)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.from_whse)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.to_whse)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ship_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.weight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_packages)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.order_date)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

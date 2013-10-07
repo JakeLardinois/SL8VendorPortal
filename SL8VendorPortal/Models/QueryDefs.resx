@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SelectCOByLineWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *
+  FROM co
+  WHERE co_num IN (
+	SELECT co_num
+	  FROM coitem
+	  WHERE whse IN (~p0) AND stat = '~p1'
+	  GROUP BY [co_num]
+	  HAVING COUNT([co_num]) &gt; 0)</value>
+  </data>
+  <data name="SelectCOLineNotes" xml:space="preserve">
+    <value>SELECT co_bln.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM co_bln
+  INNER JOIN ObjectNotes ON co_bln.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE co_bln.co_num = '~p0' AND co_bln.co_line = ~p1</value>
+  </data>
+  <data name="SelectCOLineReleaseNotes" xml:space="preserve">
+    <value>SELECT coitem.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM coitem
+  INNER JOIN ObjectNotes ON coitem.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE coitem.co_num = '~p0' AND coitem.co_line = ~p1 AND coitem.co_release = ~p2</value>
+  </data>
+  <data name="SelectCOLinesByWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *, brk_qty##1 AS [brk_qty__1], brk_qty##2 AS [brk_qty__2], brk_qty##3 AS [brk_qty__3], brk_qty##4 AS [brk_qty__4], brk_qty##5 AS [brk_qty__5]
+    FROM coitem
+  WHERE whse IN (~p0) AND stat = '~p1'</value>
+    <comment>stat=O for Ordered, C for Complete, etc.</comment>
+  </data>
+  <data name="SelectCOLinesByWarehousesAndStatusAndOrderNo" xml:space="preserve">
+    <value>SELECT *, brk_qty##1 AS [brk_qty__1], brk_qty##2 AS [brk_qty__2], brk_qty##3 AS [brk_qty__3], brk_qty##4 AS [brk_qty__4], brk_qty##5 AS [brk_qty__5]
+      FROM coitem
+  WHERE whse IN (~p0) AND stat = '~p1' AND co_num = '~p2'</value>
+    <comment>I had to put the AS cases in here because the class generated by the entity framework automatically converted the hash tags  (#) to underscores (_) so that when I tried to use my sql to populate the class, I kept getting exceptions.</comment>
+  </data>
+  <data name="SelectCONotes" xml:space="preserve">
+    <value>SELECT co.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM co
+  INNER JOIN ObjectNotes ON co.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE co.co_num = '~p0'</value>
+  </data>
+  <data name="SelectCustomerOrdersByWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *
+  FROM co
+  WHERE whse IN (~p0) AND stat = '~p1'</value>
+    <comment>stat=O for Ordered, C for Complete, etc.</comment>
+  </data>
+  <data name="SelectItemWhseByWhsesAndPMTCode" xml:space="preserve">
+    <value>SELECT itemwhse.[item]
+      ,itemwhse.[whse]
+      ,itemwhse.[qty_on_hand]
+      ,itemwhse.[qty_alloc_co]
+      ,itemwhse.[alloc_trn]
+      ,itemwhse.[qty_trans]
+      ,itemwhse.[qty_ordered]
+      ,itemwhse.[qty_mrb]
+      ,itemwhse.[qty_sold_ytd]
+      ,itemwhse.[qty_pur_ytd]
+      ,itemwhse.[trn_in_ytd]
+      ,itemwhse.[trn_out_ytd]
+      ,itemwhse.[qty_reorder]
+      ,itemwhse.[sales_ytd]
+      ,itemwhse.[sales_ptd]
+      ,itemwhse.[cycle_freq]
+      ,itemwhse.[last_cycle]
+      ,itemwhse.[cnt_in_proc]
+      ,itemwhse.[cycle_flag]
+      ,itemwhse.[cycle_type]
+      ,itemwhse.[phy_inv_qty]
+      ,itemwhse.[phy_inv_dte]
+      ,itemwhse.[qty_wip]
+      ,itemwhse.[qty_rsvd_co]
+      ,itemwhse.[replen_po_num]
+      ,itemwhse.[replen_ps_num]
+      ,itemwhse.[replen_trn_num]
+      ,itemwhse.[NoteExistsFlag]
+      ,itemwhse.[RecordDate]
+      ,itemwhse.[RowPointer]
+      ,itemwhse.[CreatedBy]
+      ,itemwhse.[UpdatedBy]
+      ,itemwhse.[CreateDate]
+      ,itemwhse.[InWorkflow]
+      ,itemwhse.[count_sequence]
+      ,itemwhse.[last_count_qty_on_hand]
+      ,itemwhse.[unit_cost]
+      ,itemwhse.[lst_u_cost]
+      ,itemwhse.[avg_u_cost]
+      ,itemwhse.[asm_setup]
+      ,itemwhse.[asm_run]
+      ,itemwhse.[asm_matl]
+      ,itemwhse.[asm_tool]
+      ,itemwhse.[asm_fixture]
+      ,itemwhse.[asm_other]
+      ,itemwhse.[asm_fixed]
+      ,itemwhse.[asm_var]
+      ,itemwhse.[asm_outside]
+      ,itemwhse.[comp_setup]
+      ,itemwhse.[comp_run]
+      ,itemwhse.[comp_matl]
+      ,itemwhse.[comp_tool]
+      ,itemwhse.[comp_fixture]
+      ,itemwhse.[comp_other]
+      ,itemwhse.[comp_fixed]
+      ,itemwhse.[comp_var]
+      ,itemwhse.[comp_outside]
+      ,itemwhse.[sub_matl]
+      ,itemwhse.[cur_u_cost]
+      ,itemwhse.[unit_mat_cost]
+      ,itemwhse.[unit_duty_cost]
+      ,itemwhse.[unit_freight_cost]
+      ,itemwhse.[unit_brokerage_cost]
+      ,itemwhse.[unit_insurance_cost]
+      ,itemwhse.[unit_loc_frt_cost]
+      ,itemwhse.[cur_mat_cost]
+      ,itemwhse.[cur_duty_cost]
+      ,itemwhse.[cur_freight_cost]
+      ,itemwhse.[cur_brokerage_cost]
+      ,itemwhse.[cur_insurance_cost]
+      ,itemwhse.[cur_loc_frt_cost]
+      ,itemwhse.[matl_cost]
+      ,itemwhse.[lbr_cost]
+      ,itemwhse.[fovhd_cost]
+      ,itemwhse.[vovhd_cost]
+      ,itemwhse.[out_cost]
+      ,itemwhse.[cur_matl_cost]
+      ,itemwhse.[cur_lbr_cost]
+      ,itemwhse.[cur_fovhd_cost]
+      ,itemwhse.[cur_vovhd_cost]
+      ,itemwhse.[cur_out_cost]
+      ,itemwhse.[avg_matl_cost]
+      ,itemwhse.[avg_lbr_cost]
+      ,itemwhse.[avg_fovhd_cost]
+      ,itemwhse.[avg_vovhd_cost]
+      ,itemwhse.[avg_out_cost]
+      ,itemwhse.[min_consignment_qty]
+      ,itemwhse.[max_consignment_qty]
+      ,itemwhse.[qty_contained]
+      ,itemwhse.[uf_pref_type]
+  FROM itemwhse
+	INNER JOIN item on itemwhse.item = item.item 
+  WHERE whse IN (~p0) AND qty_on_hand &gt; 0 AND item.p_m_t_code = '~p1'</value>
+    <comment>I had to do an inner join here so that I would only present the vendors with either 'Manufactured'(M) OR 'Purchased'(P) parts; I did this by using the p_m_t_code = 'M' or 'P' field of the Items table</comment>
+  </data>
+  <data name="SelectNoteTimeStamp" xml:space="preserve">
+    <value>Select RecordDate
+FROM SpecificNotes
+WHERE SpecificNoteToken = '~p0'</value>
+  </data>
+  <data name="SelectPOByLineWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *
+  FROM po
+  WHERE po_num IN (
+	SELECT po_num
+	  FROM poitem
+	  WHERE whse IN (~p0) AND stat = '~p1'
+	  GROUP BY [po_num]
+	  HAVING COUNT([po_num]) &gt; 0)</value>
+  </data>
+  <data name="SelectPOLineNotes" xml:space="preserve">
+    <value>SELECT po_bln.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM po_bln
+  INNER JOIN ObjectNotes ON po_bln.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE po_bln.po_num = '~p0' AND po_bln.po_line = ~p1</value>
+  </data>
+  <data name="SelectPOLineReleaseNotes" xml:space="preserve">
+    <value>SELECT poitem.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM poitem
+  INNER JOIN ObjectNotes ON poitem.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE poitem.po_num = '~p0' AND poitem.po_line = ~p1 AND poitem.po_release = ~p2</value>
+  </data>
+  <data name="SelectPOLinesByWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *
+    FROM poitem
+  WHERE whse IN (~p0) AND stat = '~p1'</value>
+  </data>
+  <data name="SelectPOLinesByWarehousesAndStatusAndOrderNo" xml:space="preserve">
+    <value>SELECT *
+      FROM poitem
+  WHERE whse IN (~p0) AND stat = '~p1' AND po_num = '~p2'</value>
+  </data>
+  <data name="SelectPONotes" xml:space="preserve">
+    <value>SELECT po.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM po
+  INNER JOIN ObjectNotes ON po.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE po.po_num = '~p0'</value>
+  </data>
+  <data name="SelectPurchaseOrdersByWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *
+  FROM po
+  WHERE whse IN (~p0) AND stat = '~p1'</value>
+    <comment>stat=O for Ordered, C for Complete, etc.</comment>
+  </data>
+  <data name="SelectTOByLineToFromWarehousesAndStatuses" xml:space="preserve">
+    <value>SELECT *
+  FROM transfer
+  WHERE trn_num IN (
+  	SELECT trn_num
+  	  FROM trnitem
+  	  WHERE (to_whse IN (~p0) OR from_whse IN (~p0)) AND stat IN (~p1)
+  	  GROUP BY [trn_num]
+	  HAVING COUNT([trn_num]) &gt; 0)</value>
+  </data>
+  <data name="SelectTOLineNotes" xml:space="preserve">
+    <value>SELECT trnitem.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM trnitem
+  INNER JOIN ObjectNotes ON trnitem.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE trnitem.trn_num = '~p0' AND trnitem.trn_line = ~p1</value>
+  </data>
+  <data name="SelectTOLinesByToFromWhsesAndStatusAndOrderNo" xml:space="preserve">
+    <value>SELECT *
+      FROM trnitem
+  WHERE (to_whse IN (~p0) OR from_whse IN (~p0)) AND stat IN (~p1) AND trn_num = '~p2'</value>
+  </data>
+  <data name="SelectTONotes" xml:space="preserve">
+    <value>SELECT transfer.RowPointer, ObjectNotes.ObjectNoteToken, SpecificNotes.SpecificNoteToken, SpecificNotes.RecordDate AS LastUpdated, SpecificNotes.NoteDesc, SpecificNotes.NoteContent, SpecificNotes.CreatedBy, SpecificNotes.UpdatedBy, NoteHeaders.NoteHeaderToken, NoteHeaders.NoteFlag as IsInternal
+FROM transfer
+  INNER JOIN ObjectNotes ON transfer.RowPointer = ObjectNotes.RefRowPointer
+  INNER JOIN NoteHeaders ON ObjectNotes.NoteHeaderToken = NoteHeaders.NoteHeaderToken
+  INNER JOIN SpecificNotes ON ObjectNotes.SpecificNoteToken = SpecificNotes.SpecificNoteToken
+WHERE transfer.trn_num = '~p0'</value>
+  </data>
+  <data name="SelectTransferOrdersByToWarehousesAndStatus" xml:space="preserve">
+    <value>SELECT *
+  FROM transfer
+  WHERE to_whse IN (~p0) AND stat IN (~p1)</value>
+    <comment>Not used anymore. I implemented SelectTOByLineToFromWarehousesAndStatuses to replace it</comment>
+  </data>
+  <data name="UpdateNote" xml:space="preserve">
+    <value>UPDATE SpecificNotes 
+SET NoteContent = '~p1', NoteDesc = '~p2' 
+WHERE SpecificNoteToken = '~p0'</value>
+    <comment>I used the command "GRANT UPDATE ON [WTF_App].[dbo].[SpecificNotes] TO WTFApp" to grant the update priveleges
+"REVOKE UPDATE ON [WTF_App].[dbo].[SpecificNotes] TO WTFApp" is the SQL to remove the privelege.</comment>
+  </data>
+</root>

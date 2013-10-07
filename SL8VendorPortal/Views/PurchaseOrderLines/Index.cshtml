@@ -1,0 +1,567 @@
+﻿@model IEnumerable<SL8VendorPortal.Models.poitem>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.po_num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.po_line)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.po_release)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.item)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.stat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_ordered)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_received)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_rejected)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_voucher)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_returned)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.item_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ref_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ref_num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ref_line_suf)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ref_release)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.due_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rcvd_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.vend_item)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.root_job)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.root_suf)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.plan_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.voucher_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.non_inv_acct)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.drop_ship_no)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.drop_seq)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ship_addr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.promise_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.release_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.whse)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.item_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cost_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.comm_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.trans_nat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.process_ind)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_weight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.delterm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.origin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cons_num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_mat_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_duty_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_freight_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_brokerage_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tax_code1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tax_code2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.export_value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ec_code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.transport)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.req_num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.req_line)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.u_m)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.qty_ordered_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.item_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.plan_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_mat_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_duty_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_freight_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_brokerage_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.non_inv_acct_unit1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.non_inv_acct_unit2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.non_inv_acct_unit3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.non_inv_acct_unit4)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lc_override)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.revision)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.drawing_nbr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.po_vend_num)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoteExistsFlag)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecordDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RowPointer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InWorkflow)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.expedited)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rcpt_rqmt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_insurance_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_insurance_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_loc_frt_cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unit_loc_frt_cost_conv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.trans_nat_2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.suppl_qty_conv_factor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unlinked_xref)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.due_date_day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.preassign_lots)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.preassign_serials)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ipr_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ipr_seq)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.manufacturer_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.manufacturer_item)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.uf_pref_type)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.po_num)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.po_line)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.po_release)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.item)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.stat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_ordered)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_received)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_rejected)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_voucher)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_returned)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.item_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ref_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ref_num)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ref_line_suf)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ref_release)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.due_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rcvd_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.vend_item)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.root_job)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.root_suf)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.plan_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.voucher_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.non_inv_acct)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.drop_ship_no)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.drop_seq)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ship_addr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.promise_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.release_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.whse)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.item_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cost_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.comm_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.trans_nat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.process_ind)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_weight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.delterm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.origin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cons_num)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_mat_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_duty_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_freight_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_brokerage_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tax_code1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tax_code2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.export_value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ec_code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.transport)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.req_num)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.req_line)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.u_m)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.qty_ordered_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.item_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.plan_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_mat_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_duty_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_freight_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_brokerage_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.non_inv_acct_unit1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.non_inv_acct_unit2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.non_inv_acct_unit3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.non_inv_acct_unit4)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lc_override)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.revision)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.drawing_nbr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.po_vend_num)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoteExistsFlag)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RowPointer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InWorkflow)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.expedited)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rcpt_rqmt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_insurance_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_insurance_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_loc_frt_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unit_loc_frt_cost_conv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.trans_nat_2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.suppl_qty_conv_factor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unlinked_xref)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.due_date_day)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.preassign_lots)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.preassign_serials)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ipr_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ipr_seq)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.manufacturer_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.manufacturer_item)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.uf_pref_type)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,645 @@
+﻿@model SL8VendorPortal.Models.itemwhse
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>itemwhse</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.item)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.item)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.whse)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.whse)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_on_hand)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_on_hand)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_alloc_co)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_alloc_co)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.alloc_trn)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.alloc_trn)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_trans)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_trans)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_ordered)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_ordered)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_mrb)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_mrb)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_sold_ytd)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_sold_ytd)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_pur_ytd)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_pur_ytd)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.trn_in_ytd)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.trn_in_ytd)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.trn_out_ytd)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.trn_out_ytd)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_reorder)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_reorder)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.sales_ytd)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.sales_ytd)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.sales_ptd)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.sales_ptd)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cycle_freq)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cycle_freq)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.last_cycle)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.last_cycle)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cnt_in_proc)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cnt_in_proc)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cycle_flag)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cycle_flag)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cycle_type)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cycle_type)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.phy_inv_qty)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.phy_inv_qty)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.phy_inv_dte)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.phy_inv_dte)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_wip)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_wip)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_rsvd_co)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_rsvd_co)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.replen_po_num)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.replen_po_num)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.replen_ps_num)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.replen_ps_num)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.replen_trn_num)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.replen_trn_num)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.NoteExistsFlag)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NoteExistsFlag)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RecordDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RecordDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RowPointer)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RowPointer)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UpdatedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UpdatedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreateDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreateDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.InWorkflow)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.InWorkflow)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.count_sequence)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.count_sequence)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.last_count_qty_on_hand)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.last_count_qty_on_hand)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.lst_u_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.lst_u_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.avg_u_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.avg_u_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_setup)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_setup)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_run)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_run)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_matl)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_matl)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_tool)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_tool)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_fixture)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_fixture)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_other)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_other)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_fixed)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_fixed)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_var)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_var)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.asm_outside)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.asm_outside)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_setup)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_setup)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_run)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_run)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_matl)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_matl)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_tool)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_tool)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_fixture)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_fixture)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_other)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_other)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_fixed)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_fixed)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_var)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_var)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.comp_outside)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.comp_outside)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.sub_matl)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.sub_matl)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_u_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_u_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_mat_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_mat_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_duty_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_duty_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_freight_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_freight_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_brokerage_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_brokerage_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_insurance_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_insurance_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.unit_loc_frt_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.unit_loc_frt_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_mat_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_mat_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_duty_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_duty_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_freight_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_freight_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_brokerage_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_brokerage_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_insurance_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_insurance_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_loc_frt_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_loc_frt_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.matl_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.matl_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.lbr_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.lbr_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.fovhd_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fovhd_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.vovhd_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.vovhd_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.out_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.out_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_matl_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_matl_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_lbr_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_lbr_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_fovhd_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_fovhd_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_vovhd_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_vovhd_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cur_out_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cur_out_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.avg_matl_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.avg_matl_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.avg_lbr_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.avg_lbr_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.avg_fovhd_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.avg_fovhd_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.avg_vovhd_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.avg_vovhd_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.avg_out_cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.avg_out_cost)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.min_consignment_qty)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.min_consignment_qty)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.max_consignment_qty)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.max_consignment_qty)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.qty_contained)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.qty_contained)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.uf_pref_type)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.uf_pref_type)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

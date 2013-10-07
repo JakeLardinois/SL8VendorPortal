@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                To learn more about WireTech visit
+                <a href="http://www.wiretechfab.com/" title="WireTech Website">http://www.wiretechfab.com/</a>.
+                The site features <mark>videos, testimonials, and samples</mark> to help you learn the most about WireTech.
+                If you have any questions about WireTech visit
+                <a href="http://www.wiretechfab.com/" title="WireTech Website">our website</a>.
+            </p>
+        </div>
+    </section>
+}
+<h3>We suggest the following:</h3>
+<ol class="round">
+    <li class="one">
+        <h5>Getting Started</h5>
+        Create an account by using the 
+        @Html.ActionLink("Register Link", "Register", "Account")
+    </li>
+
+    <li class="two">
+        <h5>Contact WTF</h5>
+        Get in touch with your WireTech Contact to have your registration approved
+    </li>
+
+    <li class="three">
+        <h5>Enjoy!</h5>
+        You'll see that Jake Lardinois has put some pretty cool features in this site.
+        So get to work and enjoy!
+    </li>
+</ol>

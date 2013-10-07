@@ -1,0 +1,118 @@
+﻿@model IEnumerable<SL8VendorPortal.Models.po>
+
+@Scripts.Render("~/bundles/SearchPurchaseOrders")
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search Purchase Orders</h2>
+
+
+<table id="objItems">
+    <thead>
+        <tr>
+            <th>
+                Drill
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.po_num)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.vend_num)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.order_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ship_code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.terms_code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fob)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.eff_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.whse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecordDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.buyer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+        </tr>
+    </thead>
+</table>
+@section scripts 
+{ 
+}
+
+
+
+<script type="text/javascript">
+    var sOpenImageUrl = '@Url.Content("~/images/details_open.png")';
+    var sCloseImageUrl = '@Url.Content("~/images/details_close.png")';
+    var sLineURL = '@Url.Action("NotesViewer", "PurchaseOrders")'
+
+
+    function fnFormatDetails(oTable, nTr, sTableName) {
+        var oData = oTable.fnGetData(nTr);
+
+        var sOut =
+            '<div class="innerDetails">' +
+                '<table id="' + sTableName + '">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>' +
+                                'Notes' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.po_line)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.po_release)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.qty_ordered)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.qty_received)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.qty_rejected)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.due_date)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.rcvd_date)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.POItem.CreateDate)' +
+                            '</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody></tbody>' +
+                '</table>' +
+            '</div>';
+
+        return sOut;
+    }
+</script>

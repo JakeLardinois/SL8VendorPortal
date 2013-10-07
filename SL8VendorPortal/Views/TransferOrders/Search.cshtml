@@ -1,0 +1,118 @@
+﻿@model IEnumerable<SL8VendorPortal.Models.transfer>
+
+@Scripts.Render("~/bundles/SearchTransferOrders")
+
+@{
+    ViewBag.Title = "Search";
+}
+<h2>Search Transfer Orders</h2>
+
+
+<table id="objItems">
+    <thead>
+        <tr>
+            <th>
+                Drill
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.trn_num)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.from_whse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.to_whse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.order_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.stat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.qty_packages)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<div id='dialog'>
+</div>
+
+@section scripts 
+{ 
+}
+
+
+
+<script type="text/javascript">
+    var sOpenImageUrl = '@Url.Content("~/images/details_open.png")';
+    var sCloseImageUrl = '@Url.Content("~/images/details_close.png")';
+    var sLineURL = '@Url.Action("NotesViewer", "TransferOrders")'
+
+
+    function fnFormatDetails(oTable, nTr, sTableName) {
+        var oData = oTable.fnGetData(nTr);
+
+        var sOut =
+            '<div class="innerDetails">' +
+                '<table id="' + sTableName + '">' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>' +
+                                'Notes' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.trn_line)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.stat)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.item)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.trn_loc)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.qty_shipped)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.sch_rcv_date)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.sch_ship_date)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.from_whse)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.to_whse)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.CreatedBy)' +
+                            '</th>' +
+                            '<th>' +
+                                '@Html.DisplayNameFor(model => model.TrnItem.CreateDate)' +
+                            '</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody></tbody>' +
+                '</table>' +
+            '</div>';
+
+        return sOut;
+    }
+</script>

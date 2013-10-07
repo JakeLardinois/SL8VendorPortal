@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @*The below statements are actually is calling "bundles" that is created in App_Start\BundleConfig which is called from Global.asax. Bundling is for Instead of loading each script or style 
+        with a single request (with script or link tags), all files are compressed into a single JavaScript or stylesheet file and loaded together. It makes the app run faster... *@
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/JSON")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery") 
+        @Scripts.Render("~/bundles/jqueryui") 
+        @Styles.Render("~/Content/themes/base/css")
+        @Scripts.Render("~/bundles/DataTables")
+
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">@Html.ActionLink("Formed Partnerships", "Index", "Home")</p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                    <nav>
+                        <ul id="menu">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
+                            @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                            @if (Request.IsAuthenticated) 
+                            { 
+                                <li>@Html.ActionLink("Customer Orders", "Search", "CustomerOrders")</li>
+                                <li>@Html.ActionLink("Purchase Orders", "Search", "PurchaseOrders")</li>
+                                <li>@Html.ActionLink("Transfer Orders", "Search", "TransferOrders")</li>
+                                <li>@Html.ActionLink("Inventory", "Search", "Inventory")</li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - WireTech Vendor Portal MVC Application</p>
+                </div>
+            </div>
+        </footer>
+
+        @* The below statement will allow me to go to each one of my views that requires a script and place it in a section called "scripts" and this layout view will make sure that all those scripts are loaded first and
+            in the proper order.  The false means that the "scripts" section is not required (so your view can opt to not have one) *@
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

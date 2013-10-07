@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SL8VendorPortal.Models.SytelineNote>
+
+@Scripts.Render("~/bundles/SharedNotesViewer")
+
+@{
+    ViewBag.Title = "WTF Order Notes";
+}
+
+<h2>Notes</h2>
+
+<table id="objNotes">
+    <thead>
+        <tr>
+            <th>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoteDesc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastUpdated)
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script type="text/javascript">
+    var sOpenImageUrl = '@Url.Content("~/images/details_open.png")';
+    var sCloseImageUrl = '@Url.Content("~/images/details_close.png")';
+</script>
