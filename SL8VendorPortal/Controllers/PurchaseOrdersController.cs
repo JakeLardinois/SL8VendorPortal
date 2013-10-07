@@ -9,6 +9,8 @@ using SL8VendorPortal.Models;
 
 using SL8VendorPortal.Infrastructure;
 using jQuery.DataTables.Mvc;
+using Microsoft.Reporting.WebForms;
+using System.Text;
 
 
 namespace SL8VendorPortal.Controllers
@@ -93,6 +95,206 @@ namespace SL8VendorPortal.Controllers
                 totalRecords: totalRecordCount,
                 totalDisplayRecords: searchRecordCount,
                 sEcho: jQueryDataTablesModel.sEcho);
+        }
+
+        [HttpPost]
+        public JsonResult GetDropShipAddress(string ShipAddr, string DropShipNo, int? SeqNo)
+        {
+            return Json(BuildDropShipAddress(ShipAddr, DropShipNo, SeqNo, true));
+        }
+
+        public ActionResult GeneratePOReport(JQueryDataTablesModel jQueryDataTablesModel)
+        {
+            int totalRecordCount;
+            int searchRecordCount;
+            string strSQL;
+
+
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            strSQL = QueryDefinitions.GetQuery("SelectPOByLineWarehousesAndStatus", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O" });//This will only bring in Orders where there are corresponding Open Order Lines.
+
+            InMemoryPurchaseOrdersRepository.AllPurchaseOrders = db.poes.SqlQuery(strSQL).ToList();
+
+            var objItems = InMemoryPurchaseOrdersRepository.GetPurchaseOrders(startIndex: jQueryDataTablesModel.iDisplayStart,
+                pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
+                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
+
+            //Add the Order Notes
+            foreach (po objPO in objItems)
+            {
+                objPO.Notes = new Notes(objPO.po_num, NoteType.PO);
+
+                //iterate on the notes collection and add the text to the AllNotesText Property...
+                foreach (SytelineNote objSLNote in objPO.Notes)
+                {
+                    if (objSLNote.IsInternal == 0)//only add external notes
+                        objPO.AllNotesText += objSLNote.NoteContent + Environment.NewLine;
+                }
+            }
+
+            RenderPOReport(objItems);
+
+            return View();
+        }
+
+        private void RenderPOReport(IList<po> objItems)
+        {
+            string strReportType = "Excel";
+            LocalReport objLocalReport;
+            ReportDataSource PurchaseOrdersDataSource;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo = "";
+            Warning[] warnings;
+            string[] streams;
+
+
+            //objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/Reports/PurchaseOrders.rdlc") };
+            //objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/bin/Reports/CustomerOrders.rdlc") };
+            objLocalReport = new LocalReport { ReportPath = Server.MapPath(Settings.ReportDirectory + "PurchaseOrders.rdlc") };
+
+            objLocalReport.SubreportProcessing += new SubreportProcessingEventHandler(MySubreportEventHandler);
+
+            //Give the reportdatasource a name so that we can reference it in our report designer
+            PurchaseOrdersDataSource = new ReportDataSource("POs", objItems);
+
+            objLocalReport.DataSources.Add(PurchaseOrdersDataSource);
+            objLocalReport.Refresh();
+
+            //The DeviceInfo settings should be changed based on the reportType
+            //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+            deviceInfo = string.Format(
+                        "<DeviceInfo>" +
+                        "<OmitDocumentMap>True</OmitDocumentMap>" +
+                        "<OmitFormulas>True</OmitFormulas>" +
+                        "<SimplePageHeaders>True</SimplePageHeaders>" +
+                        "</DeviceInfo>", strReportType);
+
+            //Render the report
+            var renderedBytes = objLocalReport.Render(
+                strReportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+            //Clear the response stream and write the bytes to the outputstream
+            //Set content-disposition to "attachment" so that user is prompted to take an action
+            //on the file (open or save)
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename=PurchaseOrders" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + "." + fileNameExtension);
+            Response.BinaryWrite(renderedBytes);
+            Response.End();
+        }
+
+        void MySubreportEventHandler(object sender, SubreportProcessingEventArgs e)
+        {
+            List<SytelineNote> objLineAndReleaseNotes;
+            List<poitem> objPOItems;
+
+
+            var objParam = e.Parameters.Where(p => p.Name.Equals("OrderNum"))
+                .SingleOrDefault();
+
+            //Get the lines for each order and add them to the Order...
+            objPOItems = db.poitems.SqlQuery(QueryDefinitions.GetQuery("SelectPOLinesByWarehousesAndStatusAndOrderNo", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O", objParam.Values[0] }))
+                .ToList();
+
+            foreach (poitem objPOItem in objPOItems)
+            {
+                objLineAndReleaseNotes = new List<SytelineNote>();
+                //Add the Line Notes
+                objLineAndReleaseNotes.AddRange(new Notes(objPOItem.po_num, objPOItem.po_line, NoteType.POLine));
+                //Add the Release Notes
+                objLineAndReleaseNotes.AddRange(new Notes(objPOItem.po_num, objPOItem.po_line, objPOItem.po_release, NoteType.POLineRelease));
+                //add the Line and Release Notes to the Line record
+                objPOItem.Notes = objLineAndReleaseNotes;
+
+                //iterate on the notes collection and add the text to the AllNotesText Property...
+                foreach (SytelineNote objSLNote in objPOItem.Notes)
+                {
+                    if (objSLNote.IsInternal == 0)//only add external notes
+                        objPOItem.AllNotesText += objSLNote.NoteContent + Environment.NewLine;
+                }
+
+                objPOItem.DropShipAddress = BuildDropShipAddress(objPOItem.ship_addr, objPOItem.drop_ship_no, objPOItem.drop_seq);
+            }
+
+            e.DataSources.Add(new ReportDataSource("POItems", objPOItems));
+        }
+
+        private string BuildDropShipAddress(string strShipAddr, string strDropShipNo, int? intSeqNo, bool blnUseHTML = false)
+        {
+            StringBuilder strbldrAddress;
+            string strNewline;
+
+
+            if (blnUseHTML)
+                strNewline = "<br />";
+            else
+                strNewline = Environment.NewLine;
+
+            strbldrAddress = new StringBuilder();
+            switch (strShipAddr)
+            {
+                case "N": //None
+                    break;
+                case "W": //Warehouse
+                    var objWhse = db.whses
+                    .Where(w => w.whse1.Equals(strDropShipNo))
+                    .SingleOrDefault();
+
+                    if (objWhse != null)
+                    {
+                        strbldrAddress.Append(string.IsNullOrEmpty(objWhse.name) ? string.Empty : objWhse.name + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objWhse.addr__1) ? string.Empty : objWhse.addr__1 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objWhse.addr__2) ? string.Empty : objWhse.addr__2 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objWhse.addr__3) ? string.Empty : objWhse.addr__3 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objWhse.addr__4) ? string.Empty : objWhse.addr__4 + strNewline);
+                        strbldrAddress.Append(objWhse.city + ", " + objWhse.state + " " + objWhse.zip + strNewline);
+                        strbldrAddress.Append(objWhse.country);
+                    }
+                    break;
+                case "D": //Drop Ship To
+                    var objVendAddr = db.vendaddrs
+                        .Where(v => v.vend_num.Equals(strDropShipNo))
+                        .SingleOrDefault();
+
+                    if (objVendAddr != null)
+                    {
+                        strbldrAddress.Append(string.IsNullOrEmpty(objVendAddr.name) ? string.Empty : objVendAddr.name + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objVendAddr.addr__1) ? string.Empty : objVendAddr.addr__1 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objVendAddr.addr__2) ? string.Empty : objVendAddr.addr__2 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objVendAddr.addr__3) ? string.Empty : objVendAddr.addr__3 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objVendAddr.addr__4) ? string.Empty : objVendAddr.addr__4 + strNewline);
+                        strbldrAddress.Append(objVendAddr.city + ", " + objVendAddr.state + " " + objVendAddr.zip + strNewline);
+                        strbldrAddress.Append(objVendAddr.country);
+                    }
+
+                    break;
+                case "C": //Custsomer
+                    var objCustAddr = db.custaddrs
+                        .Where(c => c.cust_num.Equals(strDropShipNo) && c.cust_seq == intSeqNo)
+                        .SingleOrDefault();
+
+                    if (objCustAddr != null)
+                    {
+                        strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.name) ? string.Empty : objCustAddr.name + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__1) ? string.Empty : objCustAddr.addr__1 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__2) ? string.Empty : objCustAddr.addr__2 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__3) ? string.Empty : objCustAddr.addr__3 + strNewline);
+                        strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__4) ? string.Empty : objCustAddr.addr__4 + strNewline);
+                        strbldrAddress.Append(objCustAddr.city + ", " + objCustAddr.state + " " + objCustAddr.zip + strNewline);
+                        strbldrAddress.Append(objCustAddr.country);
+                    }
+                    break;
+            }
+
+            return strbldrAddress.ToString();
         }
 
         #region Unused Code

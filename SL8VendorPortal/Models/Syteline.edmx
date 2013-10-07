@@ -16,6 +16,7 @@
           <EntitySet Name="poitem" EntityType="WTF_AppModel.Store.poitem" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="transfer" EntityType="WTF_AppModel.Store.transfer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="trnitem" EntityType="WTF_AppModel.Store.trnitem" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="vendaddr" EntityType="WTF_AppModel.Store.vendaddr" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="whse" EntityType="WTF_AppModel.Store.whse" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="co">
@@ -863,6 +864,39 @@
           <Property Name="preassign_serials" Type="tinyint" Nullable="false" />
           <Property Name="uf_pref_type" Type="nvarchar" MaxLength="8" />
         </EntityType>
+        <EntityType Name="vendaddr">
+          <Key>
+            <PropertyRef Name="vend_num" />
+          </Key>
+          <Property Name="vend_num" Type="nvarchar" Nullable="false" MaxLength="7" />
+          <Property Name="name" Type="nvarchar" MaxLength="60" />
+          <Property Name="city" Type="nvarchar" MaxLength="30" />
+          <Property Name="state" Type="nvarchar" MaxLength="5" />
+          <Property Name="zip" Type="nvarchar" MaxLength="10" />
+          <Property Name="county" Type="nvarchar" MaxLength="30" />
+          <Property Name="country" Type="nvarchar" MaxLength="30" />
+          <Property Name="fax_num" Type="nvarchar" MaxLength="25" />
+          <Property Name="telex_num" Type="nvarchar" MaxLength="25" />
+          <Property Name="addr##1" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##2" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##3" Type="nvarchar" MaxLength="50" />
+          <Property Name="addr##4" Type="nvarchar" MaxLength="50" />
+          <Property Name="pay_hold" Type="tinyint" />
+          <Property Name="pay_hold_user" Type="nvarchar" MaxLength="3" />
+          <Property Name="pay_hold_date" Type="datetime" />
+          <Property Name="pay_hold_reason" Type="nvarchar" MaxLength="3" />
+          <Property Name="internet_url" Type="nvarchar" MaxLength="150" />
+          <Property Name="internal_email_addr" Type="nvarchar" MaxLength="60" />
+          <Property Name="external_email_addr" Type="nvarchar" MaxLength="60" />
+          <Property Name="NoteExistsFlag" Type="tinyint" Nullable="false" />
+          <Property Name="RecordDate" Type="datetime" Nullable="false" />
+          <Property Name="RowPointer" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="UpdatedBy" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="InWorkflow" Type="tinyint" Nullable="false" />
+          <Property Name="uf_pref_type" Type="nvarchar" MaxLength="8" />
+        </EntityType>
         <EntityType Name="whse">
           <Key>
             <PropertyRef Name="whse" />
@@ -930,6 +964,7 @@
           <EntitySet Name="poitems" EntityType="WTF_AppModel.poitem" />
           <EntitySet Name="whses" EntityType="WTF_AppModel.whse" />
           <EntitySet Name="custaddrs" EntityType="WTF_AppModel.custaddr" />
+          <EntitySet Name="vendaddrs" EntityType="WTF_AppModel.vendaddr" />
         </EntityContainer>
         <EntityType Name="transfer">
           <Key>
@@ -1826,6 +1861,39 @@
           <Property Type="Decimal" Name="carrier_upcharge_pct" Precision="4" Scale="2" />
           <Property Type="Byte" Name="carrier_residential_indicator" Nullable="false" />
           <Property Type="String" Name="carrier_bill_to_transportation" MaxLength="5" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vendaddr">
+          <Key>
+            <PropertyRef Name="vend_num" />
+          </Key>
+          <Property Type="String" Name="vend_num" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="name" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="city" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="state" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="zip" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="county" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="country" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="fax_num" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="telex_num" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__3" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addr__4" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="pay_hold" />
+          <Property Type="String" Name="pay_hold_user" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="pay_hold_date" />
+          <Property Type="String" Name="pay_hold_reason" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="internet_url" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="internal_email_addr" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="external_email_addr" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="Byte" Name="NoteExistsFlag" Nullable="false" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="false" />
+          <Property Type="Guid" Name="RowPointer" Nullable="false" />
+          <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UpdatedBy" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateDate" Nullable="false" />
+          <Property Type="Byte" Name="InWorkflow" Nullable="false" />
+          <Property Type="String" Name="uf_pref_type" MaxLength="8" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2731,6 +2799,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="vendaddrs">
+            <EntityTypeMapping TypeName="WTF_AppModel.vendaddr">
+              <MappingFragment StoreEntitySet="vendaddr">
+                <ScalarProperty Name="uf_pref_type" ColumnName="uf_pref_type" />
+                <ScalarProperty Name="InWorkflow" ColumnName="InWorkflow" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="RowPointer" ColumnName="RowPointer" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="NoteExistsFlag" ColumnName="NoteExistsFlag" />
+                <ScalarProperty Name="external_email_addr" ColumnName="external_email_addr" />
+                <ScalarProperty Name="internal_email_addr" ColumnName="internal_email_addr" />
+                <ScalarProperty Name="internet_url" ColumnName="internet_url" />
+                <ScalarProperty Name="pay_hold_reason" ColumnName="pay_hold_reason" />
+                <ScalarProperty Name="pay_hold_date" ColumnName="pay_hold_date" />
+                <ScalarProperty Name="pay_hold_user" ColumnName="pay_hold_user" />
+                <ScalarProperty Name="pay_hold" ColumnName="pay_hold" />
+                <ScalarProperty Name="addr__4" ColumnName="addr##4" />
+                <ScalarProperty Name="addr__3" ColumnName="addr##3" />
+                <ScalarProperty Name="addr__2" ColumnName="addr##2" />
+                <ScalarProperty Name="addr__1" ColumnName="addr##1" />
+                <ScalarProperty Name="telex_num" ColumnName="telex_num" />
+                <ScalarProperty Name="fax_num" ColumnName="fax_num" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="county" ColumnName="county" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="vend_num" ColumnName="vend_num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2752,7 +2854,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="Syteline" ZoomLevel="59" >
+      <Diagram Name="Syteline" ZoomLevel="49" >
         <EntityTypeShape EntityType="WTF_AppModel.transfer" Width="1.5" PointX="0.75" PointY="0.75" Height="12.749166666666666" />
         <EntityTypeShape EntityType="WTF_AppModel.trnitem" Width="1.5" PointX="2.5" PointY="0.75" Height="16.210592447916667" />
         <EntityTypeShape EntityType="WTF_AppModel.itemwhse" Width="1.5" PointX="4.25" PointY="0.75" Height="18.325908203125003" />
@@ -2764,6 +2866,7 @@
         <EntityTypeShape EntityType="WTF_AppModel.poitem" Width="1.5" PointX="13.75" PointY="0.75" Height="18.325908203125003" />
         <EntityTypeShape EntityType="WTF_AppModel.whse" Width="1.5" PointX="17.625" PointY="0.75" Height="9.8646451822916674" />
         <EntityTypeShape EntityType="WTF_AppModel.custaddr" Width="1.5" PointX="19.75" PointY="0.75" Height="9.2877408854166674" />
+        <EntityTypeShape EntityType="WTF_AppModel.vendaddr" Width="1.5" PointX="21.625" PointY="0.75" Height="6.4032194010416674" />
       </Diagram>
     </Diagrams>
   </Designer>

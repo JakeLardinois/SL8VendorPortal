@@ -17,6 +17,8 @@ namespace SL8VendorPortal.Models
     {
         public IEnumerable<SytelineNote> Notes { get; set; }
         public SytelineNote Note { get; set; }
+        public string AllNotesText { get; set; } //for the reportviewer report
+
         public IEnumerable<coitem> coitems { get; set; }
         public coitem COItem { get; set; } //I extended this class so that I could access the headers for COLines on my razor view for Customer Orders
     }
@@ -139,12 +141,13 @@ namespace SL8VendorPortal.Models
     {
         public IEnumerable<SytelineNote> Notes { get; set; }
         public SytelineNote Note { get; set; }
+        public string AllNotesText { get; set; } //for the reportviewer report
 
         public IEnumerable<VendorRequest> VendorRequests { get; set; }
         public VendorRequest VendorRequest { get; set; }
 
         //public custaddr CustomerAddress;
-        public string CustomerAddress;
+        public string CustomerAddress { get; set; }
     }
     public class coitemMetadata
     {
@@ -332,8 +335,11 @@ namespace SL8VendorPortal.Models
     {
         public IEnumerable<SytelineNote> Notes { get; set; }
         public SytelineNote Note { get; set; }
+        public string AllNotesText { get; set; } //for the reportviewer report
+
         public IEnumerable<poitem> poitems { get; set; }
         public poitem POItem { get; set; } //I extended this class so that I could access the headers for POLines on my razor view for Purchase Orders
+
     }
     public class poMetadata
     {
@@ -436,9 +442,12 @@ namespace SL8VendorPortal.Models
     {
         public IEnumerable<SytelineNote> Notes { get; set; }
         public SytelineNote Note { get; set; }
+        public string AllNotesText { get; set; } //for the reportviewer report
 
         public IEnumerable<VendorRequest> VendorRequests { get; set; }
         public VendorRequest VendorRequest { get; set; }
+
+        public string DropShipAddress { get; set; }
     }
     public class poitemMetadata
     {
@@ -611,6 +620,8 @@ namespace SL8VendorPortal.Models
     {
         public IEnumerable<SytelineNote> Notes { get; set; }
         public SytelineNote Note { get; set; }
+        public string AllNotesText { get; set; } //for the reportviewer report
+
         public IEnumerable<trnitem> trnitems { get; set; }
         public trnitem TrnItem { get; set; }
     }
@@ -660,6 +671,7 @@ namespace SL8VendorPortal.Models
     {
         public IEnumerable<SytelineNote> Notes { get; set; }
         public SytelineNote Note { get; set; }
+        public string AllNotesText { get; set; } //for the reportviewer report
 
         public IEnumerable<VendorRequest> VendorRequests { get; set; }
         public VendorRequest VendorRequest { get; set; }

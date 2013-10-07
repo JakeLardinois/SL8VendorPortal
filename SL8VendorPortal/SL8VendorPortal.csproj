@@ -268,6 +268,9 @@
     <Compile Include="Models\trnitem.cs">
       <DependentUpon>Syteline.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vendaddr.cs">
+      <DependentUpon>Syteline.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\VendorRequests.cs" />
     <Compile Include="Models\VendorRequestSearch.cs" />
     <Compile Include="Models\whse.cs">
@@ -645,8 +648,24 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QueryDefs.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\CustomerOrderLines.rdlc" />
-    <EmbeddedResource Include="Reports\CustomerOrders.rdlc" />
+    <EmbeddedResource Include="Reports\CustomerOrderLines.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\CustomerOrders.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PurchaseOrderLines.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PurchaseOrders.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TransferOrderLines.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TransferOrders.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\jQuery.DataTables.Mvc\jQuery.DataTables.Mvc.csproj">

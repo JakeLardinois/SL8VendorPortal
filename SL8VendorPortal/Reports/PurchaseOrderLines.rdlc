@@ -6,79 +6,55 @@
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>824d9efa-4c96-466a-b0de-6e86ff007e81</rd:DataSourceID>
+      <rd:DataSourceID>1a05afef-6865-4864-b95e-6b60464e17b5</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="COItems">
+    <DataSet Name="POItems">
       <Fields>
-        <Field Name="Notes">
-          <DataField>Notes</DataField>
-          <rd:TypeName>System.Collections.Generic.IEnumerable`1[[SL8VendorPortal.Models.SytelineNote, SL8VendorPortal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</rd:TypeName>
-        </Field>
-        <Field Name="Note">
-          <DataField>Note</DataField>
-          <rd:TypeName>SL8VendorPortal.Models.SytelineNote</rd:TypeName>
-        </Field>
-        <Field Name="AllNotesText">
-          <DataField>AllNotesText</DataField>
+        <Field Name="po_num">
+          <DataField>po_num</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="VendorRequests">
-          <DataField>VendorRequests</DataField>
-          <rd:TypeName>System.Collections.Generic.IEnumerable`1[[SL8VendorPortal.Models.VendorRequest, SL8VendorPortal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</rd:TypeName>
-        </Field>
-        <Field Name="VendorRequest">
-          <DataField>VendorRequest</DataField>
-          <rd:TypeName>SL8VendorPortal.Models.VendorRequest</rd:TypeName>
-        </Field>
-        <Field Name="CustomerAddress">
-          <DataField>CustomerAddress</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="co_num">
-          <DataField>co_num</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="co_line">
-          <DataField>co_line</DataField>
+        <Field Name="po_line">
+          <DataField>po_line</DataField>
           <rd:TypeName>System.Int16</rd:TypeName>
         </Field>
-        <Field Name="co_release">
-          <DataField>co_release</DataField>
+        <Field Name="po_release">
+          <DataField>po_release</DataField>
           <rd:TypeName>System.Int16</rd:TypeName>
         </Field>
         <Field Name="item">
           <DataField>item</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="stat">
+          <DataField>stat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="qty_ordered">
           <DataField>qty_ordered</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="qty_ready">
-          <DataField>qty_ready</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="qty_received">
+          <DataField>qty_received</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="qty_shipped">
-          <DataField>qty_shipped</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="qty_rejected">
+          <DataField>qty_rejected</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="qty_packed">
-          <DataField>qty_packed</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="qty_voucher">
+          <DataField>qty_voucher</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="disc">
-          <DataField>disc</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="qty_returned">
+          <DataField>qty_returned</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="cost">
-          <DataField>cost</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="price">
-          <DataField>price</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="item_cost">
+          <DataField>item_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="ref_type">
           <DataField>ref_type</DataField>
@@ -98,95 +74,67 @@
         </Field>
         <Field Name="due_date">
           <DataField>due_date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="rcvd_date">
+          <DataField>rcvd_date</DataField>
           <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="ship_date">
-          <DataField>ship_date</DataField>
-          <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="brk_qty__1">
-          <DataField>brk_qty__1</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="brk_qty__2">
-          <DataField>brk_qty__2</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="brk_qty__3">
-          <DataField>brk_qty__3</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="brk_qty__4">
-          <DataField>brk_qty__4</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="brk_qty__5">
-          <DataField>brk_qty__5</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="reprice">
-          <DataField>reprice</DataField>
-          <rd:TypeName>System.Byte</rd:TypeName>
-        </Field>
-        <Field Name="cust_item">
-          <DataField>cust_item</DataField>
+        <Field Name="vend_item">
+          <DataField>vend_item</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="qty_invoiced">
-          <DataField>qty_invoiced</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="qty_returned">
-          <DataField>qty_returned</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cgs_total">
-          <DataField>cgs_total</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="feat_str">
-          <DataField>feat_str</DataField>
+        <Field Name="root_job">
+          <DataField>root_job</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="stat">
-          <DataField>stat</DataField>
+        <Field Name="root_suf">
+          <DataField>root_suf</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="plan_cost">
+          <DataField>plan_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="voucher_cost">
+          <DataField>voucher_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="non_inv_acct">
+          <DataField>non_inv_acct</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="cust_num">
-          <DataField>cust_num</DataField>
+        <Field Name="drop_ship_no">
+          <DataField>drop_ship_no</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="cust_seq">
-          <DataField>cust_seq</DataField>
+        <Field Name="drop_seq">
+          <DataField>drop_seq</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="prg_bill_tot">
-          <DataField>prg_bill_tot</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="prg_bill_app">
-          <DataField>prg_bill_app</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="release_date">
-          <DataField>release_date</DataField>
-          <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        <Field Name="ship_addr">
+          <DataField>ship_addr</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="promise_date">
           <DataField>promise_date</DataField>
+          <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="release_date">
+          <DataField>release_date</DataField>
           <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="whse">
           <DataField>whse</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="wks_basis">
-          <DataField>wks_basis</DataField>
+        <Field Name="item_type">
+          <DataField>item_type</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="wks_value">
-          <DataField>wks_value</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        <Field Name="cost_type">
+          <DataField>cost_type</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="comm_code">
           <DataField>comm_code</DataField>
@@ -200,13 +148,13 @@
           <DataField>process_ind</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="delterm">
-          <DataField>delterm</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="unit_weight">
           <DataField>unit_weight</DataField>
           <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="delterm">
+          <DataField>delterm</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="origin">
           <DataField>origin</DataField>
@@ -215,6 +163,22 @@
         <Field Name="cons_num">
           <DataField>cons_num</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_mat_cost">
+          <DataField>unit_mat_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_duty_cost">
+          <DataField>unit_duty_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_freight_cost">
+          <DataField>unit_freight_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_brokerage_cost">
+          <DataField>unit_brokerage_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="tax_code1">
           <DataField>tax_code1</DataField>
@@ -236,13 +200,13 @@
           <DataField>transport</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="pick_date">
-          <DataField>pick_date</DataField>
-          <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="pricecode">
-          <DataField>pricecode</DataField>
+        <Field Name="req_num">
+          <DataField>req_num</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="req_line">
+          <DataField>req_line</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="u_m">
           <DataField>u_m</DataField>
@@ -250,131 +214,63 @@
         </Field>
         <Field Name="qty_ordered_conv">
           <DataField>qty_ordered_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="price_conv">
-          <DataField>price_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="item_cost_conv">
+          <DataField>item_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="co_cust_num">
-          <DataField>co_cust_num</DataField>
+        <Field Name="plan_cost_conv">
+          <DataField>plan_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_mat_cost_conv">
+          <DataField>unit_mat_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_duty_cost_conv">
+          <DataField>unit_duty_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_freight_cost_conv">
+          <DataField>unit_freight_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_brokerage_cost_conv">
+          <DataField>unit_brokerage_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="non_inv_acct_unit1">
+          <DataField>non_inv_acct_unit1</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="packed">
-          <DataField>packed</DataField>
+        <Field Name="non_inv_acct_unit2">
+          <DataField>non_inv_acct_unit2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="non_inv_acct_unit3">
+          <DataField>non_inv_acct_unit3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="non_inv_acct_unit4">
+          <DataField>non_inv_acct_unit4</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="lc_override">
+          <DataField>lc_override</DataField>
           <rd:TypeName>System.Nullable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="bol">
-          <DataField>bol</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="qty_rsvd">
-          <DataField>qty_rsvd</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="matl_cost">
-          <DataField>matl_cost</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="lbr_cost">
-          <DataField>lbr_cost</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="fovhd_cost">
-          <DataField>fovhd_cost</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="vovhd_cost">
-          <DataField>vovhd_cost</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="out_cost">
-          <DataField>out_cost</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cgs_total_matl">
-          <DataField>cgs_total_matl</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cgs_total_lbr">
-          <DataField>cgs_total_lbr</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cgs_total_fovhd">
-          <DataField>cgs_total_fovhd</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cgs_total_vovhd">
-          <DataField>cgs_total_vovhd</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cgs_total_out">
-          <DataField>cgs_total_out</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="cost_conv">
-          <DataField>cost_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="matl_cost_conv">
-          <DataField>matl_cost_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="lbr_cost_conv">
-          <DataField>lbr_cost_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="fovhd_cost_conv">
-          <DataField>fovhd_cost_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="vovhd_cost_conv">
-          <DataField>vovhd_cost_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="out_cost_conv">
-          <DataField>out_cost_conv</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="ship_site">
-          <DataField>ship_site</DataField>
+        <Field Name="revision">
+          <DataField>revision</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="sync_reqd">
-          <DataField>sync_reqd</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="co_orig_site">
-          <DataField>co_orig_site</DataField>
+        <Field Name="drawing_nbr">
+          <DataField>drawing_nbr</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="cust_po">
-          <DataField>cust_po</DataField>
+        <Field Name="po_vend_num">
+          <DataField>po_vend_num</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="rma_num">
-          <DataField>rma_num</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="rma_line">
-          <DataField>rma_line</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="projected_date">
-          <DataField>projected_date</DataField>
-          <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="consolidate">
-          <DataField>consolidate</DataField>
-          <rd:TypeName>System.Byte</rd:TypeName>
-        </Field>
-        <Field Name="inv_freq">
-          <DataField>inv_freq</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="summarize">
-          <DataField>summarize</DataField>
-          <rd:TypeName>System.Byte</rd:TypeName>
         </Field>
         <Field Name="NoteExistsFlag">
           <DataField>NoteExistsFlag</DataField>
@@ -390,10 +286,6 @@
         </Field>
         <Field Name="description">
           <DataField>description</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="config_id">
-          <DataField>config_id</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="CreatedBy">
@@ -412,9 +304,29 @@
           <DataField>InWorkflow</DataField>
           <rd:TypeName>System.Byte</rd:TypeName>
         </Field>
+        <Field Name="expedited">
+          <DataField>expedited</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
         <Field Name="rcpt_rqmt">
           <DataField>rcpt_rqmt</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="unit_insurance_cost">
+          <DataField>unit_insurance_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_insurance_cost_conv">
+          <DataField>unit_insurance_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_loc_frt_cost">
+          <DataField>unit_loc_frt_cost</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
+        </Field>
+        <Field Name="unit_loc_frt_cost_conv">
+          <DataField>unit_loc_frt_cost_conv</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="trans_nat_2">
           <DataField>trans_nat_2</DataField>
@@ -424,61 +336,29 @@
           <DataField>suppl_qty_conv_factor</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="print_kit_components">
-          <DataField>print_kit_components</DataField>
+        <Field Name="unlinked_xref">
+          <DataField>unlinked_xref</DataField>
           <rd:TypeName>System.Byte</rd:TypeName>
         </Field>
         <Field Name="due_date_day">
           <DataField>due_date_day</DataField>
           <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="external_reservation_ref">
-          <DataField>external_reservation_ref</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="non_inv_acct">
-          <DataField>non_inv_acct</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="non_inv_acct_unit1">
-          <DataField>non_inv_acct_unit1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="non_inv_acct_unit2">
-          <DataField>non_inv_acct_unit2</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="non_inv_acct_unit3">
-          <DataField>non_inv_acct_unit3</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="non_inv_acct_unit4">
-          <DataField>non_inv_acct_unit4</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="days_shipped_before_due_date_tolerance">
-          <DataField>days_shipped_before_due_date_tolerance</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="days_shipped_after_due_date_tolerance">
-          <DataField>days_shipped_after_due_date_tolerance</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="shipped_over_ordered_qty_tolerance">
-          <DataField>shipped_over_ordered_qty_tolerance</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="shipped_under_ordered_qty_tolerance">
-          <DataField>shipped_under_ordered_qty_tolerance</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="priority">
-          <DataField>priority</DataField>
-          <rd:TypeName>System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
-        </Field>
-        <Field Name="invoice_hold">
-          <DataField>invoice_hold</DataField>
+        <Field Name="preassign_lots">
+          <DataField>preassign_lots</DataField>
           <rd:TypeName>System.Byte</rd:TypeName>
+        </Field>
+        <Field Name="preassign_serials">
+          <DataField>preassign_serials</DataField>
+          <rd:TypeName>System.Byte</rd:TypeName>
+        </Field>
+        <Field Name="ipr_id">
+          <DataField>ipr_id</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ipr_seq">
+          <DataField>ipr_seq</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
         <Field Name="manufacturer_id">
           <DataField>manufacturer_id</DataField>
@@ -492,9 +372,29 @@
           <DataField>uf_pref_type</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="qty_picked">
-          <DataField>qty_picked</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
+        <Field Name="Notes">
+          <DataField>Notes</DataField>
+          <rd:TypeName>System.Collections.Generic.IEnumerable`1[[SL8VendorPortal.Models.SytelineNote, SL8VendorPortal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</rd:TypeName>
+        </Field>
+        <Field Name="Note">
+          <DataField>Note</DataField>
+          <rd:TypeName>SL8VendorPortal.Models.SytelineNote</rd:TypeName>
+        </Field>
+        <Field Name="AllNotesText">
+          <DataField>AllNotesText</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="VendorRequests">
+          <DataField>VendorRequests</DataField>
+          <rd:TypeName>System.Collections.Generic.IEnumerable`1[[SL8VendorPortal.Models.VendorRequest, SL8VendorPortal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]</rd:TypeName>
+        </Field>
+        <Field Name="VendorRequest">
+          <DataField>VendorRequest</DataField>
+          <rd:TypeName>SL8VendorPortal.Models.VendorRequest</rd:TypeName>
+        </Field>
+        <Field Name="DropShipAddress">
+          <DataField>DropShipAddress</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <Query>
@@ -503,16 +403,16 @@
       </Query>
       <rd:DataSetInfo>
         <rd:DataSetName>SL8VendorPortal.Models</rd:DataSetName>
-        <rd:TableName>CustomerOrderLines</rd:TableName>
+        <rd:TableName>PurchaseOrderLines</rd:TableName>
         <rd:ObjectDataSourceSelectMethod>FindAll</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[SL8VendorPortal.Models.coitem] FindAll(System.Predicate`1[SL8VendorPortal.Models.coitem])</rd:ObjectDataSourceSelectMethodSignature>
-        <rd:ObjectDataSourceType>SL8VendorPortal.Models.CustomerOrderLines, SL8VendorPortal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceSelectMethodSignature>System.Collections.Generic.List`1[SL8VendorPortal.Models.poitem] FindAll(System.Predicate`1[SL8VendorPortal.Models.poitem])</rd:ObjectDataSourceSelectMethodSignature>
+        <rd:ObjectDataSourceType>SL8VendorPortal.Models.PurchaseOrderLines, SL8VendorPortal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
   <Body>
     <ReportItems>
-      <Tablix Name="Tablix3">
+      <Tablix Name="Tablix1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
@@ -537,10 +437,10 @@
               <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.78125in</Width>
+              <Width>1in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.38542in</Width>
+              <Width>1in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -579,6 +479,156 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox3">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>po line</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox3</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox5">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>po release</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox5</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox7">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>qty ordered</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox9">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>qty received</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox11">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>qty rejected</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox11</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="Textbox13">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -586,7 +636,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>co line</Value>
+                              <Value>due date</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -609,6 +659,36 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Drop Ship Address</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="Textbox15">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -616,7 +696,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>co release</Value>
+                              <Value>All Notes Text</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -624,186 +704,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox15</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox17">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>qty ordered</Value>
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox17</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox49">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>qty shipped</Value>
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox49</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox51">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>due date</Value>
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox51</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox53">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>ship date</Value>
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox53</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox22">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Customer Address</Value>
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox22</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox45">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox45</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -854,21 +754,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="co_line">
+                    <Textbox Name="po_line">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!co_line.Value</Value>
+                              <Value>=Fields!po_line.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>co_line</rd:DefaultName>
+                      <rd:DefaultName>po_line</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -884,21 +784,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="co_release">
+                    <Textbox Name="po_release">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!co_release.Value</Value>
+                              <Value>=Fields!po_release.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>co_release</rd:DefaultName>
+                      <rd:DefaultName>po_release</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -944,21 +844,51 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="qty_shipped">
+                    <Textbox Name="qty_received">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!qty_shipped.Value</Value>
+                              <Value>=Fields!qty_received.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>qty_shipped</rd:DefaultName>
+                      <rd:DefaultName>qty_received</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="qty_rejected">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!qty_rejected.Value</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>qty_rejected</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1004,21 +934,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="ship_date">
+                    <Textbox Name="DropShipAddress">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(Fields!ship_date.Value, "MM/dd/yyyy")</Value>
+                              <Value>=Fields!DropShipAddress.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>ship_date</rd:DefaultName>
+                      <rd:DefaultName>DropShipAddress</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1030,36 +960,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="CustomerAddress">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!CustomerAddress.Value</Value>
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>CustomerAddress</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1116,15 +1017,12 @@
             </TablixMember>
             <TablixMember>
               <Group Name="Details" />
-              <TablixMembers>
-                <TablixMember />
-              </TablixMembers>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>COItems</DataSetName>
+        <DataSetName>POItems</DataSetName>
         <Height>0.5in</Height>
-        <Width>11.16667in</Width>
+        <Width>9in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1132,7 +1030,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>1.59375in</Height>
+    <Height>2in</Height>
     <Style />
   </Body>
   <ReportParameters>
@@ -1141,7 +1039,7 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Width>11.16667in</Width>
+  <Width>9in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>
@@ -1149,6 +1047,6 @@
     <BottomMargin>1in</BottomMargin>
     <Style />
   </Page>
-  <rd:ReportID>94ca4e59-4655-48d5-95f7-b81ac1c47580</rd:ReportID>
+  <rd:ReportID>f372bc49-f788-4c58-9d72-b3f61510f2e0</rd:ReportID>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
 </Report>

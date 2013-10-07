@@ -114,6 +114,8 @@
 </div>
 <div id='VendorRequestDialogDiv' style="display: none;">
 </div>
+<div id='AddressDialogDiv' style="display: none;">
+</div>
 
 @section scripts 
 { 
@@ -135,6 +137,8 @@
     var sDeleteVRUrl = '@Url.Action("DeleteVR", "VendorRequests")';
     var sAddVRUrl = '@Url.Action("AddVR", "VendorRequests")';
     var sRequestCatUrl = '@Url.Action("RequestCategories", "VendorRequests")';
+    var sDropShipAddrUrl = '@Url.Action("GetDropShipAddress", "PurchaseOrders")';
+    var sPrintPOUrl = '@Url.Action("GeneratePOReport", "PurchaseOrders")';
 
 
     function GetLineTableHTML(oTable, nTr, sTableName) {
@@ -150,6 +154,9 @@
                             '</th>' +
                             '<th>' +
                                 'Requests' +
+                            '</th>' +
+                            '<th>' +
+                                'Address' +
                             '</th>' +
                             '<th>' +
                                 '@Html.DisplayNameFor(model => model.POItem.item)' +

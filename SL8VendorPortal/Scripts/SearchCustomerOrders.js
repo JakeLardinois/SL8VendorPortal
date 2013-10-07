@@ -2,6 +2,7 @@
 var oTable;
 var strMinDate = dateFormat(new Date(1900, 0, 1), "mm-dd-yyyy"); // '1/1/1900';
 
+
 TableTools.BUTTONS.download = {
     "sAction": "text",
     "sTag": "default",
@@ -69,12 +70,12 @@ $(document).ready(function () {
     oTable = $('#objItems').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sDom": 'T<"clear">Rlfrtip', //Enables column reorder with resize
+        "sDom": 'T<"clear">Rlfrtip', //Enables column reorder with resize. 'T<"clear"> adds the 'download' button
         "oTableTools": {
             "aButtons": [
                 {
                     "sExtends": "download",
-                    "sButtonText": "Download",
+                    "sButtonText": "Excel Download",
                     "sUrl": sPrintCOUrl // "/generate_csv.php"
                 }
             ]

@@ -9,6 +9,7 @@ using SL8VendorPortal.Models;
 
 using SL8VendorPortal.Infrastructure;
 using jQuery.DataTables.Mvc;
+using Microsoft.Reporting.WebForms;
 
 namespace SL8VendorPortal.Controllers
 {
@@ -16,6 +17,7 @@ namespace SL8VendorPortal.Controllers
     public class TransferOrdersController : Controller
     {
         private SytelineDbEntities db = new SytelineDbEntities();
+        private UserProfile CurrentUserProfile;
 
 
         [HttpGet]
@@ -61,15 +63,12 @@ namespace SL8VendorPortal.Controllers
         {
             int totalRecordCount;
             int searchRecordCount;
-            UsersContext context;
-            UserProfile user;
             string strSQL;
 
 
-            context = new UsersContext();
-            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
             //strSQL = QueryDefinitions.GetQuery("SelectTransferOrdersByToWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//O is for Ordered, T is for Transit, etc.
-            strSQL = QueryDefinitions.GetQuery("SelectTOByLineToFromWarehousesAndStatuses", new string[] { user.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//O is for Ordered, T is for Transit, etc.
+            strSQL = QueryDefinitions.GetQuery("SelectTOByLineToFromWarehousesAndStatuses", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//O is for Ordered, T is for Transit, etc.
 
             InMemoryTransferOrdersRepository.AllTransferOrders = db.transfers.SqlQuery(strSQL).ToList();
 
@@ -88,14 +87,11 @@ namespace SL8VendorPortal.Controllers
         {
             int totalRecordCount;
             int searchRecordCount;
-            UsersContext context;
-            UserProfile user;
             string strSQL;
 
 
-            context = new UsersContext();
-            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
-            strSQL = QueryDefinitions.GetQuery("SelectTOLinesByToFromWhsesAndStatusAndOrderNo", new string[] { user.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes(), OrderNo });//O is for Ordered, T is for Transit, etc.
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            strSQL = QueryDefinitions.GetQuery("SelectTOLinesByToFromWhsesAndStatusAndOrderNo", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes(), OrderNo });//O is for Ordered, T is for Transit, etc.
 
             InMemoryTransferOrderLinesRepository.AllTransferOrderLines = db.trnitems.SqlQuery(strSQL).ToList();
 
@@ -107,6 +103,121 @@ namespace SL8VendorPortal.Controllers
                 totalRecords: totalRecordCount,
                 totalDisplayRecords: searchRecordCount,
                 sEcho: jQueryDataTablesModel.sEcho);
+        }
+
+        public ActionResult GenerateTOReport(JQueryDataTablesModel jQueryDataTablesModel)
+        {
+            int totalRecordCount;
+            int searchRecordCount;
+            string strSQL;
+
+
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            strSQL = QueryDefinitions.GetQuery("SelectTOByLineToFromWarehousesAndStatuses", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//This will only bring in Orders where there are corresponding Open Order Lines.
+
+            InMemoryTransferOrdersRepository.AllTransferOrders = db.transfers.SqlQuery(strSQL).ToList();
+
+            var objItems = InMemoryTransferOrdersRepository.GetTransferOrders(startIndex: jQueryDataTablesModel.iDisplayStart,
+                pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
+                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
+
+            //Add the Order Notes
+            foreach (transfer objTransfer in objItems)
+            {
+                objTransfer.Notes = new Notes(objTransfer.trn_num, NoteType.TO);
+
+                //iterate on the notes collection and add the text to the AllNotesText Property...
+                foreach (SytelineNote objSLNote in objTransfer.Notes)
+                {
+                    if (objSLNote.IsInternal == 0)//only add external notes
+                        objTransfer.AllNotesText += objSLNote.NoteContent + Environment.NewLine;
+                }
+            }
+
+            RenderTOReport(objItems);
+
+            return View();
+        }
+
+        private void RenderTOReport(IList<transfer> objItems)
+        {
+            string strReportType = "Excel";
+            LocalReport objLocalReport;
+            ReportDataSource TransferOrdersDataSource;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo = "";
+            Warning[] warnings;
+            string[] streams;
+
+
+            //objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/Reports/PurchaseOrders.rdlc") };
+            //objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/bin/Reports/CustomerOrders.rdlc") };
+            objLocalReport = new LocalReport { ReportPath = Server.MapPath(Settings.ReportDirectory + "TransferOrders.rdlc") };
+
+            objLocalReport.SubreportProcessing += new SubreportProcessingEventHandler(MySubreportEventHandler);
+
+            //Give the reportdatasource a name so that we can reference it in our report designer
+            TransferOrdersDataSource = new ReportDataSource("TOs", objItems);
+
+            objLocalReport.DataSources.Add(TransferOrdersDataSource);
+            objLocalReport.Refresh();
+
+            //The DeviceInfo settings should be changed based on the reportType
+            //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+            deviceInfo = string.Format(
+                        "<DeviceInfo>" +
+                        "<OmitDocumentMap>True</OmitDocumentMap>" +
+                        "<OmitFormulas>True</OmitFormulas>" +
+                        "<SimplePageHeaders>True</SimplePageHeaders>" +
+                        "</DeviceInfo>", strReportType);
+
+            //Render the report
+            var renderedBytes = objLocalReport.Render(
+                strReportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+            //Clear the response stream and write the bytes to the outputstream
+            //Set content-disposition to "attachment" so that user is prompted to take an action
+            //on the file (open or save)
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename=TransferOrders" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + "." + fileNameExtension);
+            Response.BinaryWrite(renderedBytes);
+            Response.End();
+        }
+
+        void MySubreportEventHandler(object sender, SubreportProcessingEventArgs e)
+        {
+            List<trnitem> objTOItems;
+
+
+            var objParam = e.Parameters.Where(p => p.Name.Equals("OrderNum"))
+                .SingleOrDefault();
+
+            //Get the lines for each order and add them to the Order...
+            objTOItems = db.trnitems.SqlQuery(QueryDefinitions.GetQuery("SelectTOLinesByToFromWhsesAndStatusAndOrderNo", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes(), objParam.Values[0] }))
+                .ToList();
+
+            foreach (trnitem objTOItem in objTOItems)
+            {
+                objTOItem.Notes = new Notes(objTOItem.trn_num, objTOItem.trn_line, NoteType.TOLine);
+
+                //iterate on the notes collection and add the text to the AllNotesText Property...
+                foreach (SytelineNote objSLNote in objTOItem.Notes)
+                {
+                    if (objSLNote.IsInternal == 0)//only add external notes
+                        objTOItem.AllNotesText += objSLNote.NoteContent + Environment.NewLine;
+                }
+            }
+
+            e.DataSources.Add(new ReportDataSource("TrnItems", objTOItems));
         }
 
         #region Unused Code

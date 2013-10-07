@@ -3,6 +3,34 @@ var oTable;
 //var selectedParentRowIndex;I was using this when I was getting the OrderNo and LineNo variables from the parent datatable into my frmAddVendorRequest
 
 
+TableTools.BUTTONS.download = {
+    "sAction": "text",
+    "sTag": "default",
+    "sFieldBoundary": "",
+    "sFieldSeperator": "\t",
+    "sNewLine": "<br>",
+    "sToolTip": "",
+    "sButtonClass": "DTTT_button_text",
+    "sButtonClassHover": "DTTT_button_text_hover",
+    "sButtonText": "Download",
+    "mColumns": "all",
+    "bHeader": true,
+    "bFooter": true,
+    "sDiv": "",
+    "fnMouseover": null,
+    "fnMouseout": null,
+    "fnClick": function (nButton, oConfig) {
+        var oParams = this.s.dt.oApi._fnAjaxParameters(this.s.dt);
+        var iframe = document.createElement('iframe');
+        iframe.style.height = "0px";
+        iframe.style.width = "0px";
+        iframe.src = oConfig.sUrl + "?" + $.param(oParams);
+        document.body.appendChild(iframe);
+    },
+    "fnSelect": null,
+    "fnComplete": null,
+    "fnInit": null
+};
 
 //I implemented this function which uses my custom DateTimeFormatter.js dateFormat() function
 function FormatDate(objDate, blnIncludeTime) {
@@ -50,7 +78,16 @@ $(document).ready(function () {
     oTable = $('#objItems').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sDom": "Rlfrtip", //Enables column reorder with resize
+        "sDom": 'T<"clear">Rlfrtip', //Enables column reorder with resize. 'T<"clear"> adds the 'download' button
+        "oTableTools": {
+            "aButtons": [
+                {
+                    "sExtends": "download",
+                    "sButtonText": "Excel Download",
+                    "sUrl": sPrintTOUrl // "/generate_csv.php"
+                }
+            ]
+        },
         "sScrollX": "100%", //creates a scrollbar for the wide table
         "bJQueryUI": true, //enables themeroller for datatables...http://datatables.net/examples/basic_init/themes.html 
 		"sPaginationType": "full_numbers",

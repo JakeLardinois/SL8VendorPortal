@@ -99,25 +99,7 @@ namespace SL8VendorPortal.Controllers
         [HttpPost]
         public JsonResult GetCustomerAddress(string CustNo, int? SeqNo)
         {
-            StringBuilder objStrBldr;
-            custaddr objCustAddr;
-
-
-            objCustAddr = db.custaddrs
-                .Where(c => c.cust_num.Equals(CustNo) && c.cust_seq == SeqNo)
-                .SingleOrDefault();
-
-            objStrBldr = new StringBuilder();
-            objStrBldr.Append(string.IsNullOrEmpty(objCustAddr.name) ? string.Empty : objCustAddr.name + "<br />");
-            objStrBldr.Append(string.IsNullOrEmpty(objCustAddr.addr__1) ? string.Empty : objCustAddr.addr__1 + "<br />");
-            objStrBldr.Append(string.IsNullOrEmpty(objCustAddr.addr__2) ? string.Empty : objCustAddr.addr__2 + "<br />");
-            objStrBldr.Append(string.IsNullOrEmpty(objCustAddr.addr__3) ? string.Empty : objCustAddr.addr__3 + "<br />");
-            objStrBldr.Append(string.IsNullOrEmpty(objCustAddr.addr__4) ? string.Empty : objCustAddr.addr__4 + "<br />");
-            objStrBldr.Append(objCustAddr.city + ", " + objCustAddr.state + " " + objCustAddr.zip + "<br />");
-            objStrBldr.Append(objCustAddr.country);
-
-
-            return Json(objStrBldr.ToString());
+            return Json(BuildCustomerAddress(CustNo, SeqNo, true));
         }
 
         public ActionResult GenerateCOReport(JQueryDataTablesModel jQueryDataTablesModel)
@@ -125,69 +107,40 @@ namespace SL8VendorPortal.Controllers
             int totalRecordCount;
             int searchRecordCount;
             string strSQL;
-            StringBuilder strbldrCOLineSQL, strbldrAddress;
-            List<SytelineNote> objLineAndReleaseNotes;
 
 
             CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
             strSQL = QueryDefinitions.GetQuery("SelectCOByLineWarehousesAndStatus", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O" });//This will only bring in Orders where there are corresponding Open Order Lines.
 
-
             InMemoryCustomerOrdersRepository.AllCustomerOrders = db.coes.SqlQuery(strSQL).ToList();
-
 
             var objItems = InMemoryCustomerOrdersRepository.GetCustomerOrders(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
                 totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
 
-            strbldrCOLineSQL = new StringBuilder();
+            //Add the Order Notes
             foreach (co objCO in objItems)
             {
-                //Get the lines for each order and add them to the Order...
-                strbldrCOLineSQL.Clear();
-                strbldrCOLineSQL.Append(QueryDefinitions.GetQuery("SelectCOLinesByWarehousesAndStatusAndOrderNo", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O", objCO.co_num }));
-                objCO.coitems = db.coitems.SqlQuery(strbldrCOLineSQL.ToString()).ToList();
-
-                //Add the Order Notes
                 objCO.Notes = new Notes(objCO.co_num, NoteType.CO);
-                foreach (coitem objCOItem in objCO.coitems)
-                {
-                    objLineAndReleaseNotes = new List<SytelineNote>();
-                    //Add the Line Notes
-                    objLineAndReleaseNotes.AddRange(new Notes(objCO.co_num, objCOItem.co_line, NoteType.COLine));
-                    //Add the Release Notes
-                    objLineAndReleaseNotes.AddRange(new Notes(objCO.co_num, objCOItem.co_line, objCOItem.co_release, NoteType.COLineRelease));
-                    //add the Line and Release Notes to the Line record
-                    objCOItem.Notes = objLineAndReleaseNotes; 
 
-                    //Get the Address object from the database
-                    var objCustAddr = db.custaddrs
-                        .Where(c => c.cust_num.Equals(objCOItem.cust_num) && c.cust_seq == objCOItem.cust_seq)
-                        .SingleOrDefault();
-                    //Build my address string
-                    strbldrAddress = new StringBuilder();
-                    strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.name) ? string.Empty : objCustAddr.name + Environment.NewLine);
-                    strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__1) ? string.Empty : objCustAddr.addr__1 + Environment.NewLine);
-                    strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__2) ? string.Empty : objCustAddr.addr__2 + Environment.NewLine);
-                    strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__3) ? string.Empty : objCustAddr.addr__3 + Environment.NewLine);
-                    strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__4) ? string.Empty : objCustAddr.addr__4 + Environment.NewLine);
-                    strbldrAddress.Append(objCustAddr.city + ", " + objCustAddr.state + " " + objCustAddr.zip + Environment.NewLine);
-                    strbldrAddress.Append(objCustAddr.country);
-                    //Add the address as a string to the line object
-                    objCOItem.CustomerAddress = strbldrAddress.ToString(); 
+                //iterate on the notes collection and add the text to the AllNotesText Property...
+                foreach (SytelineNote objSLNote in objCO.Notes)
+                {
+                    if (objSLNote.IsInternal == 0)//only add external notes
+                        objCO.AllNotesText += objSLNote.NoteContent + Environment.NewLine;
                 }
             }
+            
             RenderCOReport(objItems);
-
 
             return View();
         }
 
-        //private void RenderDRTag(CorrectiveAction objCA, int intQty)
         private void RenderCOReport(IList<co> objItems)
         {
             string strReportType = "Excel";
             LocalReport objLocalReport;
+            ReportDataSource CustomerOrdersDataSource;
             string mimeType;
             string encoding;
             string fileNameExtension;
@@ -196,11 +149,14 @@ namespace SL8VendorPortal.Controllers
             string[] streams;
 
 
-            objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/Reports/CustomerOrders.rdlc") };
+            //objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/Reports/CustomerOrders.rdlc") };
             //objLocalReport = new LocalReport { ReportPath = Server.MapPath("~/bin/Reports/CustomerOrders.rdlc") };
+            objLocalReport = new LocalReport { ReportPath = Server.MapPath(Settings.ReportDirectory + "CustomerOrders.rdlc") };
+
+            objLocalReport.SubreportProcessing += new SubreportProcessingEventHandler(MySubreportEventHandler);
 
             //Give the reportdatasource a name so that we can reference it in our report designer
-            var CustomerOrdersDataSource = new ReportDataSource("COs", objItems);
+            CustomerOrdersDataSource = new ReportDataSource("COs", objItems);
 
             objLocalReport.DataSources.Add(CustomerOrdersDataSource);
             objLocalReport.Refresh();
@@ -232,6 +188,73 @@ namespace SL8VendorPortal.Controllers
             Response.AddHeader("content-disposition", "attachment; filename=CustomerOrders" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + "." + fileNameExtension);
             Response.BinaryWrite(renderedBytes);
             Response.End();
+        }
+
+        void MySubreportEventHandler(object sender, SubreportProcessingEventArgs e)
+        {
+            List<SytelineNote> objLineAndReleaseNotes;
+            List<coitem> objCOItems;
+
+
+            var objParam = e.Parameters.Where(p => p.Name.Equals("OrderNum"))
+                .SingleOrDefault();
+
+            //Get the lines for each order and add them to the Order...
+            objCOItems = db.coitems.SqlQuery(QueryDefinitions.GetQuery("SelectCOLinesByWarehousesAndStatusAndOrderNo", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O", objParam.Values[0] }))
+                .ToList();
+
+            foreach (coitem objCOItem in objCOItems)
+            {
+                objLineAndReleaseNotes = new List<SytelineNote>();
+                //Add the Line Notes
+                objLineAndReleaseNotes.AddRange(new Notes(objCOItem.co_num, objCOItem.co_line, NoteType.COLine));
+                //Add the Release Notes
+                objLineAndReleaseNotes.AddRange(new Notes(objCOItem.co_num, objCOItem.co_line, objCOItem.co_release, NoteType.COLineRelease));
+                //add the Line and Release Notes to the Line record
+                objCOItem.Notes = objLineAndReleaseNotes;
+
+                //iterate on the notes collection and add the text to the AllNotesText Property...
+                foreach (SytelineNote objSLNote in objCOItem.Notes)
+                {
+                    if (objSLNote.IsInternal == 0)//only add external notes
+                        objCOItem.AllNotesText += objSLNote.NoteContent + Environment.NewLine;
+                }
+
+                objCOItem.CustomerAddress = BuildCustomerAddress(objCOItem.cust_num, objCOItem.cust_seq);
+            }
+
+            e.DataSources.Add(new ReportDataSource("COItems", objCOItems));
+        }
+
+        public string BuildCustomerAddress(string strCustNo, int? intSeqNo, bool blnUseHTML = false)
+        {
+            StringBuilder strbldrAddress;
+            string strNewline;
+
+
+            if (blnUseHTML)
+                strNewline = "<br />";
+            else
+                strNewline = Environment.NewLine;
+
+            //Get the Address object from the database
+            var objCustAddr = db.custaddrs
+                .Where(c => c.cust_num.Equals(strCustNo) && c.cust_seq == intSeqNo)
+                .SingleOrDefault();
+
+            strbldrAddress = new StringBuilder();
+            if (objCustAddr != null)
+            {
+                strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.name) ? string.Empty : objCustAddr.name + strNewline);
+                strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__1) ? string.Empty : objCustAddr.addr__1 + strNewline);
+                strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__2) ? string.Empty : objCustAddr.addr__2 + strNewline);
+                strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__3) ? string.Empty : objCustAddr.addr__3 + strNewline);
+                strbldrAddress.Append(string.IsNullOrEmpty(objCustAddr.addr__4) ? string.Empty : objCustAddr.addr__4 + strNewline);
+                strbldrAddress.Append(objCustAddr.city + ", " + objCustAddr.state + " " + objCustAddr.zip + strNewline);
+                strbldrAddress.Append(objCustAddr.country);
+            }
+
+            return strbldrAddress.ToString();
         }
 
         #region Unused Code

@@ -3,6 +3,35 @@ var oTable;
 var strMinDate = dateFormat(new Date(1900, 0, 1), "mm-dd-yyyy"); // '1/1/1900';
 
 
+TableTools.BUTTONS.download = {
+    "sAction": "text",
+    "sTag": "default",
+    "sFieldBoundary": "",
+    "sFieldSeperator": "\t",
+    "sNewLine": "<br>",
+    "sToolTip": "",
+    "sButtonClass": "DTTT_button_text",
+    "sButtonClassHover": "DTTT_button_text_hover",
+    "sButtonText": "Download",
+    "mColumns": "all",
+    "bHeader": true,
+    "bFooter": true,
+    "sDiv": "",
+    "fnMouseover": null,
+    "fnMouseout": null,
+    "fnClick": function (nButton, oConfig) {
+        var oParams = this.s.dt.oApi._fnAjaxParameters(this.s.dt);
+        var iframe = document.createElement('iframe');
+        iframe.style.height = "0px";
+        iframe.style.width = "0px";
+        iframe.src = oConfig.sUrl + "?" + $.param(oParams);
+        document.body.appendChild(iframe);
+    },
+    "fnSelect": null,
+    "fnComplete": null,
+    "fnInit": null
+};
+
 function FormatDate(objDate, blnIncludeTime) {
     var objDateProcessed = new Date(parseInt(objDate.replace("/Date(", "").replace(")/", ""), 10));
 
@@ -47,7 +76,16 @@ $(document).ready(function () {
     oTable = $('#objItems').dataTable({
         "bProcessing": true,
         "bServerSide": true,
-        "sDom": "Rlfrtip", //Enables column reorder with resize
+        "sDom": 'T<"clear">Rlfrtip', //Enables column reorder with resize. 'T<"clear"> adds the 'download' button
+        "oTableTools": {
+            "aButtons": [
+                {
+                    "sExtends": "download",
+                    "sButtonText": "Excel Download",
+                    "sUrl": sPrintPOUrl // "/generate_csv.php"
+                }
+            ]
+        },
         "sScrollX": "100%",
         "bJQueryUI": true,
         "sPaginationType": "full_numbers",
@@ -167,6 +205,14 @@ $(document).ready(function () {
                         {  //I can't have the same mDataProp used twice on the datatable, and when I used null I kept getting a 'Requested unknown parameter '0' datatables error
                             fnRender: makeVendorRequestBtn,
                             "mDataProp": null,
+                            "bSortable": false,
+                            "bSearchable": false,
+                            "sDefaultContent": '<img src="' + sOpenImageUrl + '">'//adding sDefaultContent solved the error from having a null dataprop
+                        },
+                        {  //I can't have the same mDataProp used twice on the datatable, and when I used null I kept getting a 'Requested unknown parameter '0' datatables error
+                            fnRender: makeViewDropShipAddrBtn,
+                            "mDataProp": null,
+                            "sWidth": 30,
                             "bSortable": false,
                             "bSearchable": false,
                             "sDefaultContent": '<img src="' + sOpenImageUrl + '">'//adding sDefaultContent solved the error from having a null dataprop
@@ -349,6 +395,54 @@ function makeVendorRequestBtn(oObj) {
     sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + '&RequestType=PO'; //generate the query string
     return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='Process'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
 };
+
+function makeViewDropShipAddrBtn(oObj) {
+    var sShipAddr = oObj.aData.ship_addr;
+    var sDropShipNo = oObj.aData.drop_ship_no;
+    var sSeqNo = oObj.aData.drop_seq;
+    var sHref
+
+
+    sHref = sDropShipAddrUrl + '?&ShipAddr=' + sShipAddr + '&DropShipNo=' + sDropShipNo + '&SeqNo=' + sSeqNo; //generate the query string
+    return "<a href=\"javascript:loadAddrDialog('" + sHref + "')\" class='ViewNotes' title='Address'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
+}
+
+function loadAddrDialog(sUrl) {
+    var strAddr;
+    var sHTML
+
+
+    $.ajaxSetup({ async: false });
+    $.post(sUrl, {}, function (data) {//Gets the address string from the controller
+        strAddr = data;
+    });
+    $.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
+
+    sHTML =
+        '<table>' +
+            '<tbody>' +
+                '<tr>' +
+                    '<td>' +
+                        '<div>' +
+                            strAddr +
+                        '</div>' +
+                    '</td>' +
+                '</tr>' +
+            '</tbody>' +
+        '</table>';
+
+    $("#AddressDialogDiv").html(sHTML);
+
+    // Open this Datatable as a modal dialog box.
+    $('#AddressDialogDiv').dialog({
+        modal: true,
+        resizable: true,
+        position: 'center',
+        width: 'auto',
+        autoResize: true,
+        title: 'Address'
+    });
+}
 
 function loadVendorRequestDialog(sUrl) {
     var oVRequestTable;
