@@ -61,7 +61,7 @@ namespace SL8VendorPortal.Controllers
         }
 
         [HttpPost]
-        public JsonResult VendorRequests(JQueryDataTablesModel jQueryDataTablesModel, string OrderNo, short? LineNo, short? ReleaseNo, string RequestType)
+        public JsonResult VendorRequests(JQueryDataTablesModel jQueryDataTablesModel, string OrderNo, short? LineNo, short? ReleaseNo, string ItemID, string RequestType)
         {
             int totalRecordCount;
             int searchRecordCount;
@@ -82,6 +82,11 @@ namespace SL8VendorPortal.Controllers
                 case "TO":
                     InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests
                         .Where(t => t.OrderNo.Equals(OrderNo) && t.LineNo == LineNo && t.RequestCategoryID == (int)VendorRequestCategoryID.TORequest)
+                        .ToList();
+                    break;
+                case "Item":
+                    InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests
+                        .Where(t => t.Item.Equals(ItemID) && t.RequestCategoryID == (int)VendorRequestCategoryID.ItemRequest)
                         .ToList();
                     break;
             }

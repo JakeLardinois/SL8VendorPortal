@@ -10,6 +10,7 @@ namespace SL8VendorPortal.Models
     public enum VendorRequestCategoryID { 
         CORequest = 0, 
         PORequest = 1, 
-        TORequest = 2 
+        TORequest = 2,
+        ItemRequest = 3
     };
 }

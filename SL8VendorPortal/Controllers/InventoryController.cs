@@ -23,6 +23,33 @@ namespace SL8VendorPortal.Controllers
         [HttpGet]
         public ActionResult Search()
         {
+            UsersContext context;
+            UserProfile user;
+            IEnumerable<string> objUserWhses;
+            List<whse> objWarehouseList;
+
+
+            using (SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb())
+            {
+                ViewData["RequestCategoryCode"] = new SelectList(VendorPortalDb.RequestCategories.Where(r => r.ID == 3).ToList(),
+                    "Code", "Description", "TransferOrderRequest");
+            }
+
+            context = new UsersContext();
+            user = context.UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            objUserWhses = user.Warehouses.SplitNTrim(); //put the users warehouses into a list of trimmed strings
+
+            objWarehouseList = db.whses.ToList();//get all the warehouses from the database
+
+            //Add the users source warehouses to ViewData so the selectlist can access them
+            ViewData["SourceWarehouses"] = new SelectList(
+                objWarehouseList.Where(w => objUserWhses.Contains(w.whse1)).ToList(),//This is how you go about the SQL IN clause in Linq. 
+                "whse1", "name");
+
+            //Add all the warehouses to the destination; a user can send inventory to any of our warehouses
+            ViewData["DestWarehouses"] = new SelectList(
+                objWarehouseList, "whse1", "name",
+                objWarehouseList.Where(w => w.whse1.Equals("MAIN")).SingleOrDefault().whse1);//Sets the default to the MAIN warehouse which is WTF
             return View("Search");
         }
 

@@ -54,7 +54,8 @@
     @Html.HiddenFor(model => model.TrnItem.VendorRequest.OrderNo, new { Name = "OrderNo", ID = "OrderNo", rel = "7" })
     @Html.HiddenFor(model => model.TrnItem.VendorRequest.LineNo, new { Name = "LineNo", ID = "LineNo", rel = "8" })
     @Html.HiddenFor(model => model.TrnItem.VendorRequest.ReleaseNo, new { Name = "ReleaseNo", ID = "ReleaseNo", rel = "6" })
-    @Html.HiddenFor(model => model.TrnItem.VendorRequest.QtyLoss, new { Name = "RequestCategoryID", ID = "RequestCategoryID", rel = "10" })
+    @Html.HiddenFor(model => model.TrnItem.VendorRequest.RequestCategoryID, new { Name = "RequestCategoryID", ID = "RequestCategoryID", rel = "10" })
+     @Html.HiddenFor(model => model.TrnItem.VendorRequest.Item, new { Name = "Item", ID = "Item", rel = "11" })
 
     
     @Html.ValidationSummary(true)

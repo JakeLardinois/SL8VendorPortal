@@ -378,6 +378,7 @@ function loadNotesDialog(sUrl) {
 function makeViewNotesBtn(oObj) {
     var sOrderNo = oObj.aData.trn_num;
     var sLineNo = oObj.aData.trn_line;
+    var sItemID = oObj.aData.item;
     var sHref
 
 
@@ -391,9 +392,10 @@ function makeViewNotesBtn(oObj) {
 function makeVendorRequestBtn(oObj) {
     var sOrderNo = oObj.aData.trn_num;
     var sLineNo = oObj.aData.trn_line;
+    var sItemID = oObj.aData.item;
     var sHref
 
-    sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&RequestType=TO'; //generate the query string
+    sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ItemID=' + sItemID + '&RequestType=TO'; //generate the query string
     return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='Process'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
 };
 
@@ -513,9 +515,10 @@ function loadVendorRequestDialog(sUrl) {
             //document.getElementById('LineNo').value = oTable.fnGetData(selectedParentRowIndex).trn_num;
 
             //A much better method that uses the GET function defined above and retrieves the values from the querystring...
-            var dataValues = GET("OrderNo", "LineNo");
+            var dataValues = GET("OrderNo", "LineNo", "ItemID");
             document.getElementById('OrderNo').value = dataValues[0];
             document.getElementById('LineNo').value = dataValues[1];
+            document.getElementById('Item').value = dataValues[2];
             document.getElementById('RequestCategoryID').value = 2;//Transfer Orders have a request category of 2
 
             return true;

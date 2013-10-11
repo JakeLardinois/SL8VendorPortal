@@ -55,6 +55,8 @@ namespace SL8VendorPortal
             bundles.Add(new ScriptBundle("~/bundles/SearchTransferOrders").Include(
                         "~/Scripts/DateTimeFormatter.js",
                         "~/Scripts/SearchTransferOrders.js"));
+            bundles.Add(new ScriptBundle("~/bundles/SearchInventory").Include(
+                        "~/Scripts/SearchInventory.js"));
             bundles.Add(new ScriptBundle("~/bundles/SearchVendorRequests").Include(
                         "~/Scripts/DateTimeFormatter.js",
                         "~/Scripts/SearchVendorRequests.js"));

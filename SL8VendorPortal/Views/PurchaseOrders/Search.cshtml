@@ -68,8 +68,9 @@
     @Html.HiddenFor(model => model.POItem.VendorRequest.OrderNo, new { Name = "OrderNo", ID = "OrderNo", rel = "7" })
     @Html.HiddenFor(model => model.POItem.VendorRequest.LineNo, new { Name = "LineNo", ID = "LineNo", rel = "8" })
     @Html.HiddenFor(model => model.POItem.VendorRequest.ReleaseNo, new { Name = "ReleaseNo", ID = "ReleaseNo", rel = "6" })
-    @Html.HiddenFor(model => model.POItem.VendorRequest.QtyLoss, new { Name = "RequestCategoryID", ID = "RequestCategoryID", rel = "10" })
+    @Html.HiddenFor(model => model.POItem.VendorRequest.RequestCategoryID, new { Name = "RequestCategoryID", ID = "RequestCategoryID", rel = "10" })
     @Html.HiddenFor(model => model.POItem.VendorRequest.QtyLoss, new { Name = "QtyLoss", style = "width:100px", rel = "4" })@*QtyLoss is not needed for Customer Orders Vendor Request*@
+    @Html.HiddenFor(model => model.POItem.VendorRequest.Item, new { Name = "Item", ID = "Item", rel = "11" })
     
     @Html.ValidationSummary(true)
     @Html.ValidationSummary("Errors:")

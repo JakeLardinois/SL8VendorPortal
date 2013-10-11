@@ -1,4 +1,6 @@
-﻿@model IEnumerable<SL8VendorPortal.Models.itemwhse>
+﻿@model SL8VendorPortal.Models.itemwhse
+
+@Scripts.Render("~/bundles/SearchInventory")
 
 @{
     ViewBag.Title = "Search";
@@ -10,6 +12,9 @@
 <table id="objItems">
     <thead>
         <tr>
+            <th>
+                Requests
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.item)
             </th>
@@ -28,6 +33,65 @@
         </tr>
     </thead>
 </table>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmAddVendorRequest", style = "display: none" }))
+{
+    @Html.HiddenFor(model => model.VendorRequest.ID, new { Name = "ID", ID = "ID", rel = "0" })
+    <input type="hidden" id="Notebtn" name="Notebtn" rel="1"/> <!--This field is just for the column that holds the button image...-->
+    @Html.HiddenFor(model => model.VendorRequest.OrderNo, new { Name = "OrderNo", ID = "OrderNo", rel = "7" })
+    @Html.HiddenFor(model => model.VendorRequest.LineNo, new { Name = "LineNo", ID = "LineNo", rel = "8" })
+    @Html.HiddenFor(model => model.VendorRequest.ReleaseNo, new { Name = "ReleaseNo", ID = "ReleaseNo", rel = "6" })
+    @Html.HiddenFor(model => model.VendorRequest.RequestCategoryID, new { Name = "RequestCategoryID", ID = "RequestCategoryID", rel = "10" })
+    @Html.HiddenFor(model => model.VendorRequest.QtyLoss, new { Name = "QtyLoss", style = "width:100px", rel = "4" })@*QtyLoss is not needed for Customer Orders Vendor Request*@
+    @Html.HiddenFor(model => model.VendorRequest.Item, new { Name = "Item", ID = "Item", rel = "11" })
+
+    
+    @Html.ValidationSummary(true)
+    @Html.ValidationSummary("Errors:")
+
+    <table>
+        <tr>
+            <td colspan="2">
+                @Html.ValidationMessageFor(model => model.VendorRequest.Qty)
+                @Html.ValidationMessageFor(model => model.VendorRequest.QtyLoss)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.VendorRequest.RequestCategoryCode)</td>
+            <td>
+                @*Datatables uses the name property for sending the value in the textbox or dropdownlist to the server; The DropDownListFor and TextBoxFor default to using the 
+                model listing as the name (model.TrnItem.VendorRequest.RequestCategoryCode instead of RequestCategoryCode). I cannot override the 'name' property for my html attributes, so what
+                I did was to specify 'Name' (notice the captital 'N') instead which datatables would then use when posting the data to the controller. *@
+                @Html.DropDownListFor(model => model.VendorRequest.RequestCategoryCode, ViewData["RequestCategoryCode"] as SelectList, new { Name = "RequestCategoryCode", rel = "2" })
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.VendorRequest.Qty)</td>
+            <td>@Html.TextBoxFor(model => model.VendorRequest.Qty, new { Name = "Qty", style = "width:100px", rel = "3" })</td>
+        </tr>
+        @*<tr>
+            <td>@Html.DisplayNameFor(model => model.POItem.VendorRequest.QtyLoss)</td>
+            <td>@Html.TextBoxFor(model => model.POItem.VendorRequest.QtyLoss, new { Name = "QtyLoss", style = "width:100px", rel = "4" })</td>
+        </tr>*@
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.VendorRequest.SourceWarehouse)</td>
+            <td>@Html.DropDownListFor(model => model.VendorRequest.SourceWarehouse, ViewData["SourceWarehouses"] as SelectList, new { Name = "SourceWarehouse", rel = "5" })</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.VendorRequest.DestWarehouse)</td>
+            <td>@Html.DropDownListFor(model => model.VendorRequest.DestWarehouse, ViewData["DestWarehouses"] as SelectList, new { Name = "DestWarehouse", rel = "11" })</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.VendorRequest.Notes)</td>
+            <td>@Html.TextAreaFor(model => model.VendorRequest.Notes, new { Name = "Notes", rel = "9", @class = "MyAutogrow" })</td>
+        </tr>
+    </table>
+
+}
+
+<div id='VendorRequestDialogDiv' style="display: none;">
+</div>
+
 @section scripts 
 { 
 }
@@ -35,42 +99,72 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        var oTimerId;
+    var sOpenImageUrl = '@Url.Content("~/images/details_open.png")';
+    var sCloseImageUrl = '@Url.Content("~/images/details_close.png")';
+    var sProgressImageUrl = '@Url.Content("~/Images/Progress.gif")'; //gives the progress gif URL for ajax callback in SearchTransferOrder.js
+    var sVendorRequestsUrl = '@Url.Action("VendorRequests", "VendorRequests")';
+    var sAllWhsesUrl = '@Url.Action("AllWarehouses", "VendorRequests")';
+    var sUserWhsesUrl = '@Url.Action("UserWarehouses", "VendorRequests")';
+    var sVRNotesUpdateUrl = '@Url.Action("UpdateNote", "VendorRequests")';
+    var sRequestCatUrl = '@Url.Action("RequestCategories", "VendorRequests")';
+    var sUpdateVRUrl = '@Url.Action("UpdateVR", "VendorRequests")';
+    var sAddVRUrl = '@Url.Action("AddVR", "VendorRequests")';
+    var sDeleteVRUrl = '@Url.Action("DeleteVR", "VendorRequests")';
 
 
-        $('#objItems').dataTable({
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": document.URL,
-            "sServerMethod": "POST",
-            "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
+    function GetVRTableHTML() {
+        var sOut =
+            '<table id="objVendorRequest">' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th>' + //I need this empty header Column for the ID column
+                            'ID' +
+                        '</th>' +
+                        '<th >' +
+                            'Note' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.VendorRequest.RequestCategoryCode)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.VendorRequest.Qty)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.VendorRequest.QtyLoss)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.VendorRequest.SourceWarehouse)' +
+                        '</th>' +
+                        '<th>' +
+                            '@Html.DisplayNameFor(model => model.VendorRequest.DestWarehouse)' +
+                        '</th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '<button id="btnAddNewRow">Add</button>' +
+                '<button id="btnDeleteRow">Delete</button>' +
+            '</table>';
 
-                window.clearTimeout(oTimerId);
-                oTimerId = window.setTimeout(function () {
-                    oSettings.jqXHR = $.ajax({
-                        "dataType": 'json',
-                        "type": "POST",
-                        "url": sSource,
-                        "data": aoData,
-                        "success": fnCallback
-                    });
-                }, 1000)
-            },
-            "oLanguage": { "sSearch": "Search Item #s:" },
-            "aoColumns": [
-            { "mDataProp": "item", "sWidth": "25%" },
-            { "mDataProp": "whse" },
-            { "mDataProp": "qty_on_hand" },
-            { "mDataProp": "qty_alloc_co" },
-            { "mDataProp": "qty_trans" }],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                //var objOrderdate = new Date(parseInt(aData.order_date.replace("/Date(", "").replace(")/", ""), 10));
-                //var objCreateDate = new Date(parseInt(aData.CreateDate.replace("/Date(", "").replace(")/", ""), 10));
+        return sOut;
+    }
 
-                //$('td:eq(3)', nRow).html(objOrderdate.getMonth() + 1 + "/" + objOrderdate.getDate() + "/" + objOrderdate.getFullYear());
-                //$('td:eq(5)', nRow).html(objCreateDate.getMonth() + 1 + "/" + objCreateDate.getDate() + "/" + objCreateDate.getFullYear());
-            }
-        });
-    });
+    function GetVRNoteDetailHTML(objRow) {
+
+        var sOut =
+            '<div class="innerRowDetails">' +
+                '<table>' +
+                    '<tbody>' +
+                        '<tr>' +
+                            '<td>' +
+                                '<div id="VRNoteEditorDiv" class="EditRequestNotes">' +
+                                    objRow.HTMLNotes +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>' +
+                    '</tbody>' +
+                '</table>' +
+            '</div>';
+
+        return sOut;
+    }
 </script>

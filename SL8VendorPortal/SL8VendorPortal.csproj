@@ -17,6 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -459,6 +463,7 @@
     <Content Include="Scripts\jquery.dataTables.custom-filter.js" />
     <Content Include="Scripts\jquery.dataTables.editable.js" />
     <Content Include="Scripts\jquery.jeditable.js" />
+    <Content Include="Scripts\SearchInventory.js" />
     <Content Include="Scripts\SearchTransferOrders.js" />
     <Content Include="Scripts\SearchVendorRequests.js" />
     <Content Include="Scripts\SharedNotesViewer.js" />
@@ -604,6 +609,7 @@
     <Content Include="Views\TransferOrders\DetailsOld.cshtml" />
     <Content Include="Views\TransferOrders\Index.cshtml" />
     <Content Include="Views\TransferOrders\Copy of Index.cshtml" />
+    <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <None Include="Scripts\autogrow-1.0.2\autogrow.jquery.json" />
     <None Include="Scripts\autogrow-1.0.2\README.md" />
     <None Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\js\AutoFill.min.js.gz" />

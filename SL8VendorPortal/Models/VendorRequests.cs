@@ -19,10 +19,13 @@ namespace SL8VendorPortal.Models
             DateProcessed = SharedVariables.MINDATE;
             Notes = string.Empty;//If the notes aren't initialized to an empty (as opposed to null) value, then when adding a request via the VendorRequestController and the frmAddVendorRequest form causes an error whereby the user
                                     //isn't able to modify the notes in the popup and see the edited changes immediately; most likely due to some error that is thrown while saving a null value for notes...
+            Item = " ";
         }
 
         [Key]
         public virtual int ID { get; set; }
+
+        public string Item { get; set; }
 
         public virtual bool Processed { get; set; }
         public virtual DateTime DateProcessed { get; set; }

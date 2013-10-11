@@ -433,9 +433,10 @@ function makeVendorRequestBtn(oObj) {
     var sOrderNo = oObj.aData.co_num;
     var sLineNo = oObj.aData.co_line;
     var sReleaseNo = oObj.aData.co_release;
+    var sItemID = oObj.aData.item;
     var sHref
 
-    sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + '&RequestType=CO'; //generate the query string
+    sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + '&ItemID=' + sItemID + '&RequestType=CO'; //generate the query string
     return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='Process'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
 };
 
@@ -574,10 +575,11 @@ function loadVendorRequestDialog(sUrl) {
             //That they were added in the column instantiation. I then populate thier values here...
 
             //uses the GET function defined above and retrieves the values from the querystring...
-            var dataValues = GET("OrderNo", "LineNo", "ReleaseNo");
+            var dataValues = GET("OrderNo", "LineNo", "ReleaseNo", "ItemID");
             document.getElementById('OrderNo').value = dataValues[0];
             document.getElementById('LineNo').value = dataValues[1];
             document.getElementById('ReleaseNo').value = dataValues[2];
+            document.getElementById('Item').value = dataValues[3];
             document.getElementById('RequestCategoryID').value = 0; //Customer Orders have a request category of 0
 
             return true;

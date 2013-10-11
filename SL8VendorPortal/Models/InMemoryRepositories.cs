@@ -1013,7 +1013,7 @@ namespace SL8VendorPortal.Models
                 .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.Processed) || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
                 .Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
                 .Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
-                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.OrderNo) || c.OrderNo.ToString().Contains(objVendorRequestSearch.OrderNo))
+                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.OrderNo) || (!string.IsNullOrEmpty(c.OrderNo) && c.OrderNo.ToString().Contains(objVendorRequestSearch.OrderNo)))
                 .Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
                 .ToList();
 

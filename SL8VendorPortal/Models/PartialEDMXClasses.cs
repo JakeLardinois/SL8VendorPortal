@@ -759,7 +759,10 @@ namespace SL8VendorPortal.Models
     #endregion
 
     [MetadataType(typeof(itemwhseMetadata))]
-    public partial class itemwhse { }
+    public partial class itemwhse 
+    {
+        public VendorRequest VendorRequest { get; set; }
+    }
     public class itemwhseMetadata
     {
         [Display(Name = "Item")]
