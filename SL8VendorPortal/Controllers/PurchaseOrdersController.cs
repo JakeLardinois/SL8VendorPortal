@@ -33,7 +33,7 @@ namespace SL8VendorPortal.Controllers
             using (SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb())
             {
                 ViewData["RequestCategoryCode"] = new SelectList(VendorPortalDb.RequestCategories.Where(r => r.ID == 1).ToList(),
-                    "Code", "Description", "POReciept");
+                    "Code", "Description", "POReceipt");
             }
 
             context = new UsersContext();

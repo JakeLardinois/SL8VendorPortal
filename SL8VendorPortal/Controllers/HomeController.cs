@@ -71,6 +71,11 @@ namespace SL8VendorPortal.Controllers
 
             ViewBag.Message = "WireTech Fabricators ASP.NET MVC Vendor Portal Application.";
 
+            //The below code can be used to reset a users password...
+            //WebSecurity.InitializeDatabaseConnection("SecurityConnection", "Users", "UserID", "UserName", autoCreateTables: false);
+            //var token = WebSecurity.GeneratePasswordResetToken("Del");
+            //WebSecurity.ResetPassword(token, "123456789");
+
             return View();
         }
 

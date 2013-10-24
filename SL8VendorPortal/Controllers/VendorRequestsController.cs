@@ -86,7 +86,7 @@ namespace SL8VendorPortal.Controllers
                     break;
                 case "Item":
                     InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests
-                        .Where(t => t.Item.Equals(ItemID) && t.RequestCategoryID == (int)VendorRequestCategoryID.ItemRequest)
+                        .Where(t => t.Item.Equals(ItemID) && t.Processed == false && t.RequestCategoryID == (int)VendorRequestCategoryID.ItemRequest)
                         .ToList();
                     break;
             }
