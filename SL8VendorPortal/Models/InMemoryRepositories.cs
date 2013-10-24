@@ -979,6 +979,9 @@ namespace SL8VendorPortal.Models
                         case "OrderNo":
                             objVendorRequestSearch.OrderNo = DataTablesModel.sSearch_[intCounter];
                             break;
+                        case "Item":
+                            objVendorRequestSearch.Item = DataTablesModel.sSearch_[intCounter];
+                            break;
                         case "LineNo":
                             break;
                         case "ReleaseNo":
@@ -1004,6 +1007,7 @@ namespace SL8VendorPortal.Models
             
             vendorrequests = vendorrequests
                 .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.ID) || c.ID.ToString().Contains(objVendorRequestSearch.ID))
+                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.Item) || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
                 .Where(c => c.DateProcessed >= objVendorRequestSearch.DateProcessedGT || objVendorRequestSearch.DateProcessedGT == DateTime.MinValue)
                 .Where(c => c.DateProcessed <= objVendorRequestSearch.DateProcessedLT || objVendorRequestSearch.DateProcessedLT == DateTime.MinValue)
                 .Where(c => c.DateRequested >= objVendorRequestSearch.DateRequestedGT || objVendorRequestSearch.DateRequestedGT == DateTime.MinValue)
@@ -1028,6 +1032,10 @@ namespace SL8VendorPortal.Models
                     case "ID":
                         sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.ID)
                             : sortedList.CustomSort(sortedColumn.Direction, i => i.ID);
+                        break;
+                    case "Item":
+                        sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Item)
+                            : sortedList.CustomSort(sortedColumn.Direction, i => i.Item);
                         break;
                     case "Processed":
                         sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Processed)

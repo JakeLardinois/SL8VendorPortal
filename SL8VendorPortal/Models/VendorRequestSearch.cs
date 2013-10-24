@@ -9,6 +9,7 @@ namespace SL8VendorPortal.Models
     {
         public string ID { get; set; }
         public string Processed { get; set; }
+        public string Item { get; set; }
 
         public DateTime DateProcessedGT { get; set; }
         public DateTime DateProcessedLT { get; set; }

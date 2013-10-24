@@ -101,7 +101,9 @@ $(document).ready(function () {
                 would line up properly*/
                 "mDataProp": "ID"
             },
+            { "mDataProp": "RequestCategoryCode" },
             { "mDataProp": "OrderNo" },
+            { "mDataProp": "Item" },
             { "mDataProp": "Processed" },
             { "mDataProp": "LineNo" },
             { "mDataProp": "ReleaseNo" },
@@ -133,8 +135,6 @@ $(document).ready(function () {
                     }
                 }
             },
-            { "mDataProp": "RequestCategoryID" },
-            { "mDataProp": "RequestCategoryCode" },
             { "mDataProp": "Approved" },
             { "mDataProp": "Creator" },
             { "mDataProp": "Updater"}]
@@ -147,7 +147,15 @@ $(document).ready(function () {
             sSelector: "#IDFilter"
         },
         {
+            sSelector: "#CategoryCodeFilter",
+            type: "checkbox", //type: "select", //I changed this to use a checkbox list instead of a select list..
+            values: RequestCategories()
+        },
+        {
             sSelector: "#OrderNoFilter"
+        },
+        {
+            sSelector: "#ItemFilter"
         },
         {
             sSelector: "#ProcessedFilter",
@@ -186,12 +194,6 @@ $(document).ready(function () {
             type: "date-range"
         },
         {},
-        {
-            sSelector: "#CategoryCodeFilter",
-            type: "checkbox", //type: "select", //I changed this to use a checkbox list instead of a select list..
-            values: RequestCategories()
-        },
-        {},
         {}, //creator
         {} //updater
     ]
@@ -200,6 +202,8 @@ $(document).ready(function () {
         //sAddURL: sAddVRUrl,
         //sDeleteURL: sDeleteVRUrl,
         aoColumns: [
+            null,
+            null,
             null,
             null,
             null,
@@ -218,8 +222,6 @@ $(document).ready(function () {
                 //id: 'ID'  //gives the label 'id' the label 'PostedNoteData'
                 //submitdata: { id: 1, value: "dood" } //sumbits the following 'parametername: value' pairs to the controller.
             },
-            null,
-            null,
             null,
             null,
             null,

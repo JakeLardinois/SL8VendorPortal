@@ -19,6 +19,10 @@
                         <td align="right">Order No:</td>
                         <td align="center" id="OrderNoFilter"></td>
                     </tr>
+                    <tr>
+                        <td align="right">Item:</td>
+                        <td align="center" id="ItemFilter"></td>
+                    </tr>
                 </tbody>
             </table>
             <table class="SearchFields">
@@ -82,7 +86,13 @@
                 @Html.DisplayNameFor(model => model.ID)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.RequestCategoryCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OrderNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Processed)
@@ -113,12 +123,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateUpdated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequestCategoryID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequestCategoryCode)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Approved)
@@ -140,7 +144,13 @@
                 @Html.DisplayNameFor(model => model.ID)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.RequestCategoryCode)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OrderNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Processed)
@@ -171,12 +181,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateUpdated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequestCategoryID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequestCategoryCode)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Approved)

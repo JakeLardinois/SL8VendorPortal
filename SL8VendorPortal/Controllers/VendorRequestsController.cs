@@ -18,8 +18,8 @@ namespace SL8VendorPortal.Controllers
     {
         private SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb();
         private List<string> mobjNewMDataProp = new List<string> { 
-                "0", "1", "ID","OrderNo", "Processed", "LineNo", "ReleaseNo", "SourceWarehouse", "DestWarehouse", "Qty", "QtyLoss", "DateProcessed",
-                "DateRequested", "DateUpdated", "RequestCategoryID", "RequestCategoryCode", "Approved", "Creator", "Updater"};
+                "0", "1", "ID", "RequestCategoryCode", "OrderNo", "Item", "Processed", "LineNo", "ReleaseNo", "SourceWarehouse", "DestWarehouse", "Qty", "QtyLoss", "DateProcessed",
+                "DateRequested", "DateUpdated" , "Approved", "Creator", "Updater"};
 
 
         [HttpGet]

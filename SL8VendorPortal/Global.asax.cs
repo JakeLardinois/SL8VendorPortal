@@ -90,9 +90,9 @@ namespace SL8VendorPortal
             //TORequestTypes - TOReciept, TOShipment; CORequestTypes - COShipment, COLateRequest; PORequestTypes: POReciept, POLateRequest
             context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COShipment", Description = "CO Shipment" });
             context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COLateRequest", Description = "CO Late Request" });
-            context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POReceipt", Description = "PO Reciept" });
+            context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POReceipt", Description = "PO Receipt" });
             context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POLateRequest", Description = "PO Late Request" });
-            context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOReceipt", Description = "TO Reciept" });
+            context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOReceipt", Description = "TO Receipt" });
             context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOShipment", Description = "TO Shipment" });
             context.RequestCategories.Add(new RequestCategory { ID = 3, Code = "InventoryAdjustment", Description = "Inventory Adjustment" });
             context.RequestCategories.Add(new RequestCategory { ID = 3, Code = "TransferOrderRequest", Description = "Request Transfer Order" });
