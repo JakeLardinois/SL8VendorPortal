@@ -264,10 +264,10 @@ $(document).ready(function () {
                             }
                         },
                         {
-                            "mDataProp": "ship_date",
+                            "mDataProp": "promise_date",
                             "fnRender": function (oObj) {
-                                if (oObj.aData.ship_date != null && oObj.aData.ship_date !== undefined) {
-                                    return FormatDate(oObj.aData.ship_date);
+                                if (oObj.aData.promise_date != null && oObj.aData.promise_date !== undefined) {
+                                    return FormatDate(oObj.aData.promise_date);
                                 }
                                 else
                                     return strMinDate;
