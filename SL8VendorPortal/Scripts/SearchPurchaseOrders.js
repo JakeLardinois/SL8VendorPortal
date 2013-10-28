@@ -218,6 +218,7 @@ $(document).ready(function () {
                             "sDefaultContent": '<img src="' + sOpenImageUrl + '">'//adding sDefaultContent solved the error from having a null dataprop
                         },
                         { "mDataProp": "item" },
+                        { "mDataProp": "unit_mat_cost_conv" },
                         { "mDataProp": "po_line" },
                         { "mDataProp": "po_release" },
                         { "mDataProp": "qty_ordered" },

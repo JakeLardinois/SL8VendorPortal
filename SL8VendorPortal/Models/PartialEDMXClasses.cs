@@ -547,6 +547,9 @@ namespace SL8VendorPortal.Models
 
         [Display(Name = "Manufacturer Item")]
         public string manufacturer_item { get; set; }
+
+        [Display(Name = "Price")]
+        public string unit_mat_cost_conv { get; set; }
     }
     //PO Blanket Lines
     [MetadataType(typeof(po_blnMetadata))]
