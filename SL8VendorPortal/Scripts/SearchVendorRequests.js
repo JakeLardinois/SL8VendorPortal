@@ -1,7 +1,38 @@
 ﻿var anOpen = [];
 var oVRequestTable;
 var asInitVals = new Array();
+var intMaxRecordCount = 100;
 
+
+TableTools.BUTTONS.download = {
+    "sAction": "text",
+    "sTag": "default",
+    "sFieldBoundary": "",
+    "sFieldSeperator": "\t",
+    "sNewLine": "<br>",
+    "sToolTip": "",
+    "sButtonClass": "DTTT_button_text",
+    "sButtonClassHover": "DTTT_button_text_hover",
+    "sButtonText": "Download",
+    "mColumns": "all",
+    "bHeader": true,
+    "bFooter": true,
+    "sDiv": "",
+    "fnMouseover": null,
+    "fnMouseout": null,
+    "fnClick": function (nButton, oConfig) {
+        var oParams = this.s.dt.oApi._fnAjaxParameters(this.s.dt);
+        var iframe = document.createElement('iframe');
+        iframe.style.height = "0px";
+        iframe.style.width = "0px";
+        oParams.push({ "name": "MaxRecordCount", "value": intMaxRecordCount });
+        iframe.src = oConfig.sUrl + "?" + $.param(oParams);
+        document.body.appendChild(iframe);
+    },
+    "fnSelect": null,
+    "fnComplete": null,
+    "fnInit": null
+};
 
 function FormatDate(objDate, blnIncludeTime) {
     var objDateProcessed = new Date(parseInt(objDate.replace("/Date(", "").replace(")/", ""), 10));
@@ -39,9 +70,18 @@ $(document).ready(function () {
         "bProcessing": true,
         "bServerSide": true,
         "bJQueryUI": true,
+        "oTableTools": {
+            "aButtons": [
+                {
+                    "sExtends": "download",
+                    "sButtonText": "Excel Download",
+                    "sUrl": sPrintVendorRequestsUrl //+ "?MaxRecordCount=" + intMaxRecordCount // "/generate_csv.php"
+                }
+            ]
+        },
         "sPaginationType": "full_numbers",
         "sScrollX": "100%", //puts scrollbars around the datatable
-        "sDom": "Rlrtip", //The 'R' enables column reorder with resize; UPDATE took out the f from "Rlfrtip" to hide the search textbox
+        "sDom": 'T<"clear">Rlrtip', //The 'R' enables column reorder with resize; UPDATE took out the f from "Rlfrtip" to hide the search textbox
         //"bStateSave": true, //saves the state of datatables, when the end user reloads or revisits a page its previous state is retained// Unfortuantely was holding the values of my submitted forms and causing my queries to fail...
         "oColReorder": {
             "iFixedColumns": 5,
@@ -68,7 +108,7 @@ $(document).ready(function () {
 
             window.clearTimeout(oTimerId); //clear the timer if it still exists
             oTimerId = window.setTimeout(function () {
-                aoData.push({ "name": "MaxRecordCount", "value": "100" }); //adds the MaxRecordCount data to the array sent to the server...
+                aoData.push({ "name": "MaxRecordCount", "value": intMaxRecordCount }); //adds the MaxRecordCount data to the array sent to the server...
 
                 oSettings.jqXHR = $.ajax({  //This is the setting that does the posting of the data...
                     "dataType": 'json',

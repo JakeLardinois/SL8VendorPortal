@@ -7,7 +7,8 @@ using System.Web.Mvc;
 using jQuery.DataTables.Mvc;
 using SL8VendorPortal.Models;
 using SL8VendorPortal.Infrastructure;
-using System.Collections.ObjectModel; //for  ReadOnlyCollection<string>
+using System.Collections.ObjectModel;
+using Microsoft.Reporting.WebForms; //for  ReadOnlyCollection<string>
 
 
 namespace SL8VendorPortal.Controllers
@@ -284,6 +285,75 @@ namespace SL8VendorPortal.Controllers
             {
                 return objEx.Message;
             }
+        }
+
+        public ActionResult GenerateVendorRequestsReport(JQueryDataTablesModel jQueryDataTablesModel, int MaxRecordCount)
+        {
+            int totalRecordCount;
+            int searchRecordCount;
+            jQueryDataTablesModel.mDataProp2_ = mobjNewMDataProp.AsReadOnly();
+
+
+            //I put a cap on the number of records that this 
+            InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
+
+            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(
+                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel);
+
+
+            RenderVendorRequestsReport(objItems);
+
+            return View();
+        }
+
+        private void RenderVendorRequestsReport(IList<VendorRequest> objItems)
+        {
+            string strReportType = "Excel";
+            LocalReport objLocalReport;
+            ReportDataSource ItemWhseDataSource;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo = "";
+            Warning[] warnings;
+            string[] streams;
+
+
+            objLocalReport = new LocalReport { ReportPath = Server.MapPath(Settings.ReportDirectory + "VendorRequests.rdlc") };
+
+            //Give the reportdatasource a name so that we can reference it in our report designer
+            ItemWhseDataSource = new ReportDataSource("VendorRequests", objItems);
+
+            objLocalReport.DataSources.Add(ItemWhseDataSource);
+            objLocalReport.Refresh();
+
+            //The DeviceInfo settings should be changed based on the reportType
+            //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+            deviceInfo = string.Format(
+                        "<DeviceInfo>" +
+                        "<OmitDocumentMap>True</OmitDocumentMap>" +
+                        "<OmitFormulas>True</OmitFormulas>" +
+                        "<SimplePageHeaders>True</SimplePageHeaders>" +
+                        "</DeviceInfo>", strReportType);
+
+            //Render the report
+            var renderedBytes = objLocalReport.Render(
+                strReportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+            //Clear the response stream and write the bytes to the outputstream
+            //Set content-disposition to "attachment" so that user is prompted to take an action
+            //on the file (open or save)
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename=Inventory" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + "." + fileNameExtension);
+            Response.BinaryWrite(renderedBytes);
+            Response.End();
         }
     }
 }

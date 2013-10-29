@@ -674,6 +674,7 @@
     <EmbeddedResource Include="Reports\TransferOrders.rdlc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\VendorRequests.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\jQuery.DataTables.Mvc\jQuery.DataTables.Mvc.csproj">
