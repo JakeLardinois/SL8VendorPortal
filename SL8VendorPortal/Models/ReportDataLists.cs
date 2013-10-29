@@ -17,4 +17,6 @@ namespace SL8VendorPortal.Models
 
     public class TransferOrders : List<transfer> { }
     public class TransferOrderLines : List<trnitem> { }
+
+    public class ItemWhses : List<itemwhse> { }
 }

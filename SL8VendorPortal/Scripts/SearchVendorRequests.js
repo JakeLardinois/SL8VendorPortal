@@ -40,7 +40,7 @@ $(document).ready(function () {
         "bServerSide": true,
         "bJQueryUI": true,
         "sPaginationType": "full_numbers",
-        "sScrollX": "100%",
+        "sScrollX": "100%", //puts scrollbars around the datatable
         "sDom": "Rlrtip", //The 'R' enables column reorder with resize; UPDATE took out the f from "Rlfrtip" to hide the search textbox
         //"bStateSave": true, //saves the state of datatables, when the end user reloads or revisits a page its previous state is retained// Unfortuantely was holding the values of my submitted forms and causing my queries to fail...
         "oColReorder": {

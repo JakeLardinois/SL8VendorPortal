@@ -1,6 +1,35 @@
 ﻿var anOpen = [];
 
 
+TableTools.BUTTONS.download = {
+    "sAction": "text",
+    "sTag": "default",
+    "sFieldBoundary": "",
+    "sFieldSeperator": "\t",
+    "sNewLine": "<br>",
+    "sToolTip": "",
+    "sButtonClass": "DTTT_button_text",
+    "sButtonClassHover": "DTTT_button_text_hover",
+    "sButtonText": "Download",
+    "mColumns": "all",
+    "bHeader": true,
+    "bFooter": true,
+    "sDiv": "",
+    "fnMouseover": null,
+    "fnMouseout": null,
+    "fnClick": function (nButton, oConfig) {
+        var oParams = this.s.dt.oApi._fnAjaxParameters(this.s.dt);
+        var iframe = document.createElement('iframe');
+        iframe.style.height = "0px";
+        iframe.style.width = "0px";
+        iframe.src = oConfig.sUrl + "?" + $.param(oParams);
+        document.body.appendChild(iframe);
+    },
+    "fnSelect": null,
+    "fnComplete": null,
+    "fnInit": null
+};
+
 $(document).ready(function () {
     var oTimerId;
 
@@ -32,6 +61,19 @@ $(document).ready(function () {
     $('#objItems').dataTable({
         "bProcessing": true,
         "bServerSide": true,
+        "sDom": 'T<"clear">Rlfrtip', //Enables column reorder with resize. 'T<"clear"> adds the 'download' button
+        "oTableTools": {
+            "aButtons": [
+                {
+                    "sExtends": "download",
+                    "sButtonText": "Excel Download",
+                    "sUrl": sPrintInventoryUrl // "/generate_csv.php"
+                }
+            ]
+        },
+        //"sScrollX": "100%", //Puts scroll bars around the datatable
+        "bJQueryUI": true, //puts the box around the column headers
+        "sPaginationType": "full_numbers", //enhances the pagination display from simple arrows
         "sAjaxSource": document.URL,
         "sServerMethod": "POST",
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
@@ -49,18 +91,18 @@ $(document).ready(function () {
         },
         "oLanguage": { "sSearch": "Search Item #s:" },
         "aoColumns": [
-        {
-            fnRender: makeVendorRequestBtn,
-            "mDataProp": null,
-            "bSortable": false,
-            "bSearchable": false,
-            "sDefaultContent": '<img src="' + sOpenImageUrl + '">'//adding sDefaultContent solved the error from having a null dataprop
-        },
-        { "mDataProp": "item", "sWidth": "25%" },
-        { "mDataProp": "whse" },
-        { "mDataProp": "qty_on_hand" },
-        { "mDataProp": "qty_alloc_co" },
-        { "mDataProp": "qty_trans" }],
+            {
+                fnRender: makeVendorRequestBtn,
+                "mDataProp": null,
+                "bSortable": false,
+                "bSearchable": false,
+                "sDefaultContent": '<img src="' + sOpenImageUrl + '">'//adding sDefaultContent solved the error from having a null dataprop
+            },
+            { "mDataProp": "item", "sWidth": "25%" },
+            { "mDataProp": "whse" },
+            { "mDataProp": "qty_on_hand" },
+            { "mDataProp": "qty_alloc_co" },
+            { "mDataProp": "qty_trans" }],
         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             //var objOrderdate = new Date(parseInt(aData.order_date.replace("/Date(", "").replace(")/", ""), 10));
             //var objCreateDate = new Date(parseInt(aData.CreateDate.replace("/Date(", "").replace(")/", ""), 10));

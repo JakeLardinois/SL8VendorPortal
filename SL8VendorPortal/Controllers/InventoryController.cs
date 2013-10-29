@@ -9,6 +9,7 @@ using SL8VendorPortal.Models;
 
 using SL8VendorPortal.Infrastructure;
 using jQuery.DataTables.Mvc;
+using Microsoft.Reporting.WebForms;
 
 
 namespace SL8VendorPortal.Controllers
@@ -75,6 +76,77 @@ namespace SL8VendorPortal.Controllers
                 totalRecords: totalRecordCount,
                 totalDisplayRecords: searchRecordCount,
                 sEcho: jQueryDataTablesModel.sEcho);
+        }
+
+        public ActionResult GenerateInventoryReport(JQueryDataTablesModel jQueryDataTablesModel)
+        {
+            int totalRecordCount;
+            int searchRecordCount;
+            string strSQL;
+
+
+            CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
+            strSQL = QueryDefinitions.GetQuery("SelectItemWhseByWhsesAndPMTCode", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "M" });//M is for Manufactured, P is for Purchased
+
+            InMemoryItemWhsesRepository.AllItemWhses = db.itemwhses.SqlQuery(strSQL).ToList();
+
+            var objItems = InMemoryItemWhsesRepository.GetItemWhses(startIndex: jQueryDataTablesModel.iDisplayStart,
+                pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
+                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
+
+            RenderInventoryReport(objItems);
+
+            return View();
+        }
+
+        private void RenderInventoryReport(IList<itemwhse> objItems)
+        {
+            string strReportType = "Excel";
+            LocalReport objLocalReport;
+            ReportDataSource ItemWhseDataSource;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo = "";
+            Warning[] warnings;
+            string[] streams;
+
+
+            objLocalReport = new LocalReport { ReportPath = Server.MapPath(Settings.ReportDirectory + "Inventory.rdlc") };
+
+            //Give the reportdatasource a name so that we can reference it in our report designer
+            ItemWhseDataSource = new ReportDataSource("ItemWhses", objItems);
+
+            objLocalReport.DataSources.Add(ItemWhseDataSource);
+            objLocalReport.Refresh();
+
+            //The DeviceInfo settings should be changed based on the reportType
+            //http://msdn2.microsoft.com/en-us/library/ms155397.aspx
+            deviceInfo = string.Format(
+                        "<DeviceInfo>" +
+                        "<OmitDocumentMap>True</OmitDocumentMap>" +
+                        "<OmitFormulas>True</OmitFormulas>" +
+                        "<SimplePageHeaders>True</SimplePageHeaders>" +
+                        "</DeviceInfo>", strReportType);
+
+            //Render the report
+            var renderedBytes = objLocalReport.Render(
+                strReportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+
+            //Clear the response stream and write the bytes to the outputstream
+            //Set content-disposition to "attachment" so that user is prompted to take an action
+            //on the file (open or save)
+            Response.Clear();
+            Response.ContentType = mimeType;
+            Response.AddHeader("content-disposition", "attachment; filename=Inventory" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + "." + fileNameExtension);
+            Response.BinaryWrite(renderedBytes);
+            Response.End();
         }
 
         #region Unused Code

@@ -661,6 +661,7 @@
     <EmbeddedResource Include="Reports\CustomerOrders.rdlc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Inventory.rdlc" />
     <EmbeddedResource Include="Reports\PurchaseOrderLines.rdlc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
