@@ -426,7 +426,7 @@ function makeViewNotesBtn(oObj) {
     //return "<a href='" + sLineURL + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + "' class='ViewNotes' title='View Notes'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
 
     sHref = sCONotesUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo; //generate the query string
-    return "<a href=\"javascript:loadDialog('" + sHref + "')\" class='ViewNotes' title='View Notes'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
+    return "<a href=\"javascript:loadDialog('" + sHref + "')\" class='ViewNotes' title='View Syteline Notes'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
 }
 
 function makeVendorRequestBtn(oObj) {
@@ -437,7 +437,7 @@ function makeVendorRequestBtn(oObj) {
     var sHref
 
     sHref = sVendorRequestsUrl + '?&OrderNo=' + sOrderNo + '&LineNo=' + sLineNo + '&ReleaseNo=' + sReleaseNo + '&ItemID=' + sItemID + '&RequestType=CO'; //generate the query string
-    return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='Process'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
+    return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='View Vendor Requests'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
 };
 
 function makeViewCustAddrBtn(oObj) {
@@ -447,7 +447,7 @@ function makeViewCustAddrBtn(oObj) {
 
 
     sHref = sCustAddrUrl + '?&CustNo=' + sCustNo + '&SeqNo=' + sSeqNo; //generate the query string
-    return "<a href=\"javascript:loadAddrDialog('" + sHref + "')\" class='ViewNotes' title='Address'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
+    return "<a href=\"javascript:loadAddrDialog('" + sHref + "')\" class='ViewNotes' title='View Address'><img src='" + sOpenImageUrl + "' height='12' width='12'></a>";
 }
 
 function loadAddrDialog(sUrl) {

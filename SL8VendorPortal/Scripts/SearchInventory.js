@@ -118,7 +118,7 @@ function makeVendorRequestBtn(oObj) {
     var sHref
 
     sHref = sVendorRequestsUrl + '?&ItemID=' + sItemID + '&RequestType=Item'; //generate the query string
-    return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='Process'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
+    return "<a href=\"javascript:loadVendorRequestDialog('" + sHref + "')\" class='Process' title='View Vendor Requests'><img src='" + sOpenImageUrl + "' height='10' width='10'></a>";
 };
 
 function loadVendorRequestDialog(sUrl) {
