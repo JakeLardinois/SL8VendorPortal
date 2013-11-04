@@ -460,6 +460,7 @@ function loadVendorRequestDialog(sUrl) {
             { "mDataProp": "QtyLoss" },
             { "mDataProp": "SourceWarehouse" },
             { "mDataProp": "DestWarehouse" },
+            { "mDataProp": "Processed" },
             {
                 "mDataProp": "OrderNo", //I don't show this row on the datatable, but I need it here so that I can populate it on my frmAddVendorRequest
                 "bVisible": false
