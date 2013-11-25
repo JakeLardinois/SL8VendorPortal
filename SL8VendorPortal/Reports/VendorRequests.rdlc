@@ -1180,7 +1180,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1252,7 +1251,7 @@
         </TablixRowHierarchy>
         <DataSetName>VendorRequests</DataSetName>
         <Height>0.5in</Height>
-        <Width>19.63542in</Width>
+        <Width>19.63541in</Width>
         <Style>
           <Border>
             <Style>None</Style>

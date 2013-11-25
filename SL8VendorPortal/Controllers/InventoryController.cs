@@ -143,6 +143,8 @@ namespace SL8VendorPortal.Controllers
             //Set content-disposition to "attachment" so that user is prompted to take an action
             //on the file (open or save)
             Response.Clear();
+            Response.ClearHeaders();
+            Response.ClearContent();
             Response.ContentType = mimeType;
             Response.AddHeader("content-disposition", "attachment; filename=Inventory" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + "." + fileNameExtension);
             Response.BinaryWrite(renderedBytes);
