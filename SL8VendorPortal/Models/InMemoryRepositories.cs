@@ -930,8 +930,6 @@ namespace SL8VendorPortal.Models
 
             totalRecordCount = VendorPortalDb.VendorRequests.Count();
 
-            //I put a cap on the number of records that this 
-            //InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
             objVendorRequestSearch = new VendorRequestSearch();
             for (int intCounter = 0; intCounter < DataTablesModel.iColumns; intCounter++)
             {
@@ -1015,6 +1013,8 @@ namespace SL8VendorPortal.Models
              * it there.  However, I ran into a problem when utilizing deferred execution(aka lazy loading) to first populate my list as filtered...  The below commented .Where() clauses in my query stopped working when querying against a database as opposed to 
              querying against a list in memory due to linq translating the query into SQL. I kept getting "String[]'. Only entity types, enumeration types or primitive types are supported in this context." and 
              "Cannot compare elements of type 'System.String[]'. Only primitive types, enumeration types and entity types are supported." errors because of this.*/
+
+            /*The Below was created because the Entity Framework had a problem doing a filter of a list with a list because of the difficulty it had using deferred execution and the corresponding sql creation*/
             var strEmptyString = "EMPTY";
             var SourceWarehouseList = objVendorRequestSearch.SourceWarehouses == null ? new[] { strEmptyString } : objVendorRequestSearch.SourceWarehouses.ToArray<string>();
             var DestinationWarehouseList = objVendorRequestSearch.DestWarehouses == null ? new[] { strEmptyString } : objVendorRequestSearch.DestWarehouses.ToArray<string>();
