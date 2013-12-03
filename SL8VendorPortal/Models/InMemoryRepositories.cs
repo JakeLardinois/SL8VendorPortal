@@ -6,6 +6,7 @@ using System.Web;
 using System.Collections.ObjectModel;
 using jQuery.DataTables.Mvc;
 using SL8VendorPortal.Infrastructure;
+using System.Data.Objects.SqlClient;
 
 
 namespace SL8VendorPortal.Models
@@ -917,19 +918,22 @@ namespace SL8VendorPortal.Models
     {
         public static IList<VendorRequest> AllVendorRequests { get; set; }
 
-        public static IList<VendorRequest> GetVendorRequests(out int totalRecordCount, out int searchRecordCount, JQueryDataTablesModel DataTablesModel)
+        public static IList<VendorRequest> GetVendorRequests(int MaxRecordCount, out int totalRecordCount, out int searchRecordCount, JQueryDataTablesModel DataTablesModel)
         {
+            SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb();
+            ReadOnlyCollection<SortedColumn> sortedColumns = DataTablesModel.GetSortedColumns();
+            IList<VendorRequest> vendorrequests;
             DateTime dtmTemp;
             string[] objResults;
             VendorRequestSearch objVendorRequestSearch;
-            ReadOnlyCollection<SortedColumn> sortedColumns = DataTablesModel.GetSortedColumns();
-            var vendorrequests = AllVendorRequests;
-
-            totalRecordCount = vendorrequests.Count;
 
 
+            totalRecordCount = VendorPortalDb.VendorRequests.Count();
+
+            //I put a cap on the number of records that this 
+            //InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
             objVendorRequestSearch = new VendorRequestSearch();
-            for (int intCounter = 0; intCounter < DataTablesModel.iColumns; intCounter++ )
+            for (int intCounter = 0; intCounter < DataTablesModel.iColumns; intCounter++)
             {
 
                 if (DataTablesModel.bSearchable_[intCounter] == true && !string.IsNullOrEmpty(DataTablesModel.sSearch_[intCounter]))
@@ -951,7 +955,7 @@ namespace SL8VendorPortal.Models
                             if (objResults.Length > 1)//there are two results returned so both true and false have been selected
                                 objVendorRequestSearch.Processed = "Both";
                             else
-                                objVendorRequestSearch.Processed = objResults[0];  
+                                objVendorRequestSearch.Processed = objResults[0];
                             break;
                         case "Notes":
                             break;
@@ -1004,24 +1008,45 @@ namespace SL8VendorPortal.Models
                     }
                 }
             }
-            
-            vendorrequests = vendorrequests
-                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.ID) || c.ID.ToString().Contains(objVendorRequestSearch.ID))
-                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.Item) || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
+
+            /*I had considerable issues in capping the quantity of records returned by this method. My concern was that over the years I could have a scenario where thousands of Vendor Requests were in the database and so the code was written in a way 
+             that all of those records would get loaded into memory and then they would be filtered.  In order to resolve this problem I had to initially populate the AllVendorRequests property of the InMemoryVendorRequestsRepository class with the filtered
+             results. In order to do that I had to include an instance of the SL8VendorPortalDb datacontext class so that I could populate my filtered set of vendorrequests instead of first filling in the contents of the database into vendorrequests and then filtering
+             * it there.  However, I ran into a problem when utilizing deferred execution(aka lazy loading) to first populate my list as filtered...  The below commented .Where() clauses in my query stopped working when querying against a database as opposed to 
+             querying against a list in memory due to linq translating the query into SQL. I kept getting "String[]'. Only entity types, enumeration types or primitive types are supported in this context." and 
+             "Cannot compare elements of type 'System.String[]'. Only primitive types, enumeration types and entity types are supported." errors because of this.*/
+            var strEmptyString = "EMPTY";
+            var SourceWarehouseList = objVendorRequestSearch.SourceWarehouses == null ? new[] { strEmptyString } : objVendorRequestSearch.SourceWarehouses.ToArray<string>();
+            var DestinationWarehouseList = objVendorRequestSearch.DestWarehouses == null ? new[] { strEmptyString } : objVendorRequestSearch.DestWarehouses.ToArray<string>();
+            var RequestCategoryCodeList = objVendorRequestSearch.RequestCategoryCodes == null ? new[] { strEmptyString } : objVendorRequestSearch.RequestCategoryCodes.ToArray<string>();
+
+            bool blnProcessed = false;
+            if (objVendorRequestSearch.Processed != null && objVendorRequestSearch.Processed.ToUpper().Equals("BOTH"))
+                blnProcessed = bool.TryParse(objVendorRequestSearch.Processed, out blnProcessed) ? blnProcessed : false;
+
+            vendorrequests = VendorPortalDb.VendorRequests
+                .Where(c => objVendorRequestSearch.ID == null || SqlFunctions.StringConvert((double)c.ID).Contains(objVendorRequestSearch.ID))
+                .Where(c => objVendorRequestSearch.Item == null || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
                 .Where(c => c.DateProcessed >= objVendorRequestSearch.DateProcessedGT || objVendorRequestSearch.DateProcessedGT == DateTime.MinValue)
                 .Where(c => c.DateProcessed <= objVendorRequestSearch.DateProcessedLT || objVendorRequestSearch.DateProcessedLT == DateTime.MinValue)
                 .Where(c => c.DateRequested >= objVendorRequestSearch.DateRequestedGT || objVendorRequestSearch.DateRequestedGT == DateTime.MinValue)
                 .Where(c => c.DateRequested <= objVendorRequestSearch.DateRequestedLT || objVendorRequestSearch.DateRequestedLT == DateTime.MinValue)
                 .Where(c => c.DateUpdated >= objVendorRequestSearch.DateUpdatedGT || objVendorRequestSearch.DateUpdatedGT == DateTime.MinValue)
                 .Where(c => c.DateUpdated <= objVendorRequestSearch.DateUpdatedLT || objVendorRequestSearch.DateUpdatedLT == DateTime.MinValue)
-                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.Processed) || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
-                .Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
-                .Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
-                .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.OrderNo) || (!string.IsNullOrEmpty(c.OrderNo) && c.OrderNo.ToString().Contains(objVendorRequestSearch.OrderNo)))
-                .Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
+                .Where(c => objVendorRequestSearch.OrderNo == null || ((c.OrderNo != null) && c.OrderNo.Contains(objVendorRequestSearch.OrderNo)))
+                //.ToList()//if I populated the query with a list right here (executed the query) then the below commented queries would function, however this didn't solve the problem I was facing where large collections of vendor requests would get loaded into memory prior to being filtered...
+                //The below commented queries only worked when doing it on a collection fully loaded into memory and stopped working when I implemented lazy loading to filter the initial collection.
+                //.Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
+                .Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed == blnProcessed)
+                //.Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
+                .Where(c => SourceWarehouseList.Contains(strEmptyString) || SourceWarehouseList.Contains(c.SourceWarehouse))
+                //.Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
+                 .Where(c => DestinationWarehouseList.Contains(strEmptyString) || DestinationWarehouseList.Contains(c.DestWarehouse))
+                //.Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
+                .Where(c => RequestCategoryCodeList.Contains(strEmptyString) || RequestCategoryCodeList.Contains(c.RequestCategoryCode))
+                .Take(MaxRecordCount)
                 .ToList();
-
-
+            
             searchRecordCount = vendorrequests.Count;
 
             IOrderedEnumerable<VendorRequest> sortedList = null;
@@ -1111,6 +1136,202 @@ namespace SL8VendorPortal.Models
                 try { return sortedList.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }
                 catch (ArgumentNullException) { return vendorrequests.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }
         }
+        #region OldMethod
+        //public static IList<VendorRequest> GetVendorRequests(out int totalRecordCount, out int searchRecordCount, JQueryDataTablesModel DataTablesModel)
+        //{
+        //    DateTime dtmTemp;
+        //    string[] objResults;
+        //    VendorRequestSearch objVendorRequestSearch;
+        //    ReadOnlyCollection<SortedColumn> sortedColumns = DataTablesModel.GetSortedColumns();
+        //    var vendorrequests = AllVendorRequests;
+
+        //    totalRecordCount = vendorrequests.Count;
+
+
+        //    objVendorRequestSearch = new VendorRequestSearch();
+        //    for (int intCounter = 0; intCounter < DataTablesModel.iColumns; intCounter++ )
+        //    {
+
+        //        if (DataTablesModel.bSearchable_[intCounter] == true && !string.IsNullOrEmpty(DataTablesModel.sSearch_[intCounter]))
+        //        {
+        //            /*For some reason when I implemented resizable movable columns and would then move the columns in the application, the application would send tilde's in the 'checkbox' column types sSearch field which was wierd
+        //             since the checkbox column types are delimited by the pipe | character and the 'range' column types are delimited by the tilde...  The resolution that I came up with was to check if the only value passed in sSearch
+        //             was a tilde and if it was then skip the loop so that the respective VendorRequestSearch field was left null.*/
+        //            if (DataTablesModel.sSearch_[intCounter].Equals("~"))
+        //                continue;
+
+        //            /*Notice that i had to use mDataProp2_ due to datatables multi-column filtering not placing sSearch into proper array position when columns are reordered; See VendorRequestsController.cs Search method for details...*/
+        //            switch (DataTablesModel.mDataProp2_[intCounter])
+        //            {
+        //                case "ID":
+        //                    objVendorRequestSearch.ID = DataTablesModel.sSearch_[intCounter];
+        //                    break;
+        //                case "Processed":
+        //                    objResults = DataTablesModel.sSearch_[intCounter].Split('|');//results returned from a checklist are delimited by the pipe char
+        //                    if (objResults.Length > 1)//there are two results returned so both true and false have been selected
+        //                        objVendorRequestSearch.Processed = "Both";
+        //                    else
+        //                        objVendorRequestSearch.Processed = objResults[0];  
+        //                    break;
+        //                case "Notes":
+        //                    break;
+        //                case "DateProcessed":
+        //                    objResults = DataTablesModel.sSearch_[intCounter].Split('~');//results returned from a daterange are delimited by the tilde char
+        //                    objVendorRequestSearch.DateProcessedGT = DateTime.TryParse(objResults[0], out dtmTemp) ? dtmTemp : DateTime.MinValue;
+        //                    objVendorRequestSearch.DateProcessedLT = DateTime.TryParse(objResults[1], out dtmTemp) ? dtmTemp : DateTime.MinValue;
+        //                    break;
+        //                case "DateRequested":
+        //                    objResults = DataTablesModel.sSearch_[intCounter].Split('~');//results returned from a daterange are delimited by the tilde char
+        //                    objVendorRequestSearch.DateRequestedGT = DateTime.TryParse(objResults[0], out dtmTemp) ? dtmTemp : DateTime.MinValue;
+        //                    objVendorRequestSearch.DateRequestedLT = DateTime.TryParse(objResults[1], out dtmTemp) ? dtmTemp : DateTime.MinValue;
+        //                    break;
+        //                case "DateUpdated":
+        //                    objResults = DataTablesModel.sSearch_[intCounter].Split('~');//results returned from a daterange are delimited by the tilde char
+        //                    objVendorRequestSearch.DateUpdatedGT = DateTime.TryParse(objResults[0], out dtmTemp) ? dtmTemp : DateTime.MinValue;
+        //                    objVendorRequestSearch.DateUpdatedLT = DateTime.TryParse(objResults[1], out dtmTemp) ? dtmTemp : DateTime.MinValue;
+        //                    break;
+        //                case "SourceWarehouse":
+        //                    objVendorRequestSearch.SourceWarehouses = DataTablesModel.sSearch_[intCounter].Split('|');//results returned from a checklist are delimited by the pipe char
+        //                    break;
+        //                case "DestWarehouse":
+        //                    objVendorRequestSearch.DestWarehouses = DataTablesModel.sSearch_[intCounter].Split('|');//results returned from a checklist are delimited by the pipe char
+        //                    break;
+        //                case "OrderNo":
+        //                    objVendorRequestSearch.OrderNo = DataTablesModel.sSearch_[intCounter];
+        //                    break;
+        //                case "Item":
+        //                    objVendorRequestSearch.Item = DataTablesModel.sSearch_[intCounter];
+        //                    break;
+        //                case "LineNo":
+        //                    break;
+        //                case "ReleaseNo":
+        //                    break;
+        //                case "RequestCategoryID":
+        //                    break;
+        //                case "RequestCategoryCode":
+        //                    objVendorRequestSearch.RequestCategoryCodes = DataTablesModel.sSearch_[intCounter].Split('|');//results returned from a checklist are delimited by the pipe char
+        //                    break;
+        //                case "Qty":
+        //                    break;
+        //                case "QtyLoss":
+        //                    break;
+        //                case "Approved":
+        //                    break;
+        //                case "Creator":
+        //                    break;
+        //                case "Updater":
+        //                    break;
+        //            }
+        //        }
+        //    }
+            
+        //    vendorrequests = vendorrequests
+        //        .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.ID) || c.ID.ToString().Contains(objVendorRequestSearch.ID))
+        //        .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.Item) || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
+        //        .Where(c => c.DateProcessed >= objVendorRequestSearch.DateProcessedGT || objVendorRequestSearch.DateProcessedGT == DateTime.MinValue)
+        //        .Where(c => c.DateProcessed <= objVendorRequestSearch.DateProcessedLT || objVendorRequestSearch.DateProcessedLT == DateTime.MinValue)
+        //        .Where(c => c.DateRequested >= objVendorRequestSearch.DateRequestedGT || objVendorRequestSearch.DateRequestedGT == DateTime.MinValue)
+        //        .Where(c => c.DateRequested <= objVendorRequestSearch.DateRequestedLT || objVendorRequestSearch.DateRequestedLT == DateTime.MinValue)
+        //        .Where(c => c.DateUpdated >= objVendorRequestSearch.DateUpdatedGT || objVendorRequestSearch.DateUpdatedGT == DateTime.MinValue)
+        //        .Where(c => c.DateUpdated <= objVendorRequestSearch.DateUpdatedLT || objVendorRequestSearch.DateUpdatedLT == DateTime.MinValue)
+        //        .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.Processed) || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
+        //        .Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
+        //        .Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
+        //        .Where(c => string.IsNullOrEmpty(objVendorRequestSearch.OrderNo) || (!string.IsNullOrEmpty(c.OrderNo) && c.OrderNo.ToString().Contains(objVendorRequestSearch.OrderNo)))
+        //        .Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
+        //        .ToList();
+
+
+        //    searchRecordCount = vendorrequests.Count;
+
+        //    IOrderedEnumerable<VendorRequest> sortedList = null;
+        //    foreach (var sortedColumn in sortedColumns)
+        //    {
+        //        switch (sortedColumn.PropertyName)
+        //        {
+        //            case "ID":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.ID)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.ID);
+        //                break;
+        //            case "Item":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Item)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Item);
+        //                break;
+        //            case "Processed":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Processed)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Processed);
+        //                break;
+        //            case "Notes":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Notes)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Notes);
+        //                break;
+        //            case "DateRequested":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.DateRequested)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.DateRequested);
+        //                break;
+        //            case "DateProcessed":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.DateProcessed)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.DateProcessed);
+        //                break;
+        //            case "SourceWarehouse":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.SourceWarehouse)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.SourceWarehouse);
+        //                break;
+        //            case "RequestCategoryCode":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.RequestCategoryCode)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.RequestCategoryCode);
+        //                break;
+        //            case "RequestCategoryID":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.RequestCategoryID)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.RequestCategoryID);
+        //                break;
+        //            case "DestWarehouse":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.DestWarehouse)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.DestWarehouse);
+        //                break;
+        //            case "OrderNo":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.OrderNo)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.OrderNo);
+        //                break;
+        //            case "LineNo":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.LineNo)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.LineNo);
+        //                break;
+        //            case "ReleaseNo":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.ReleaseNo)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.ReleaseNo);
+        //                break;
+        //            case "Qty":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Qty)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Qty);
+        //                break;
+        //            case "QtyLoss":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.QtyLoss)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.QtyLoss);
+        //                break;
+        //            case "Approved":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Approved)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Approved);
+        //                break;
+        //            case "Creator":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Creator)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Creator);
+        //                break;
+        //            case "Updater":
+        //                sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Updater)
+        //                    : sortedList.CustomSort(sortedColumn.Direction, i => i.Updater);
+        //                break;
+        //        }
+        //    }
+
+        //    if (DataTablesModel.iDisplayLength == -1) //pagination is disabled in the javascript
+        //        try { return sortedList.Skip(DataTablesModel.iDisplayStart).ToList(); }
+        //        catch (ArgumentNullException) { return vendorrequests.Skip(DataTablesModel.iDisplayStart).ToList(); }
+        //    else //pagination is enabled
+        //        try { return sortedList.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }
+        //        catch (ArgumentNullException) { return vendorrequests.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }
+        //}
+        #endregion
 
         private static bool CheckTilde(string strSearch)
         {

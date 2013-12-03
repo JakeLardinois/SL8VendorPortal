@@ -9,6 +9,7 @@ using SL8VendorPortal.Models;
 using SL8VendorPortal.Infrastructure;
 using System.Collections.ObjectModel;
 using Microsoft.Reporting.WebForms; //for  ReadOnlyCollection<string>
+//using System.Data.Objects.SqlClient;
 
 
 namespace SL8VendorPortal.Controllers
@@ -49,17 +50,47 @@ namespace SL8VendorPortal.Controllers
              */
             jQueryDataTablesModel.mDataProp2_ = mobjNewMDataProp.AsReadOnly();
 
-            //I put a cap on the number of records that this 
-            InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
-
-            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(
+            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(MaxRecordCount, 
                 totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel);
-
+            
             return this.DataTablesJson(items: objItems,
                 totalRecords: totalRecordCount,
                 totalDisplayRecords: searchRecordCount,
                 sEcho: jQueryDataTablesModel.sEcho);
         }
+        //Search done using the old method
+        ////MaxRecordCount is populated by datatables via the aoData array during the fnServerData call...
+        //[HttpPost]
+        //public JsonResult Search(JQueryDataTablesModel jQueryDataTablesModel, int MaxRecordCount)
+        //{
+        //    int totalRecordCount;
+        //    int searchRecordCount;
+
+        //    /*I am using datatables server side with ColReorderWithResize.js and multicolumn filtering (jquery.dataTables.columnFilter.js) that uses the sSelector option in the .columnFilter() in the instantiation process (see SearchVendorRequest.js) to redirect my search textboxes to a table that I place on the top of my Search.cshtml page.
+        //     * The problem that this creates is that the sSearch_0, sSearch_1, etc. variables that are populated by the form remain in thier position regardless of where the columns get moved. So if I have column 3 (mdataprop_3) named 'Order' moved to the column 1 position,  then mdataprop_1 will hold the column name 'Order' that was previously in mdataprop_3 
+        //     * however, the search text Ssearch_3 will hold the search variables used for column 1 (mdataprop_1 or previously mdataprop_3). The result of this is that my InMemoryRepositories.sc will be searching the property that took the place of mdataprop_3 ('lineNo' or something) with the search text for 'Order'...  To further complicate things, the sorting
+        //     * is NOT affected by this scenario; Only the searching... I searched everywhere for 2 days on this trying to find a resolution! If the sorting was affected by sSearch_ not following mdataprop_ then I could simply make mdataprop_ static regardless of the column ordering; I could not find any property in Datatables that would give me the original 
+        //     * column order, so I would have had to do just like I did with mobjNewMDataProp above. So the only way i could resolve this issue was to modify my JQueryDataTablesModel class and add another ReadOnlyCollection<string> and call it mDataProp2_ . I then use mDataProp2_ to hold the original column order that sSearch_ correctly corresponds to. I then 
+        //     * went into InMemoryRepositories.cs and changed my searching switch statement to use mDataProp2_.
+        //     * I did find some solutions for this issue where the index of the column search textbox was used with fnVisibleToColumnIndex (datatables api) to leverage fnSearch (datatables function). However, fnSearch applies the search text to sSearch and not the sSearch_ array and so multi-column filtering would not work (which is what I have implemented in InMemoryRepositories.cs
+        //     * and I am not using the textboxes at the bottom or top of my datatables column (I'm using sSelector to redirect the search texts to a table) and the solutions that were offered were based on rewiring the event that datatables automatically wires to the keyup event of the column textboxes; which I never use because of sSelector and so the events would
+        //     * never get fired! Furthermore I couldn't wire events to the textboxes created by sSelector because datatable automatically creates them and so I have no way of knowing what thier ID's are; and it's a moot point since thier indexes would have nothing to do with the columns anyway which is what fnVisibleToColumnIndex leverages.
+        //     * So although the solution I implemented is somewht ugly, it is the best way to maintain all of my required functionality...
+        //     */
+        //    jQueryDataTablesModel.mDataProp2_ = mobjNewMDataProp.AsReadOnly();
+
+        //    //I put a cap on the number of records that this 
+        //    InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
+
+        //    var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(
+        //        totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel);
+
+        //    return this.DataTablesJson(items: objItems,
+        //        totalRecords: totalRecordCount,
+        //        totalDisplayRecords: searchRecordCount,
+        //        sEcho: jQueryDataTablesModel.sEcho);
+        //}
+
 
         [HttpPost]
         public JsonResult VendorRequests(JQueryDataTablesModel jQueryDataTablesModel, string OrderNo, short? LineNo, short? ReleaseNo, string ItemID, string RequestType)
@@ -294,17 +325,32 @@ namespace SL8VendorPortal.Controllers
             jQueryDataTablesModel.mDataProp2_ = mobjNewMDataProp.AsReadOnly();
 
 
-            //I put a cap on the number of records that this 
-            InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
-
-            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(
+            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(MaxRecordCount, 
                 totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel);
-
 
             RenderVendorRequestsReport(objItems);
 
             return View();
         }
+        //GenerateVendorRequestsReport done utilizing the old method
+        //public ActionResult GenerateVendorRequestsReport(JQueryDataTablesModel jQueryDataTablesModel, int MaxRecordCount)
+        //{
+        //    int totalRecordCount;
+        //    int searchRecordCount;
+        //    jQueryDataTablesModel.mDataProp2_ = mobjNewMDataProp.AsReadOnly();
+
+
+        //    //I put a cap on the number of records that this 
+        //    InMemoryVendorRequestsRepository.AllVendorRequests = VendorPortalDb.VendorRequests.Take(MaxRecordCount).ToList();
+
+        //    var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(
+        //        totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel);
+
+
+        //    RenderVendorRequestsReport(objItems);
+
+        //    return View();
+        //}
 
         private void RenderVendorRequestsReport(IList<VendorRequest> objItems)
         {
