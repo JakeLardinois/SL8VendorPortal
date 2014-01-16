@@ -65,9 +65,9 @@ namespace SL8VendorPortal.Controllers
         public ActionResult Index()
         {
             //This forces the database to reinitialize
-            var result = db.VendorRequests
-                .Where(p => p.RequestCategoryCode.Equals("TOReciept"))
-                .ToList();
+            //var result = db.VendorRequests
+            //    .Where(p => p.RequestCategoryCode.Equals("TOReciept"))
+            //    .ToList();
 
             ViewBag.Message = "WireTech Fabricators ASP.NET MVC Vendor Portal Application.";
 

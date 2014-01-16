@@ -30,7 +30,8 @@ namespace SL8VendorPortal
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-            Database.SetInitializer<SL8VendorPortalDb>(new SL8VendorPortalDbInitializer());
+
+            //Database.SetInitializer<SL8VendorPortalDb>(new SL8VendorPortalDbInitializer());
 
             //THIS IS REQUIRED TO USE THE DATATABLES DATAGRID!
             // Lets MVC know that anytime there is a JQueryDataTablesModel as a parameter in an action to use the
@@ -41,67 +42,67 @@ namespace SL8VendorPortal
 
     //public class SL8VendorPortalDbInitializer : DropCreateDatabaseIfModelChanges<SL8VendorPortalDb>
     //public class SL8VendorPortalDbInitializer : DropCreateDatabaseAlways<SL8VendorPortalDb>
-    public class SL8VendorPortalDbInitializer : DropCreateDatabaseIfModelChanges<SL8VendorPortalDb>
-    {
-        /*This method passes in the context of the database that was referenced in the initialization strategy above.
-         */
-        protected override void Seed(SL8VendorPortalDb context)
-        {
-            base.Seed(context);
+    //public class SL8VendorPortalDbInitializer : DropCreateDatabaseIfModelChanges<SL8VendorPortalDb>
+    //{
+    //    /*This method passes in the context of the database that was referenced in the initialization strategy above.
+    //     */
+    //    protected override void Seed(SL8VendorPortalDb context)
+    //    {
+    //        base.Seed(context);
 
-            //context.VendorRequests.Add(new VendorRequest
-            //{
-            //    Approved = true,
-            //    Processed = true,
-            //    DateProcessed = DateTime.Now.AddDays(1),
-            //    DateRequested = DateTime.Now,
-            //    DestWarehouse = "PPI",
-            //    Notes = "Blah Blah",
-            //    Qty = 3,
-            //    QtyLoss = 1,
-            //    SourceWarehouse = "MAIN",
-            //    OrderNo = "T000000267",
-            //    LineNo = 1,
-            //    RequestCategoryCode = "TOReciept",
-            //    RequestCategoryID = (int)VendorRequestCategoryID.TORequest,
-            //    Creator = "Administrator",
-            //    Updater = "Administrator"
-            //});
-            //context.VendorRequests.Add(new VendorRequest
-            //{
-            //    Approved = true,
-            //    Processed = false,
-            //    DateProcessed = SharedVariables.MINDATE,
-            //    DateRequested = DateTime.Now,
-            //    DestWarehouse = "MAIN",
-            //    Notes = "Blah Blah",
-            //    Qty = 3,
-            //    QtyLoss = 1,
-            //    SourceWarehouse = "PPI",
-            //    LineNo = 1,
-            //    OrderNo = "T000000267",
-            //    RequestCategoryCode = "TOShipment",
-            //    RequestCategoryID = (int)VendorRequestCategoryID.TORequest,
-            //    Creator = "Administrator",
-            //    Updater = "Administrator"
-            //});
+    //        //context.VendorRequests.Add(new VendorRequest
+    //        //{
+    //        //    Approved = true,
+    //        //    Processed = true,
+    //        //    DateProcessed = DateTime.Now.AddDays(1),
+    //        //    DateRequested = DateTime.Now,
+    //        //    DestWarehouse = "PPI",
+    //        //    Notes = "Blah Blah",
+    //        //    Qty = 3,
+    //        //    QtyLoss = 1,
+    //        //    SourceWarehouse = "MAIN",
+    //        //    OrderNo = "T000000267",
+    //        //    LineNo = 1,
+    //        //    RequestCategoryCode = "TOReciept",
+    //        //    RequestCategoryID = (int)VendorRequestCategoryID.TORequest,
+    //        //    Creator = "Administrator",
+    //        //    Updater = "Administrator"
+    //        //});
+    //        //context.VendorRequests.Add(new VendorRequest
+    //        //{
+    //        //    Approved = true,
+    //        //    Processed = false,
+    //        //    DateProcessed = SharedVariables.MINDATE,
+    //        //    DateRequested = DateTime.Now,
+    //        //    DestWarehouse = "MAIN",
+    //        //    Notes = "Blah Blah",
+    //        //    Qty = 3,
+    //        //    QtyLoss = 1,
+    //        //    SourceWarehouse = "PPI",
+    //        //    LineNo = 1,
+    //        //    OrderNo = "T000000267",
+    //        //    RequestCategoryCode = "TOShipment",
+    //        //    RequestCategoryID = (int)VendorRequestCategoryID.TORequest,
+    //        //    Creator = "Administrator",
+    //        //    Updater = "Administrator"
+    //        //});
 
-            //CORequest = 0, PORequest = 1, TORequest = 2 
-            //TORequestTypes - TOReciept, TOShipment; CORequestTypes - COShipment, COLateRequest; PORequestTypes: POReciept, POLateRequest
-            context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COShipment", Description = "CO Shipment" });
-            context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COLateRequest", Description = "CO Late Request" });
-            context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POReceipt", Description = "PO Receipt" });
-            context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POLateRequest", Description = "PO Late Request" });
-            context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOReceipt", Description = "TO Receipt" });
-            context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOShipment", Description = "TO Shipment" });
-            context.RequestCategories.Add(new RequestCategory { ID = 3, Code = "InventoryAdjustment", Description = "Inventory Adjustment" });
-            context.RequestCategories.Add(new RequestCategory { ID = 3, Code = "TransferOrderRequest", Description = "Request Transfer Order" });
+    //        //CORequest = 0, PORequest = 1, TORequest = 2 
+    //        //TORequestTypes - TOReciept, TOShipment; CORequestTypes - COShipment, COLateRequest; PORequestTypes: POReciept, POLateRequest
+    //        context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COShipment", Description = "CO Shipment" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 0, Code = "COLateRequest", Description = "CO Late Request" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POReceipt", Description = "PO Receipt" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 1, Code = "POLateRequest", Description = "PO Late Request" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOReceipt", Description = "TO Receipt" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 2, Code = "TOShipment", Description = "TO Shipment" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 3, Code = "InventoryAdjustment", Description = "Inventory Adjustment" });
+    //        context.RequestCategories.Add(new RequestCategory { ID = 3, Code = "TransferOrderRequest", Description = "Request Transfer Order" });
 
-            //context.PendingTransferOrderTransactions.Add(new PendingTransferOrderTransaction { Description = "My Description" });
+    //        //context.PendingTransferOrderTransactions.Add(new PendingTransferOrderTransaction { Description = "My Description" });
 
 
-            context.SaveChanges();
-        }
+    //        context.SaveChanges();
+    //    }
 
-    }
+    //}
 }
