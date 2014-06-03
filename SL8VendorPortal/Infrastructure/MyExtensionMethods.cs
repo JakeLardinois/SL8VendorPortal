@@ -36,6 +36,30 @@ namespace SL8VendorPortal.Infrastructure
             
         }
 
+        public static string AddSingleQuotesAndPadLeft(this string source, int intWidth)
+        {
+            string[] strArray;
+            StringBuilder objStrBldr;
+
+
+            strArray = source.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (strArray.Length > 0)
+            {
+                objStrBldr = new StringBuilder();
+
+                foreach (string strTemp in strArray)
+                {
+                    objStrBldr.Append("'" + strTemp.Trim().PadLeft(intWidth, ' ') + "',");
+                }
+
+                return objStrBldr.Remove(objStrBldr.Length - 1, 1).ToString();
+            }
+            else
+                return string.Empty;
+
+
+        }
+
         //Splits a comma separated string into a list
         public static IEnumerable<string> SplitNTrim(this string source)
         {

@@ -54,13 +54,36 @@ namespace SL8VendorPortal.Controllers
             int totalRecordCount;
             int searchRecordCount;
             string strSQL;
+            StringBuilder objStrBldr;
 
             CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
             //strSQL = QueryDefinitions.GetQuery("SelectCustomerOrdersByWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O" });//O is for Ordered, C is for Complete, etc.
             strSQL = QueryDefinitions.GetQuery("SelectCOByLineWarehousesAndStatus", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O" });//This will only bring in Orders where there are corresponding Open Order Lines.
 
-            InMemoryCustomerOrdersRepository.AllCustomerOrders = db.coes.SqlQuery(strSQL).ToList();
+            //get the pertinant customer orders
+            var objCOList = db.coes.SqlQuery(strSQL).ToList();
 
+            //instantiate my stringbuilder and then develop my list of co_nums for the query
+            objStrBldr = new StringBuilder();
+            foreach (var objCO in objCOList)
+                objStrBldr.Append(objCO.co_num + ", ");
+
+            if (objStrBldr.Length == 0)//prevents an error in the scenario where no records are returned...
+                objStrBldr.Append("''");
+
+            //Build the coitem sql
+            strSQL = QueryDefinitions.GetQuery("SelectCOLinesByWarehousesAndStatusAndOrderNoList", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O", objStrBldr.ToString().AddSingleQuotesAndPadLeft(10) });
+            //get the list of coitems...
+            var objCOItemList = db.coitems.SqlQuery(strSQL).ToList();
+
+            //Set the coitems property on each co to the pertinant list 
+            foreach (var objCO in objCOList)
+                objCO.coitems = objCOItemList
+                    .Where(c => c.co_num.Equals(objCO.co_num));
+                
+
+            //InMemoryCustomerOrdersRepository.AllCustomerOrders = db.coes.SqlQuery(strSQL).ToList();
+            InMemoryCustomerOrdersRepository.AllCustomerOrders = objCOList;
 
             var objItems = InMemoryCustomerOrdersRepository.GetCustomerOrders(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),

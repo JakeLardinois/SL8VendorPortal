@@ -23,9 +23,14 @@ namespace SL8VendorPortal.Models
 
             totalRecordCount = transfers.Count;
 
+            //this was changed to accomodate the users request to search the Orders by Item which is only contained in the line/release.
+            //To accomodate this, I added the line/release data to the parent order in the Search method of the controller so that I could perform the search
+            //on the sub objects here...
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                transfers = transfers.Where(c => c.trn_num.ToLower().Contains(searchString.ToLower()))
+                //transfers = transfers.Where(c => c.trn_num.ToLower().Contains(searchString.ToLower()))
+                //    .ToList();
+                transfers = transfers.Where(c => c.trnitems.Any(l => l.item.ToLower().Contains(searchString.ToLower())))
                     .ToList();
             }
 
@@ -293,9 +298,14 @@ namespace SL8VendorPortal.Models
 
             totalRecordCount = customerorders.Count;
 
+            //this was changed to accomodate the users request to search the Orders by Item which is only contained in the line/release.
+            //To accomodate this, I added the line/release data to the parent order in the Search method of the controller so that I could perform the search
+            //on the sub objects here...
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                customerorders = customerorders.Where(c => c.co_num.ToLower().Contains(searchString.ToLower()))
+                //customerorders = customerorders.Where(c => c.co_num.ToLower().Contains(searchString.ToLower()))
+                //    .ToList();
+                customerorders = customerorders.Where(c => c.coitems.Any(l => l.item.ToLower().Contains(searchString.ToLower())))
                     .ToList();
             }
 
@@ -583,9 +593,14 @@ namespace SL8VendorPortal.Models
 
             totalRecordCount = purchaseorders.Count;
 
+            //this was changed to accomodate the users request to search the Orders by Item which is only contained in the line/release.
+            //To accomodate this, I added the line/release data to the parent order in the Search method of the controller so that I could perform the search
+            //on the sub objects here...
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                purchaseorders = purchaseorders.Where(c => c.po_num.ToLower().Contains(searchString.ToLower()))
+                //purchaseorders = purchaseorders.Where(c => c.po_num.ToLower().Contains(searchString.ToLower()))
+                //    .ToList();
+                purchaseorders = purchaseorders.Where(c => c.poitems.Any(l => l.item.ToLower().Contains(searchString.ToLower())))
                     .ToList();
             }
 

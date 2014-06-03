@@ -98,7 +98,7 @@ $(document).ready(function () {
             }, 1000)
         },
         "sServerMethod": "POST",
-        "oLanguage": { "sSearch": "Search Order #s:" },
+        "oLanguage": { "sSearch": "Search By Item #s:" },
         "aoColumns": [
             {
                 "mDataProp": null, //Note that I had a problem with this column being first because when the datatable loads, it automatically sorts based on the first column; since this column had a null value

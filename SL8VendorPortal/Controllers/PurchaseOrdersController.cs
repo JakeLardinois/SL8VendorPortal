@@ -54,13 +54,35 @@ namespace SL8VendorPortal.Controllers
             int totalRecordCount;
             int searchRecordCount;
             string strSQL;
+            StringBuilder objStrBldr;
 
 
             CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
             //strSQL = QueryDefinitions.GetQuery("SelectPurchaseOrdersByWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O" });//O is for Ordered, C is for Complete, etc.
             strSQL = QueryDefinitions.GetQuery("SelectPOByLineWarehousesAndStatus", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O" });//This will only bring in Orders where there are corresponding Open Order Lines.
 
-            InMemoryPurchaseOrdersRepository.AllPurchaseOrders = db.poes.SqlQuery(strSQL).ToList();
+            //get the pertinant purchase orders
+            var objPOList = db.poes.SqlQuery(strSQL).ToList();
+
+            //instantiate my stringbuilder and then develop my list of po_nums for the query
+            objStrBldr = new StringBuilder();
+            foreach (var objCO in objPOList)
+                objStrBldr.Append(objCO.po_num + ", ");
+
+            if (objStrBldr.Length == 0)//prevents an error in the scenario where no records are returned...
+                objStrBldr.Append("''");
+
+            //Build the coitem sql
+            strSQL = QueryDefinitions.GetQuery("SelectPOLinesByWarehousesAndStatusAndOrderNoList", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O", objStrBldr.ToString().AddSingleQuotesAndPadLeft(10) });
+            //get the list of coitems...
+            var objPOItemList = db.poitems.SqlQuery(strSQL).ToList();
+
+            //Set the coitems property on each co to the pertinant list 
+            foreach (var objPO in objPOList)
+                objPO.poitems = objPOItemList
+                    .Where(p => p.po_num.Equals(objPO.po_num));
+
+            InMemoryPurchaseOrdersRepository.AllPurchaseOrders = objPOList;
 
 
             var objItems = InMemoryPurchaseOrdersRepository.GetPurchaseOrders(startIndex: jQueryDataTablesModel.iDisplayStart,

@@ -10,6 +10,7 @@ using SL8VendorPortal.Models;
 using SL8VendorPortal.Infrastructure;
 using jQuery.DataTables.Mvc;
 using Microsoft.Reporting.WebForms;
+using System.Text;
 
 namespace SL8VendorPortal.Controllers
 {
@@ -64,13 +65,36 @@ namespace SL8VendorPortal.Controllers
             int totalRecordCount;
             int searchRecordCount;
             string strSQL;
+            StringBuilder objStrBldr;
 
 
             CurrentUserProfile = new UsersContext().UserProfiles.SingleOrDefault(u => u.UserName == User.Identity.Name);
             //strSQL = QueryDefinitions.GetQuery("SelectTransferOrdersByToWarehousesAndStatus", new string[] { user.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//O is for Ordered, T is for Transit, etc.
             strSQL = QueryDefinitions.GetQuery("SelectTOByLineToFromWarehousesAndStatuses", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes() });//O is for Ordered, T is for Transit, etc.
 
-            InMemoryTransferOrdersRepository.AllTransferOrders = db.transfers.SqlQuery(strSQL).ToList();
+            //get the pertinant transfer orders
+            var objTOList = db.transfers.SqlQuery(strSQL).ToList();
+
+            //instantiate my stringbuilder and then develop my list of co_nums for the query
+            objStrBldr = new StringBuilder();
+            foreach (var objTO in objTOList)
+                objStrBldr.Append(objTO.trn_num + ", ");
+
+            if (objStrBldr.Length == 0)//prevents an error in the scenario where no records are returned...
+                objStrBldr.Append("''");
+
+            //Build the trnitem sql
+            strSQL = QueryDefinitions.GetQuery("SelectTOLinesByToFromWhsesAndStatusAndOrderNoList", new string[] { CurrentUserProfile.Warehouses.AddSingleQuotes(), "O, T".AddSingleQuotes(), objStrBldr.ToString().AddSingleQuotesAndPadLeft(10) });
+            //get the list of trnitems...
+            var objTRNItemList = db.trnitems.SqlQuery(strSQL).ToList();
+
+            //Set the trnitems property on each to to the pertinant list 
+            foreach (var objTO in objTOList)
+                objTO.trnitems = objTRNItemList
+                    .Where(t => t.trn_num.Equals(objTO.trn_num));
+
+
+            InMemoryTransferOrdersRepository.AllTransferOrders = objTOList;
 
             var objItems = InMemoryTransferOrdersRepository.GetTransferOrders(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),

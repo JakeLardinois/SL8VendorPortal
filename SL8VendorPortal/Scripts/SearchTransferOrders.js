@@ -106,7 +106,7 @@ $(document).ready(function () {
                 });
             }, 1000)
         },
-        "oLanguage": { "sSearch": "Search Transfer #s:" },
+        "oLanguage": { "sSearch": "Search By Item #s:" },
         "bAutoWidth": false, // Disable the auto width calculation 
         "aoColumns": [
             {
