@@ -53,9 +53,10 @@ $(document).ready(function () {
             if (settings.rows) {
                 textarea.attr('rows', settings.rows);
             } else {
-                textarea.height(settings.height);
+                textarea.height(settings.height + 50);
             }
             $(this).append(textarea);
+            $(this).append('<br >'); //This is how you get the buttons to be below the textarea box...
             return (textarea);
         },
         plugin: function (settings, original) {
@@ -80,7 +81,7 @@ $(document).ready(function () {
                 }
             ]
         },
-        "sScrollX": "100%",
+        //"sScrollX": "100%",
         "bJQueryUI": true,
         "sPaginationType": "full_numbers",
         "sAjaxSource": document.URL,

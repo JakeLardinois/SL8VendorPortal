@@ -92,7 +92,7 @@ namespace SL8VendorPortal.Controllers
 
             var objItems = InMemoryItemWhsesRepository.GetItemWhses(startIndex: jQueryDataTablesModel.iDisplayStart,
                 pageSize: jQueryDataTablesModel.iDisplayLength, sortedColumns: jQueryDataTablesModel.GetSortedColumns(),
-                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch);
+                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, searchString: jQueryDataTablesModel.sSearch, isDownloadReport: true);
 
             RenderInventoryReport(objItems);
 

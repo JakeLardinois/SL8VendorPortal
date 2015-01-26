@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Web.Mvc;
 
+
 namespace jQuery.DataTables.Mvc
 {
     public class JQueryDataTablesModelBinder : IModelBinder

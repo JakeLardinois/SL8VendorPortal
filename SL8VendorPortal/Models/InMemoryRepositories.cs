@@ -17,7 +17,7 @@ namespace SL8VendorPortal.Models
         public static IList<transfer> AllTransferOrders { get; set; }
 
         public static IList<transfer> GetTransferOrders(int startIndex, int pageSize, ReadOnlyCollection<SortedColumn> sortedColumns, out int totalRecordCount,
-            out int searchRecordCount, string searchString)
+            out int searchRecordCount, string searchString, bool isDownloadReport = false)
         {
             var transfers = AllTransferOrders;
 
@@ -30,7 +30,7 @@ namespace SL8VendorPortal.Models
             {
                 //transfers = transfers.Where(c => c.trn_num.ToLower().Contains(searchString.ToLower()))
                 //    .ToList();
-                transfers = transfers.Where(c => c.trnitems.Any(l => l.item.ToLower().Contains(searchString.ToLower())))
+                transfers = transfers.Where(t => t.trnitems.Any(l => !string.IsNullOrEmpty(l.item) && l.item.ToLower().Contains(searchString.ToLower())))
                     .ToList();
             }
 
@@ -89,14 +89,22 @@ namespace SL8VendorPortal.Models
                         sortedList = sortedList == null ? transfers.CustomSort(sortedColumn.Direction, i => i.RecordDate)
                             : sortedList.CustomSort(sortedColumn.Direction, i => i.RecordDate);
                         break;
+                    default://This took care of the below scenario where the default sorted column was 0 which is my drill down image. I could have used 'case "0":' but just made a default case instead...
+                        sortedList = sortedList == null ? transfers.CustomSort(sortedColumn.Direction, i => i.trn_num)
+                            : sortedList;
+                        break;
                 }
             }
             /*I had a problem in my Datatable when adding the drill down functionality, because when I added a null column to hold my drill down image, this passed a null value to 'Sort' which caused an exception here.
              * I fixed that by adding the try catch loop below.
-             */
+             
             try { return sortedList.Skip(startIndex).Take(pageSize).ToList(); }
             catch (ArgumentNullException)
-            { return transfers.Skip(startIndex).Take(pageSize).ToList(); }
+            { return transfers.Skip(startIndex).Take(pageSize).ToList(); }*/
+            if (isDownloadReport)
+                return sortedList.ToList();
+            else
+                return sortedList.Skip(startIndex).Take(pageSize).ToList();
         }
     }
 
@@ -237,7 +245,7 @@ namespace SL8VendorPortal.Models
         public static IList<itemwhse> AllItemWhses { get; set; }
 
         public static IList<itemwhse> GetItemWhses(int startIndex, int pageSize, ReadOnlyCollection<SortedColumn> sortedColumns, out int totalRecordCount,
-            out int searchRecordCount, string searchString)
+            out int searchRecordCount, string searchString, bool isDownloadReport = false)
         {
             var itemwhses = AllItemWhses;
 
@@ -276,14 +284,22 @@ namespace SL8VendorPortal.Models
                         sortedList = sortedList == null ? itemwhses.CustomSort(sortedColumn.Direction, i => i.qty_trans)
                             : sortedList.CustomSort(sortedColumn.Direction, i => i.qty_trans);
                         break;
+                    default://This took care of the below scenario where the default sorted column was 0 which is my drill down image. I could have used 'case "0":' but just made a default case instead...
+                        sortedList = sortedList == null ? itemwhses.CustomSort(sortedColumn.Direction, i => i.item)
+                            : sortedList;
+                        break;
                 }
             }
             /*I had a problem in my Datatable when adding the drill down functionality, because when I added a null column to hold my drill down image, this passed a null value to 'Sort' which caused an exception here.
              * I fixed that by adding the try catch loop below.
-             */
+             
             try { return sortedList.Skip(startIndex).Take(pageSize).ToList(); }
             catch (ArgumentNullException)
-            { return itemwhses.Skip(startIndex).Take(pageSize).ToList(); }
+            { return itemwhses.Skip(startIndex).Take(pageSize).ToList(); }*/
+            if (isDownloadReport)
+                return sortedList.ToList();
+            else
+                return sortedList.Skip(startIndex).Take(pageSize).ToList();
         }
     }
 
@@ -292,7 +308,7 @@ namespace SL8VendorPortal.Models
         public static IList<co> AllCustomerOrders { get; set; }
 
         public static IList<co> GetCustomerOrders(int startIndex, int pageSize, ReadOnlyCollection<SortedColumn> sortedColumns, out int totalRecordCount,
-            out int searchRecordCount, string searchString)
+            out int searchRecordCount, string searchString, bool isDownloadReport = false)
         {
             var customerorders = AllCustomerOrders;
 
@@ -305,7 +321,7 @@ namespace SL8VendorPortal.Models
             {
                 //customerorders = customerorders.Where(c => c.co_num.ToLower().Contains(searchString.ToLower()))
                 //    .ToList();
-                customerorders = customerorders.Where(c => c.coitems.Any(l => l.item.ToLower().Contains(searchString.ToLower())))
+                customerorders = customerorders.Where(c => c.coitems.Any(l => !string.IsNullOrEmpty(l.item) && l.item.ToLower().Contains(searchString.ToLower())))
                     .ToList();
             }
 
@@ -392,17 +408,23 @@ namespace SL8VendorPortal.Models
                         sortedList = sortedList == null ? customerorders.CustomSort(sortedColumn.Direction, i => i.CreateDate)
                             : sortedList.CustomSort(sortedColumn.Direction, i => i.CreateDate);
                         break;
-
+                    default://This took care of the below scenario where the default sorted column was 0 which is my drill down image. I could have used 'case "0":' but just made a default case instead...
+                        sortedList = sortedList == null ? customerorders.CustomSort(sortedColumn.Direction, i => i.co_num)
+                            : sortedList;
+                        break;
                 }
             }
 
             /*I had a problem in my Datatable when adding the drill down functionality, because when I added a null column to hold my drill down image, this passed a null value to 'Sort' which caused an exception here.
              * I fixed that by adding the try catch loop below.
-             */
+             
             try{ return sortedList.Skip(startIndex).Take(pageSize).ToList();}
             catch(ArgumentNullException) 
-            {return customerorders.Skip(startIndex).Take(pageSize).ToList();}
-            
+            {return customerorders.Skip(startIndex).Take(pageSize).ToList();}*/
+            if (isDownloadReport)
+                return sortedList.ToList();
+            else
+                return sortedList.Skip(startIndex).Take(pageSize).ToList();
         }
     }
 
@@ -587,7 +609,7 @@ namespace SL8VendorPortal.Models
         public static IList<po> AllPurchaseOrders { get; set; }
 
         public static IList<po> GetPurchaseOrders(int startIndex, int pageSize, ReadOnlyCollection<SortedColumn> sortedColumns, out int totalRecordCount,
-            out int searchRecordCount, string searchString)
+            out int searchRecordCount, string searchString, bool isDownloadReport = false)
         {
             var purchaseorders = AllPurchaseOrders;
 
@@ -600,7 +622,8 @@ namespace SL8VendorPortal.Models
             {
                 //purchaseorders = purchaseorders.Where(c => c.po_num.ToLower().Contains(searchString.ToLower()))
                 //    .ToList();
-                purchaseorders = purchaseorders.Where(c => c.poitems.Any(l => l.item.ToLower().Contains(searchString.ToLower())))
+                purchaseorders = purchaseorders
+                    .Where(p => p.poitems.Any(l => !string.IsNullOrEmpty(l.item) && l.item.ToLower().Contains(searchString.ToLower())))
                     .ToList();
             }
 
@@ -691,15 +714,22 @@ namespace SL8VendorPortal.Models
                         sortedList = sortedList == null ? purchaseorders.CustomSort(sortedColumn.Direction, i => i.CreateDate)
                             : sortedList.CustomSort(sortedColumn.Direction, i => i.CreateDate);
                         break;
-
+                    default://This took care of the below scenario where the default sorted column was 0 which is my drill down image. I could have used 'case "0":' but just made a default case instead...
+                        sortedList = sortedList == null ? purchaseorders.CustomSort(sortedColumn.Direction, i => i.po_num)
+                            : sortedList;
+                        break;
                 }
             }
             /*I had a problem in my Datatable when adding the drill down functionality, because when I added a null column to hold my drill down image, this passed a null value to 'Sort' which caused an exception here.
              * I fixed that by adding the try catch loop below.
-             */
+             
             try { return sortedList.Skip(startIndex).Take(pageSize).ToList(); }
             catch (ArgumentNullException)
-            { return purchaseorders.Skip(startIndex).Take(pageSize).ToList(); }
+            { return purchaseorders.Skip(startIndex).Take(pageSize).ToList(); }*/
+            if (isDownloadReport)
+                return sortedList.ToList();
+            else
+                return sortedList.Skip(startIndex).Take(pageSize).ToList();
         }
     }
 
@@ -933,7 +963,7 @@ namespace SL8VendorPortal.Models
     {
         public static IList<VendorRequest> AllVendorRequests { get; set; }
 
-        public static IList<VendorRequest> GetVendorRequests(int MaxRecordCount, out int totalRecordCount, out int searchRecordCount, JQueryDataTablesModel DataTablesModel)
+        public static IList<VendorRequest> GetVendorRequests(int MaxRecordCount, out int totalRecordCount, out int searchRecordCount, JQueryDataTablesModel DataTablesModel, bool isDownloadReport = false)
         {
             SL8VendorPortalDb VendorPortalDb = new SL8VendorPortalDb();
             ReadOnlyCollection<SortedColumn> sortedColumns = DataTablesModel.GetSortedColumns();
@@ -1039,28 +1069,51 @@ namespace SL8VendorPortal.Models
             if (objVendorRequestSearch.Processed != null && objVendorRequestSearch.Processed.ToUpper().Equals("BOTH"))
                 blnProcessed = bool.TryParse(objVendorRequestSearch.Processed, out blnProcessed) ? blnProcessed : false;
 
-            vendorrequests = VendorPortalDb.VendorRequests
-                .Where(c => objVendorRequestSearch.ID == null || SqlFunctions.StringConvert((double)c.ID).Contains(objVendorRequestSearch.ID))
-                .Where(c => objVendorRequestSearch.Item == null || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
-                .Where(c => c.DateProcessed >= objVendorRequestSearch.DateProcessedGT || objVendorRequestSearch.DateProcessedGT == DateTime.MinValue)
-                .Where(c => c.DateProcessed <= objVendorRequestSearch.DateProcessedLT || objVendorRequestSearch.DateProcessedLT == DateTime.MinValue)
-                .Where(c => c.DateRequested >= objVendorRequestSearch.DateRequestedGT || objVendorRequestSearch.DateRequestedGT == DateTime.MinValue)
-                .Where(c => c.DateRequested <= objVendorRequestSearch.DateRequestedLT || objVendorRequestSearch.DateRequestedLT == DateTime.MinValue)
-                .Where(c => c.DateUpdated >= objVendorRequestSearch.DateUpdatedGT || objVendorRequestSearch.DateUpdatedGT == DateTime.MinValue)
-                .Where(c => c.DateUpdated <= objVendorRequestSearch.DateUpdatedLT || objVendorRequestSearch.DateUpdatedLT == DateTime.MinValue)
-                .Where(c => objVendorRequestSearch.OrderNo == null || ((c.OrderNo != null) && c.OrderNo.Contains(objVendorRequestSearch.OrderNo)))
-                //.ToList()//if I populated the query with a list right here (executed the query) then the below commented queries would function, however this didn't solve the problem I was facing where large collections of vendor requests would get loaded into memory prior to being filtered...
-                //The below commented queries only worked when doing it on a collection fully loaded into memory and stopped working when I implemented lazy loading to filter the initial collection.
-                //.Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
-                .Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed == blnProcessed)
-                //.Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
-                .Where(c => SourceWarehouseList.Contains(strEmptyString) || SourceWarehouseList.Contains(c.SourceWarehouse))
-                //.Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
-                 .Where(c => DestinationWarehouseList.Contains(strEmptyString) || DestinationWarehouseList.Contains(c.DestWarehouse))
-                //.Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
-                .Where(c => RequestCategoryCodeList.Contains(strEmptyString) || RequestCategoryCodeList.Contains(c.RequestCategoryCode))
-                .Take(MaxRecordCount)
-                .ToList();
+            if (isDownloadReport)
+                vendorrequests = VendorPortalDb.VendorRequests
+                    .Where(c => objVendorRequestSearch.ID == null || SqlFunctions.StringConvert((double)c.ID).Contains(objVendorRequestSearch.ID))
+                    .Where(c => objVendorRequestSearch.Item == null || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
+                    .Where(c => c.DateProcessed >= objVendorRequestSearch.DateProcessedGT || objVendorRequestSearch.DateProcessedGT == DateTime.MinValue)
+                    .Where(c => c.DateProcessed <= objVendorRequestSearch.DateProcessedLT || objVendorRequestSearch.DateProcessedLT == DateTime.MinValue)
+                    .Where(c => c.DateRequested >= objVendorRequestSearch.DateRequestedGT || objVendorRequestSearch.DateRequestedGT == DateTime.MinValue)
+                    .Where(c => c.DateRequested <= objVendorRequestSearch.DateRequestedLT || objVendorRequestSearch.DateRequestedLT == DateTime.MinValue)
+                    .Where(c => c.DateUpdated >= objVendorRequestSearch.DateUpdatedGT || objVendorRequestSearch.DateUpdatedGT == DateTime.MinValue)
+                    .Where(c => c.DateUpdated <= objVendorRequestSearch.DateUpdatedLT || objVendorRequestSearch.DateUpdatedLT == DateTime.MinValue)
+                    .Where(c => objVendorRequestSearch.OrderNo == null || ((c.OrderNo != null) && c.OrderNo.Contains(objVendorRequestSearch.OrderNo)))
+                        //.ToList()//if I populated the query with a list right here (executed the query) then the below commented queries would function, however this didn't solve the problem I was facing where large collections of vendor requests would get loaded into memory prior to being filtered...
+                        //The below commented queries only worked when doing it on a collection fully loaded into memory and stopped working when I implemented lazy loading to filter the initial collection.
+                        //.Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
+                    .Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed == blnProcessed)
+                        //.Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
+                    .Where(c => SourceWarehouseList.Contains(strEmptyString) || SourceWarehouseList.Contains(c.SourceWarehouse))
+                        //.Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
+                     .Where(c => DestinationWarehouseList.Contains(strEmptyString) || DestinationWarehouseList.Contains(c.DestWarehouse))
+                        //.Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
+                    .Where(c => RequestCategoryCodeList.Contains(strEmptyString) || RequestCategoryCodeList.Contains(c.RequestCategoryCode))
+                    .ToList();
+            else
+                vendorrequests = VendorPortalDb.VendorRequests
+                    .Where(c => objVendorRequestSearch.ID == null || SqlFunctions.StringConvert((double)c.ID).Contains(objVendorRequestSearch.ID))
+                    .Where(c => objVendorRequestSearch.Item == null || c.Item.ToUpper().Contains(objVendorRequestSearch.Item.ToUpper()))
+                    .Where(c => c.DateProcessed >= objVendorRequestSearch.DateProcessedGT || objVendorRequestSearch.DateProcessedGT == DateTime.MinValue)
+                    .Where(c => c.DateProcessed <= objVendorRequestSearch.DateProcessedLT || objVendorRequestSearch.DateProcessedLT == DateTime.MinValue)
+                    .Where(c => c.DateRequested >= objVendorRequestSearch.DateRequestedGT || objVendorRequestSearch.DateRequestedGT == DateTime.MinValue)
+                    .Where(c => c.DateRequested <= objVendorRequestSearch.DateRequestedLT || objVendorRequestSearch.DateRequestedLT == DateTime.MinValue)
+                    .Where(c => c.DateUpdated >= objVendorRequestSearch.DateUpdatedGT || objVendorRequestSearch.DateUpdatedGT == DateTime.MinValue)
+                    .Where(c => c.DateUpdated <= objVendorRequestSearch.DateUpdatedLT || objVendorRequestSearch.DateUpdatedLT == DateTime.MinValue)
+                    .Where(c => objVendorRequestSearch.OrderNo == null || ((c.OrderNo != null) && c.OrderNo.Contains(objVendorRequestSearch.OrderNo)))
+                    //.ToList()//if I populated the query with a list right here (executed the query) then the below commented queries would function, however this didn't solve the problem I was facing where large collections of vendor requests would get loaded into memory prior to being filtered...
+                    //The below commented queries only worked when doing it on a collection fully loaded into memory and stopped working when I implemented lazy loading to filter the initial collection.
+                    //.Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed.ToString().ToUpper().Equals(objVendorRequestSearch.Processed.ToUpper()))
+                    .Where(c => objVendorRequestSearch.Processed == null || objVendorRequestSearch.Processed.ToUpper().Equals("BOTH") || c.Processed == blnProcessed)
+                    //.Where(c => objVendorRequestSearch.SourceWarehouses == null || objVendorRequestSearch.SourceWarehouses.Contains(c.SourceWarehouse))
+                    .Where(c => SourceWarehouseList.Contains(strEmptyString) || SourceWarehouseList.Contains(c.SourceWarehouse))
+                    //.Where(c => objVendorRequestSearch.DestWarehouses == null || objVendorRequestSearch.DestWarehouses.Contains(c.DestWarehouse))
+                     .Where(c => DestinationWarehouseList.Contains(strEmptyString) || DestinationWarehouseList.Contains(c.DestWarehouse))
+                    //.Where(c => objVendorRequestSearch.RequestCategoryCodes == null || objVendorRequestSearch.RequestCategoryCodes.Contains(c.RequestCategoryCode))
+                    .Where(c => RequestCategoryCodeList.Contains(strEmptyString) || RequestCategoryCodeList.Contains(c.RequestCategoryCode))
+                    .Take(MaxRecordCount)
+                    .ToList();
             
             searchRecordCount = vendorrequests.Count;
 
@@ -1141,15 +1194,26 @@ namespace SL8VendorPortal.Models
                         sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.Updater)
                             : sortedList.CustomSort(sortedColumn.Direction, i => i.Updater);
                         break;
+                    default://This took care of the below scenario where the default sorted column was 0 which is my drill down image. I could have used 'case "0":' but just made a default case instead...
+                        sortedList = sortedList == null ? vendorrequests.CustomSort(sortedColumn.Direction, i => i.ID)
+                            : sortedList;
+                        break;
                 }
             }
 
-            if (DataTablesModel.iDisplayLength == -1) //pagination is disabled in the javascript
+            /*if (DataTablesModel.iDisplayLength == -1) //pagination is disabled in the javascript
                 try { return sortedList.Skip(DataTablesModel.iDisplayStart).ToList(); }
                 catch (ArgumentNullException) { return vendorrequests.Skip(DataTablesModel.iDisplayStart).ToList(); }
             else //pagination is enabled
                 try { return sortedList.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }
-                catch (ArgumentNullException) { return vendorrequests.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }
+                catch (ArgumentNullException) { return vendorrequests.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList(); }*/
+            if (isDownloadReport)
+                return sortedList.ToList();
+            else
+                if (DataTablesModel.iDisplayLength == -1)
+                    return sortedList.Skip(DataTablesModel.iDisplayStart).ToList();
+                else
+                    return sortedList.Skip(DataTablesModel.iDisplayStart).Take(DataTablesModel.iDisplayLength).ToList();
         }
         #region OldMethod
         //public static IList<VendorRequest> GetVendorRequests(out int totalRecordCount, out int searchRecordCount, JQueryDataTablesModel DataTablesModel)

@@ -40,7 +40,7 @@ $(document).ready(function () {
             if (settings.rows) {
                 textarea.attr('rows', settings.rows);
             } else {
-                textarea.height(settings.height);
+                textarea.height(settings.height + 50);
             }
 
             if (settings.cols) {
@@ -49,6 +49,7 @@ $(document).ready(function () {
                 //textarea.width(settings.width);
             }
             $(this).append(textarea);
+            $(this).append('<br >'); //This is how you get the buttons to be below the textarea box...
             return (textarea);
         },
         plugin: function (settings, original) {

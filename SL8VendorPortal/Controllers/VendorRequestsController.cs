@@ -325,8 +325,8 @@ namespace SL8VendorPortal.Controllers
             jQueryDataTablesModel.mDataProp2_ = mobjNewMDataProp.AsReadOnly();
 
 
-            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(MaxRecordCount, 
-                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel);
+            var objItems = InMemoryVendorRequestsRepository.GetVendorRequests(MaxRecordCount,
+                totalRecordCount: out totalRecordCount, searchRecordCount: out searchRecordCount, DataTablesModel: jQueryDataTablesModel, isDownloadReport: true);
 
             RenderVendorRequestsReport(objItems);
 
